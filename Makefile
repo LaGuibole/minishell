@@ -6,7 +6,7 @@
 #    By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/07 11:03:15 by guphilip          #+#    #+#              #
-#    Updated: 2025/04/07 11:22:42 by guphilip         ###   ########.fr        #
+#    Updated: 2025/04/07 11:35:45 by guphilip         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,9 +78,14 @@ fcleanlibs: fclean
 relibs: fcleanlibs $(LIBFT_INC_H) $(MLX_INC_H)
 
 norminette:
-					@norminette $(SRC_DIR) $(INC_DIR) | grep -Ev '^Notice|OK!$$'\
-					&& $(ECHO) -e '\033[1;31mNorminette KO!'
-					|| $(ECHO) -e '\033[1;32mNorminette OK!'
+	@norminette $(SRC_DIR) $(INC_DIR) | grep -Ev '^Notice|OK!$$' > .norme_errors;\
+	if [ -s .norme_errors ]; then \
+		cat .norme_errors; \
+		$(ECHO) -e '\033[1;31mNorminette KO!'; \
+	else \
+		$(ECHO) -e '\033[1;32mNorminette OK!'; \
+	fi;\
+	rm -f .norme_errors
 
 .PHONY: all re clean fclean cleanlibs fcleanlibs relibs norminette
 
