@@ -6,7 +6,7 @@
 #    By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/07 11:03:15 by guphilip          #+#    #+#              #
-#    Updated: 2025/04/07 11:35:45 by guphilip         ###   ########.fr        #
+#    Updated: 2025/04/08 19:55:28 by guphilip         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ RM_LINE				= @tput cuu1 && tput el
 
 CC 					=	cc
 CFLAGS				=	-Wall -Wextra -Werror -g
+LFLAGS				=	-lreadline
 IFLAGS				=	-I$(INC_DIR)
 
 # DIRECTORIES
@@ -39,7 +40,7 @@ OBJ_DIR				=	obj
 
 # MINISHELL
 
-SRC_FILES			=	minishell
+SRC_FILES			=	minishell core/display_prompt env/ft_envp
 SRCS				=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
 OBJS				=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
@@ -47,6 +48,8 @@ OBJS				=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 NAME				=	minishell
 LIB_TARGET			=	$(LIBFT_TARGET)
+
+# LIBFT_GIT
 
 LIBFT_GIT			= 		https://github.com/LaGuibole/Libft_Boosted.git
 LIBFT_DIR			= 		Libft_Boosted
@@ -105,7 +108,7 @@ $(LIBFT_TARGET):
 # MINISHELL TARGET
 
 $(NAME): $(LIBFT_INC_H) $(OBJS)
-					@$(CC) $(CFLAGS) $(IFLAGS) -o $(NAME) $(OBJS) $(LIBFT_TARGET)
+					@$(CC) $(CFLAGS) $(IFLAGS) -o $(NAME) $(OBJS) $(LIBFT_TARGET) $(LFLAGS)
 					@echo "🎉 Executable$(BLUE) $(NAME) $(RESET)created. \n"
 
 $(OBJ_DIR):
