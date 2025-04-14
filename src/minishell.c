@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 12:23:17 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 19:07:29 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sa_c;
 	(void) argc;
 	(void) argv;
-	
+
 	sa_c.sa_handler = handle_sigint;
 	sa_c.sa_flags = 0;
 	sigemptyset(&sa_c.sa_mask);
@@ -42,11 +42,12 @@ int	main(int argc, char **argv, char **envp)
 					ft_printf("exit\n"),1);
 		if (*line)
 			add_history(line);
-		ft_pwd();
-		ft_cd(ft_split(line, ' '));
+		// ft_pwd();
+		if (ft_strlen(line) > 0)
+			ft_cd(ft_split(line, ' '));
 		free(prompt);
 		free(line);
 	}
 	ft_lstclear(ft_envp(NULL), free);
-	return (0);
+	return (RET_OK);
 }

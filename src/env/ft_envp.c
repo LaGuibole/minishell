@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:38:48 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/11 12:54:33 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:46:48 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,15 @@ void	ft_setenv(const char *name, const char *value)
 		if (ft_strncmp(entry, name, name_len) == 0 && entry[name_len] == '=')
 		{
 			free(envp->content);
-			new_entry = ft_strjoin(ft_strjoin(name, "="), value);
+			new_entry = free_join(ft_strjoin(name, "="), (char *)value, true, false);
 			envp->content = new_entry;
 			return ;
 		}
 		envp = envp->next;
 	}
-	new_entry = ft_strjoin(ft_strjoin(name, "="), value);
+	new_entry = free_join(ft_strjoin(name, "="), (char *)value, true, false);
 	ft_lstadd_back(ft_envp(NULL), ft_lstnew(new_entry));
+	free(new_entry);
 }
 
 /// @brief Delete an env variable if it exists
