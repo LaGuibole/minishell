@@ -6,7 +6,7 @@
 #    By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/07 11:03:15 by guphilip          #+#    #+#              #
-#    Updated: 2025/04/08 19:55:28 by guphilip         ###   ########.fr        #
+#    Updated: 2025/04/14 12:15:24 by guphilip         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,17 +49,48 @@ $(LIBFT):
 	fi
 	@make -sC $(LIBFT_PATH)
 
+<<<<<<< Updated upstream
 $(NAME): $(LIBFT) $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) $(LIBFT) $(LFLAGS) -o $(NAME)
 	@echo "🎉 Executable$(BLUE) $(NAME) $(RESET)created."
+=======
+# MINISHELL
+
+SRC_FILES			=	minishell core/display_prompt env/ft_envp builtins/cd builtins/pwd
+SRCS				=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_FILES)))
+OBJS				=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_FILES)))
+
+# TARGET
+
+NAME				=	minishell
+LIB_TARGET			=	$(LIBFT_TARGET)
+
+# LIBFT_GIT
+
+LIBFT_GIT			= 		https://github.com/LaGuibole/Libft_Boosted.git
+LIBFT_DIR			= 		Libft_Boosted
+LIBFT_PATH			= 		$(LIB_DIR)/$(LIBFT_DIR)
+LIBFT_H				= 		libft.h
+LIBFT_H_PATH		= 		$(LIBFT_PATH)/includes/$(LIBFT_H)
+LIBFT_INC_H			= 		$(INC_DIR)/$(LIBFT_H)
+LIBFT_TARGET		= 		libft.a
+LIBFT_TARGET_PATH	= 		$(LIBFT_PATH)/$(LIBFT_TARGET)
+
+all:				$(NAME)
+>>>>>>> Stashed changes
 
 clean:
 	@rm -rf build
 	@make -sC $(LIBFT_PATH) clean
 
+<<<<<<< Updated upstream
 fclean: 
 	@rm -f $(NAME)
 	@make -sC $(LIBFT_PATH) fclean
+=======
+fclean: clean
+					@$(RM) $(NAME)
+>>>>>>> Stashed changes
 
 removeLibft:
 	@rm -rf $(LIBFT_PATH)

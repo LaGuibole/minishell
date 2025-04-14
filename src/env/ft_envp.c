@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:38:48 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/09 15:04:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/11 12:54:33 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Init or store linked list representing env variables
+/// @param envp String array representing env variables (NULL to store existing list)
+/// @return Double pointer to the linked list of env variables if envp is NULL, NULL otherwise
 t_list	**ft_envp(char **envp)
 {
 	size_t			i;
@@ -30,6 +33,9 @@ t_list	**ft_envp(char **envp)
 	return (NULL);
 }
 
+/// @brief Store given env variable into linked list
+/// @param name Name of the env variaable to look for (for instance : "PATH")
+/// @return A copy of the associated value, NULL if not found
 char	*ft_getenv(const char *name)
 {
 	t_list	*envp;
@@ -50,6 +56,9 @@ char	*ft_getenv(const char *name)
 	return (NULL);
 }
 
+/// @brief Add or modify an env variable
+/// @param name Name of the variable to define
+/// @param value Value to associate to the variable
 void	ft_setenv(const char *name, const char *value)
 {
 	t_list	*envp;
@@ -61,14 +70,13 @@ void	ft_setenv(const char *name, const char *value)
 		return ;
 	name_len = ft_strlen(name);
 	envp = *ft_envp(NULL);
-
 	while (envp)
 	{
 		entry = (char *)envp->content;
 		if (ft_strncmp(entry, name, name_len) == 0 && entry[name_len] == '=')
 		{
 			free(envp->content);
-			new_entry = ft_strjoin(ft_strjoin(name, "="), value); // a free
+			new_entry = ft_strjoin(ft_strjoin(name, "="), value);
 			envp->content = new_entry;
 			return ;
 		}
@@ -78,6 +86,8 @@ void	ft_setenv(const char *name, const char *value)
 	ft_lstadd_back(ft_envp(NULL), ft_lstnew(new_entry));
 }
 
+/// @brief Delete an env variable if it exists
+/// @param name Name of the variable to delete
 void	ft_unsetenv(const char *name)
 {
 	t_list	**envp_head;
