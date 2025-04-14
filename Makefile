@@ -19,7 +19,8 @@ SOURCES = \
 	./src/builtins/pwd.c \
 	./src/core/display_prompt.c \
 	./src/env/ft_envp.c \
-	./src/minishell.c
+	./src/minishell.c \
+	./src/parse/parsing.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))
 
