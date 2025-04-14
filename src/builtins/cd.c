@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 12:35:58 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:08:52 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_cd(char **args)
 			fd_printf(STDERR_FILENO, "cd: OLDPWD not set\n");
 			return (1);
 		}
-		fd_printf(STDOUT_FILENO, path);
+		// fd_printf(STDOUT_FILENO, path);
 	}
 	else
 		path = ft_strdup(args[1]);
