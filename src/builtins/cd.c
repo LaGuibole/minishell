@@ -6,69 +6,77 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 16:08:52 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 19:09:28 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **args)
+static int	save_old_pwd(void)
+{
+	char	*old_pwd;
+
+	old_pwd = getcwd(NULL, 0);
+	if (!old_pwd)
+	{
+		fd_printf(STDERR_FILENO, "cd: getcwd failed: %s\n", strerror(errno));
+		return (RET_ERR);
+	}
+	ft_setenv("OLDPWD", old_pwd);
+	free(old_pwd);
+	return (RET_OK);
+}
+
+static int	update_pwd(void)
+{
+	char	*new_pwd;
+
+	new_pwd = getcwd(NULL, 0);
+	if (!new_pwd)
+	{
+		fd_printf(STDERR_FILENO, "cd: getcwd failed: %s\n", strerror(errno));
+		return (RET_ERR);
+	}
+	ft_setenv("PWD", new_pwd);
+	free(new_pwd);
+	return (RET_OK);
+}
+
+static char	*get_target_path(char **args)
 {
 	char	*path;
-	char	*old_pwd;
-	char	*new_pwd;
 
 	if (!args[1] || !args[1][0])
 	{
 		path = ft_getenv("HOME");
 		if (!path)
-		{
-			fd_printf(STDERR_FILENO, "cd: HOME not set\n");
-			return (1);
-		}
+			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		path = ft_getenv("OLDPWD");
 		if (!path)
-		{
-			fd_printf(STDERR_FILENO, "cd: OLDPWD not set\n");
-			return (1);
-		}
-		// fd_printf(STDOUT_FILENO, path);
+			return (fd_printf(STDERR_FILENO, "cd: OLDPWD not set\n"), NULL);
 	}
 	else
 		path = ft_strdup(args[1]);
-	old_pwd = getcwd(NULL, 0);
-	if (!old_pwd)
-	{
-		fd_printf(STDERR_FILENO, "cd: getcwd failed\n");
-		free(path);
-		return (1);
-	}
+	return (path);
+}
+
+int	ft_cd(char **args)
+{
+	char	*path;
+	int		ret;
+
+	path = get_target_path(args);
+	if (!path)
+		return (RET_ERR);
+	ret = save_old_pwd();
+	if (ret != 0)
+		return (free(path), ret);
 	if (chdir(path) != 0)
-	{
-		fd_printf(STDERR_FILENO, "cd: ");
-		fd_printf(STDERR_FILENO, path);
-		fd_printf(STDERR_FILENO, ": ");
-		fd_printf(STDERR_FILENO, strerror(errno));
-		fd_printf(STDERR_FILENO, "\n");
-		free(path);
-		free(old_pwd);
-		return (1);
-	}
-	new_pwd = getcwd(NULL, 0);
-	if (!new_pwd)
-	{
-		fd_printf(STDERR_FILENO, "cd: getcwd failed\n");
-		free(path);
-		free(old_pwd);
-		return (1);
-	}
-	ft_setenv("OLDPWD", old_pwd);
-	ft_setenv("PWD", new_pwd);
-	free(path);
-	free(old_pwd);
-	free(new_pwd);
-	return (0);
+		return (fd_printf(STDERR_FILENO, "cd: %s: %s\n", path,
+				strerror(errno)), free(path), RET_ERR);
+	ret = update_pwd();
+	return (free(path), ret);
 }

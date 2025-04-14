@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:52:41 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 15:26:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:05:05 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	ft_pwd(void)
 	{
 		fd_printf(STDERR_FILENO, "pwd: getcwd failed\n");
 		fd_printf(STDERR_FILENO, strerror(errno));
-		return (1);
+		return (RET_ERR);
 	}
 	fd_printf(STDOUT_FILENO, pwd);
 	fd_printf(STDOUT_FILENO, "\n");
 	free(pwd);
-	return (0);
+	return (RET_OK);
 }

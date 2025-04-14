@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 12:20:19 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 17:03:01 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <errno.h>
+
+# define RET_OK 0
+# define RET_ERR 1
 
 char	*display_prompt(void);
 t_list	**ft_envp(char **envp);
