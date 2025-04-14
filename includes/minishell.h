@@ -10,10 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
+#ifndef MINISHELL_H
+# define MINISHELL_H
+
+# include "libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
 
 char	*display_prompt(void);
 t_list	**ft_envp(char **envp);
@@ -21,3 +24,5 @@ char	*ft_getenv(const char *name);
 void	ft_setenv(const char *name, const char *value);
 void	ft_unsetenv(const char *name);
 char	*display_prompt(void);
+
+#endif

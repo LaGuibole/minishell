@@ -10,12 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
+
+void handle_sigint(int sig)
+{
+	(void) sig;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	write(1, "\n", 1);
+	rl_redisplay();
+}
 
 int	main(int argc, char **argv, char **envp)
 {
+	struct sigaction	sa_c;
 	(void) argc;
 	(void) argv;
+	
+	sa_c.sa_handler = handle_sigint;
+	sa_c.sa_flags = 0;
+	sigemptyset(&sa_c.sa_mask);
+	sigaction(SIGINT, &sa_c, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	ft_envp(envp);
 	while (1)
@@ -23,7 +38,8 @@ int	main(int argc, char **argv, char **envp)
 		char *prompt = display_prompt();
 		char *line = readline(prompt);
 		if (!line)
-			return (free(prompt), ft_lstclear(ft_envp(NULL), free), 1);
+			return (free(prompt), ft_lstclear(ft_envp(NULL), free), \
+					ft_printf("exit\n"),1);
 		if (*line)
 			add_history(line);
 		free(prompt);
