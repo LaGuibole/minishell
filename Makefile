@@ -20,7 +20,8 @@ SOURCES = \
 	./src/core/display_prompt.c \
 	./src/env/ft_envp.c \
 	./src/minishell.c \
-	./src/parse/parsing.c
+	./src/parse/parsing.c \
+	./src/parse/parsing_command.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))
 

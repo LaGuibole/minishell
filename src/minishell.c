@@ -24,9 +24,11 @@ void handle_sigint(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	struct sigaction	sa_c;
+	t_cmd				*cmd;
+
 	(void) argc;
 	(void) argv;
-
+	
 	sa_c.sa_handler = handle_sigint;
 	sa_c.sa_flags = 0;
 	sigemptyset(&sa_c.sa_mask);
@@ -39,12 +41,13 @@ int	main(int argc, char **argv, char **envp)
 		char *line = readline(prompt);
 		if (!line)
 			return (free(prompt), ft_lstclear(ft_envp(NULL), free), \
-					ft_printf("exit\n"),1);
+					ft_printf("exit\n"), rl_clear_history(),1);
 		if (*line)
 			add_history(line);
+		cmd = parsing_cmd(line);
 		// ft_pwd();
-		if (ft_strlen(line) > 0)
-			ft_cd(ft_split(line, ' '));
+		//if (ft_strlen(line) > 0)
+			//ft_cd(ft_split(line, ' '));
 		free(prompt);
 		free(line);
 	}
