@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/09 15:11:44 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:23:17 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	main(int argc, char **argv, char **envp)
 					ft_printf("exit\n"),1);
 		if (*line)
 			add_history(line);
+		ft_pwd();
+		ft_cd(ft_split(line, ' '));
 		free(prompt);
 		free(line);
 	}
