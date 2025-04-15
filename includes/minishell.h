@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 17:03:01 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:18:30 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ void	ft_setenv(const char *name, const char *value);
 void	ft_unsetenv(const char *name);
 int		ft_cd(char **args);
 int		ft_pwd();
-
+int		ft_echo(char **args);
+int		ft_export(char **args);
 #endif

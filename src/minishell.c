@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 19:07:29 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:10:03 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,16 @@ int	main(int argc, char **argv, char **envp)
 					ft_printf("exit\n"),1);
 		if (*line)
 			add_history(line);
-		// ft_pwd();
-		if (ft_strlen(line) > 0)
-			ft_cd(ft_split(line, ' '));
+		if (ft_strcmp(line, "pwd") == 0)
+			ft_pwd();
+		// if (ft_strlen(line) > 0)
+		// 	ft_cd(ft_split(line, ' '));
+		char **args = split_free(line, ' ', false);
+		if (args && args[0] && ft_strncmp(args[0], "echo", 5) == 0)
+			ft_echo(args);
+		if (args && args[0] && ft_strncmp(args[0], "export", 7) == 0)
+			ft_export(args);
+		free_double_tab(args);
 		free(prompt);
 		free(line);
 	}

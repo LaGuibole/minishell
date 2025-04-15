@@ -16,10 +16,13 @@ RESET = \033[0m
 
 SOURCES = \
 	./src/builtins/cd.c \
+	./src/builtins/echo.c \
+	./src/builtins/env.c \
 	./src/builtins/pwd.c \
 	./src/core/display_prompt.c \
 	./src/env/ft_envp.c \
-	./src/minishell.c
+	./src/minishell.c \
+	./src/utils/builtin_utils/export_utils.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))
 

@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 19:09:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/15 09:53:16 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Function to save the previous pwd path
+/// @param void
+/// @return set the OLPWD env variable, return 0 on success, 1 on error
 static int	save_old_pwd(void)
 {
 	char	*old_pwd;
@@ -27,6 +30,9 @@ static int	save_old_pwd(void)
 	return (RET_OK);
 }
 
+/// @brief Function to update the PWD path
+/// @param void
+/// @return Update the PWD env variable, return 0 on success, 1 on error
 static int	update_pwd(void)
 {
 	char	*new_pwd;
@@ -42,6 +48,9 @@ static int	update_pwd(void)
 	return (RET_OK);
 }
 
+/// @brief
+/// @param args
+/// @return
 static char	*get_target_path(char **args)
 {
 	char	*path;
@@ -63,6 +72,9 @@ static char	*get_target_path(char **args)
 	return (path);
 }
 
+/// @brief
+/// @param args
+/// @return
 int	ft_cd(char **args)
 {
 	char	*path;
