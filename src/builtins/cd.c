@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/15 09:53:16 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:18:21 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ static char	*get_target_path(char **args)
 		path = ft_getenv("HOME");
 		if (!path)
 			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
+	}
+	else if (ft_strcmp(args[1], "~") == 0 || ft_strcmp(args[1], "--") == 0)
+	{
+		path = ft_getenv("HOME");
+		if (!path)
+			return(fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
