@@ -6,12 +6,14 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 11:52:41 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 17:05:05 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:24:48 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Builtin implementation of the pwd command
+/// @return 0 on success, 1 otherwise (getcwd failed)
 int	ft_pwd(void)
 {
 	char	*pwd;

@@ -6,15 +6,14 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 13:18:21 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:16:16 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Function to save the previous pwd path
-/// @param void
-/// @return set the OLPWD env variable, return 0 on success, 1 on error
+/// @brief Save the current workind directory to OLDPWD
+/// @return 0 on success, 1 otherwise (eg ; getcwd failed)
 static int	save_old_pwd(void)
 {
 	char	*old_pwd;
@@ -30,9 +29,8 @@ static int	save_old_pwd(void)
 	return (RET_OK);
 }
 
-/// @brief Function to update the PWD path
-/// @param void
-/// @return Update the PWD env variable, return 0 on success, 1 on error
+/// @brief Update the current working directory in PWD
+/// @return 0 on success, 1 otherwise (eg ; getcwd failed)
 static int	update_pwd(void)
 {
 	char	*new_pwd;
@@ -48,9 +46,9 @@ static int	update_pwd(void)
 	return (RET_OK);
 }
 
-/// @brief
-/// @param args
-/// @return
+/// @brief Get the target path from cd args
+/// @param args The args list passed to cd
+/// @return A malloc'd string containing the path to change to, NULL on error
 static char	*get_target_path(char **args)
 {
 	char	*path;
@@ -65,7 +63,7 @@ static char	*get_target_path(char **args)
 	{
 		path = ft_getenv("HOME");
 		if (!path)
-			return(fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
+			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
@@ -78,9 +76,9 @@ static char	*get_target_path(char **args)
 	return (path);
 }
 
-/// @brief
-/// @param args
-/// @return
+/// @brief Builtin implementation of the cd command
+/// @param args The arg list passed to cd
+/// @return 0 on success, 1 otherwise
 int	ft_cd(char **args)
 {
 	char	*path;

@@ -6,15 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:10:15 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 15:44:26 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:48:08 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Verify if env name variable is valid for export
-/// @param name Name of the checked variable
-/// @return true is name is valid, false otherwise
+/// @brief Check if a variable name is a valid identifier for export
+/// @param name The name to validate
+/// @return true if the name is valid, false otherwise
 bool	is_valid_identifier(const char *name)
 {
 	int	i;
@@ -33,9 +33,9 @@ bool	is_valid_identifier(const char *name)
 	return (true);
 }
 
-/// @brief Treat arg without equal sign
-/// @param arg Arg to be treated
-/// @return 0 on success, 1 otherwise
+/// @brief Handle an export argument without '='
+/// @param arg The argument to process (e.g, just a variable name)
+/// @return 0 on success, 1 otherwise (invalid identifier)
 int	process_export_no_equal(char *arg)
 {
 	char	*value;
@@ -53,9 +53,9 @@ int	process_export_no_equal(char *arg)
 	return (RET_OK);
 }
 
-/// @brief Treat arg with equal sign
-/// @param arg Arg to be trated
-/// @return 0 on success, 1 otherwise
+/// @brief Handle an export argument containing '='
+/// @param arg The full argument string (name=value)
+/// @return 0 on success, 1 otherwise (invalid identifier)
 int	process_export_with_equal(char *arg, char *equal_sign)
 {
 	char	*name;
@@ -71,8 +71,8 @@ int	process_export_with_equal(char *arg, char *equal_sign)
 	return (RET_OK);
 }
 
-/// @brief
-/// @param sorted_env
+/// @brief Print the env variables in export format and free the list
+/// @param sorted_env The sorted environement list to display and free
 void	print_and_free_sorted_env(t_list *sorted_env)
 {
 	t_list	*current;
@@ -88,8 +88,8 @@ void	print_and_free_sorted_env(t_list *sorted_env)
 		free(tmp);
 	}
 }
-/// @brief
-/// @param
+
+/// @brief Copy, sort and print the environment in export format
 void	print_sorted_env(void)
 {
 	t_list	*sorted_env;
@@ -100,8 +100,6 @@ void	print_sorted_env(void)
 	sort_env_list(sorted_env);
 	print_and_free_sorted_env(sorted_env);
 }
-
-
 
 /// @brief Print the begininng of env variable
 /// @param var Variable to display

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 15:57:37 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:54:27 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,11 @@ void	ft_unsetenv(const char *name);
 
 // BUILTINS
 int		ft_cd(char **args);
-int		ft_pwd();
+int		ft_pwd(void);
 int		ft_echo(char **args);
 int		ft_export(char **args);
+void	ft_env(void);
+int		ft_unset(char **args);
 
 // EXPORT HELPERS
 void	print_invalid_identifier(char *arg);
@@ -46,16 +48,19 @@ void	print_sorted_env(void);
 int		process_export_arg(char *arg);
 void	print_export_var(char *var);
 
+// UNSET HELPERS
+bool	match_env_to_delete(char *entry, const char *name, size_t len);
+void	remove_env_node(t_list **head, t_list *curr, t_list *prev);
 
-//ENV HELPERS
+// ENV HELPERS
 bool	match_env_entry(const char *entry, const char *name);
 void	swap_nodes(t_list *a, t_list *b);
 t_list	*copy_env_list(void);
 int		sort_env_list_part(t_list *sorted_env, t_list **current, t_list *last);
 void	sort_env_list(t_list *sorted_env);
+bool	is_valid_identifier(const char *name);
 
-
-//ERRORS
+// ERRORS
 void	print_invalid_identifier(char *arg);
 
 #endif

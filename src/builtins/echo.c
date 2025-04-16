@@ -6,13 +6,16 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/15 11:40:53 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:19:15 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool is_n_flag(char *arg)
+/// @brief Check if the given argument is a valid -n flag
+/// @param arg The argument to check (eg, "-n", "-nnn" etc)
+/// @return true of the arg is a valid -n option, false otherwise
+static bool	is_n_flag(char *arg)
 {
 	int	i;
 
@@ -28,12 +31,14 @@ static bool is_n_flag(char *arg)
 	return (true);
 }
 
-int ft_echo(char **args)
+/// @brief Builtin implementation of the echo command
+/// @param args The argument list passed to echo
+/// @return 0 always (RET_OK)
+int	ft_echo(char **args)
 {
 	bool	n_option;
 
 	n_option = false;
-
 	args++;
 	while (*args && is_n_flag(*args))
 	{

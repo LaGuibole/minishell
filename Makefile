@@ -20,11 +20,13 @@ SOURCES = \
 	./src/builtins/env.c \
 	./src/builtins/export.c \
 	./src/builtins/pwd.c \
+	./src/builtins/unset.c \
 	./src/core/display_prompt.c \
+	./src/env/env_helpers.c \
 	./src/env/ft_envp.c \
 	./src/minishell.c \
-	./src/utils/builtin_utils/env_helpers.c \
 	./src/utils/builtin_utils/export_helpers.c \
+	./src/utils/builtin_utils/unset_helpers.c \
 	./src/utils/errors/env_errors.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))

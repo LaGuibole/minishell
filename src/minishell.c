@@ -6,13 +6,13 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 13:26:50 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:55:41 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
 	(void) sig;
 	rl_replace_line("", 0);
@@ -24,9 +24,9 @@ void handle_sigint(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	struct sigaction	sa_c;
+
 	(void) argc;
 	(void) argv;
-
 	sa_c.sa_handler = handle_sigint;
 	sa_c.sa_flags = 0;
 	sigemptyset(&sa_c.sa_mask);
@@ -51,6 +51,10 @@ int	main(int argc, char **argv, char **envp)
 			ft_echo(args);
 		if (args && args[0] && ft_strncmp(args[0], "export", 7) == 0)
 			ft_export(args);
+		if (args && args[0] && ft_strncmp(args[0], "env", 4) == 0)
+			ft_env();
+		if (args && args[0] && ft_strncmp(args[0], "unset", 6) == 0)
+			ft_unset(args);
 		free_double_tab(args);
 		free(prompt);
 		free(line);
