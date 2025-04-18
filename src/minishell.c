@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 11:41:39 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:03:49 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
+	int heredoc_fd;
 	sa_c.sa_handler = handle_sigint;
 	sa_c.sa_flags = 0;
 	sigemptyset(&sa_c.sa_mask);
@@ -43,23 +44,14 @@ int	main(int argc, char **argv, char **envp)
 		char **args = split_free(line, ' ', false);
 		if (*line)
 			add_history(line);
-		if (ft_strcmp(line, "pwd") == 0)
-			ft_pwd(args);
-		else if (ft_strlen(line) > 0)
-			ft_cd((char *[]){"cd", ""});
-		if (args && args[0] && ft_strncmp(args[0], "echo", 5) == 0)
-			ft_echo(args);
-		if (args && args[0] && ft_strncmp(args[0], "export", 7) == 0)
-			ft_export(args);
-		if (args && args[0] && ft_strncmp(args[0], "env", 4) == 0)
-			ft_env(args);
-		if (args && args[0] && ft_strncmp(args[0], "unset", 6) == 0)
-			ft_unset(args);
+		exec_builtin(args);
 		if (args && args[0] && ft_strncmp(args[0], "heredoc", 8) == 0)
-			create_heredoc_fd("EOF");
+			heredoc_fd = create_heredoc_fd("EOF");
 		free_double_tab(args);
 		free(prompt);
 		free(line);
+		if (heredoc_fd)
+			close(heredoc_fd);
 	}
 	ft_lstclear(ft_envp(NULL), free);
 	return (RET_OK);

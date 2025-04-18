@@ -73,6 +73,8 @@ int		ft_unset(char **args);
 
 //EXEC BUILTINS
 bool	is_parent_builtin(char *cmd);
+bool	is_builtin_pipeable(const char *name);
+int		exec_builtin(char **args);
 
 // EXPORT HELPERS
 void	print_invalid_identifier(char *arg);
@@ -86,6 +88,7 @@ void	print_export_var(char *var);
 // UNSET HELPERS
 bool	match_env_to_delete(char *entry, const char *name, size_t len);
 void	remove_env_node(t_list **head, t_list *curr, t_list *prev);
+
 
 // ENV HELPERS
 bool	match_env_entry(const char *entry, const char *name);

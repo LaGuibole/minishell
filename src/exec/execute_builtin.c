@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:07:01 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 10:47:04 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/18 13:01:10 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ bool	is_parent_builtin(char *cmd)
 		return (true);
 	return (false);
 } // si pas de pipe | si pipe, executer quand meme dans le child
+
+bool	is_builtin_pipeable(const char *name)
+{
+	if (ft_strcmp((char *)name, "echo") == 0
+		|| ft_strcmp((char *)name, "pwd") == 0
+		|| ft_strcmp((char *)name, "env") == 0)
+		return (true);
+	return (false);
+}
 
 /// @brief
 /// @param args
