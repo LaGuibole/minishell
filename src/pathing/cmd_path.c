@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 13:53:33 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 14:36:22 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:56:34 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	is_path(char *cmd)
 	while (cmd[i])
 	{
 		if (cmd[i] == '/')
-			return (false);
+			return (true);
 		i++;
 	}
 	return (false);
@@ -116,7 +116,7 @@ static char	*search_in_paths(char **paths, char *cmd)
 ///			NULL if not found
 char	*get_cmd_path(t_cmd *cmd, char **envp)
 {
-	char **paths;
+	char	**paths;
 
 	if (!cmd || !cmd->cmd || !envp)
 		return (NULL);
@@ -131,7 +131,3 @@ char	*get_cmd_path(t_cmd *cmd, char **envp)
 		return (NULL);
 	return (search_in_paths(paths, cmd->cmd));
 }
-
-
-
-

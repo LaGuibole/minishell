@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   dummy.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 10:33:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 16:43:40 by guphilip         ###   ########.fr       */
+/*   Created: 2025/04/18 16:41:28 by guphilip          #+#    #+#             */
+/*   Updated: 2025/04/18 16:42:22 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#include "minishell.h"
 
-# include "minishell.h"
-
-typedef struct s_builtin
+void	set_dummy_params(t_cmd *cmd)
 {
-	char	*name;
-	int		(*func)(char **args);
-}	t_builtin;
-
-bool	cmd_is_builtin(char *name);
-
-#endif
+	if (!cmd || !cmd->cmd)
+		return ;
+	cmd->params = ft_split(cmd->cmd, ' ');
+}

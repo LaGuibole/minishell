@@ -1,4 +1,4 @@
- /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 18:54:27 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:03:19 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <signal.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -25,7 +26,7 @@
 # define RET_OK 0
 # define RET_ERR 1
 
-typedef enum	e_redir_type
+typedef enum e_redir_type
 {
 	R_INPUT,
 	R_OUTPUT,
@@ -33,7 +34,7 @@ typedef enum	e_redir_type
 	R_HEREDOC
 }	t_redir_type;
 
-typedef enum	e_link_type
+typedef enum e_link_type
 {
 	L_PIPE,
 	L_BACK
@@ -74,7 +75,7 @@ int		ft_unset(char **args);
 //EXEC BUILTINS
 bool	is_parent_builtin(char *cmd);
 bool	is_builtin_pipeable(const char *name);
-int		exec_builtin(char **args);
+int		exec_builtin(t_cmd *cmd);
 
 // EXPORT HELPERS
 void	print_invalid_identifier(char *arg);
@@ -88,7 +89,6 @@ void	print_export_var(char *var);
 // UNSET HELPERS
 bool	match_env_to_delete(char *entry, const char *name, size_t len);
 void	remove_env_node(t_list **head, t_list *curr, t_list *prev);
-
 
 // ENV HELPERS
 bool	match_env_entry(const char *entry, const char *name);
@@ -111,4 +111,7 @@ char	**get_paths(char **envp);
 char	*join_cmd_paths(char *path, char *cmd);
 char	*get_cmd_path(t_cmd *cmd, char **envp);
 
-# endif
+//DUMMY
+void	set_dummy_params(t_cmd *cmd);
+int		exec_cmd(t_cmd *cmd, char **envp);
+#endif

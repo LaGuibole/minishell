@@ -25,8 +25,11 @@ SOURCES = \
 	./src/core/display_prompt.c \
 	./src/env/env_helpers.c \
 	./src/env/ft_envp.c \
+	./src/exec/dummy.c \
 	./src/exec/execute_builtin.c \
+	./src/exec/execute_cmd.c \
 	./src/minishell.c \
+	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/export_helpers.c \
 	./src/utils/builtin_utils/unset_helpers.c \
 	./src/utils/errors/env_errors.c \
