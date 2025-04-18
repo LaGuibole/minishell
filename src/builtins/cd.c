@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 19:16:16 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:59:22 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*get_target_path(char **args)
 {
 	char	*path;
 
-	if (!args[1] || !args[1][0])
+	if (!args[1])
 	{
 		path = ft_getenv("HOME");
 		if (!path)

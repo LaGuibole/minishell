@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+ /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -14,13 +14,45 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "builtins.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
 # include <signal.h>
 # include <errno.h>
+# include <fcntl.h>
 
 # define RET_OK 0
 # define RET_ERR 1
+
+typedef enum	e_redir_type
+{
+	R_INPUT,
+	R_OUTPUT,
+	R_APPEND,
+	R_HEREDOC
+}	t_redir_type;
+
+typedef enum	e_link_type
+{
+	L_PIPE,
+	L_BACK
+}	t_link_type;
+
+typedef struct s_redir
+{
+	t_redir_type	type;
+	char			*filename;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char		*cmd;
+	bool		is_builtin;
+	char		**params;
+	t_list		*redir;
+	t_link_type	type_link_next;
+}	t_cmd;
 
 // PROMPT
 char	*display_prompt(void);
@@ -33,11 +65,14 @@ void	ft_unsetenv(const char *name);
 
 // BUILTINS
 int		ft_cd(char **args);
-int		ft_pwd(void);
+int		ft_pwd(char **args);
 int		ft_echo(char **args);
 int		ft_export(char **args);
-void	ft_env(void);
+int		ft_env(char **args);
 int		ft_unset(char **args);
+
+//EXEC BUILTINS
+bool	is_parent_builtin(char *cmd);
 
 // EXPORT HELPERS
 void	print_invalid_identifier(char *arg);
@@ -60,7 +95,11 @@ int		sort_env_list_part(t_list *sorted_env, t_list **current, t_list *last);
 void	sort_env_list(t_list *sorted_env);
 bool	is_valid_identifier(const char *name);
 
+//HEREDOC HELPER
+char	*ft_mktemp(void);
+int		create_heredoc_fd(const char *delimiter);
+
 // ERRORS
 void	print_invalid_identifier(char *arg);
 
-#endif
+# endif

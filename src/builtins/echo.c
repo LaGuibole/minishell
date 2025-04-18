@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 19:19:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:31:18 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 /// @return true of the arg is a valid -n option, false otherwise
 static bool	is_n_flag(char *arg)
 {
-	int	i;
+	size_t	i;
 
-	if (!arg || arg[0] != '-' || arg[1] == '\0')
+	if (!arg || arg[0] != '-')
 		return (false);
 	i = 1;
 	while (arg[i])

@@ -6,14 +6,14 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 19:38:48 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 19:46:46 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/17 12:05:25 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /// @brief Init or retrieve env variables list
-/// @param envp Array of strings representing env variables \
+/// @param envp Array of strings representing env variables
 /// 			if NULL, the function returns saved list
 /// @return Pointer to the environment list if envp is NULL, otherwise NULL
 t_list	**ft_envp(char **envp)

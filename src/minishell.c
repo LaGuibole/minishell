@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 18:55:41 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:41:39 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,23 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 			return (free(prompt), ft_lstclear(ft_envp(NULL), free), \
 					ft_printf("exit\n"),1);
+		char **args = split_free(line, ' ', false);
 		if (*line)
 			add_history(line);
 		if (ft_strcmp(line, "pwd") == 0)
-			ft_pwd();
-		// if (ft_strlen(line) > 0)
-		// 	ft_cd(ft_split(line, ' '));
-		char **args = split_free(line, ' ', false);
+			ft_pwd(args);
+		else if (ft_strlen(line) > 0)
+			ft_cd((char *[]){"cd", ""});
 		if (args && args[0] && ft_strncmp(args[0], "echo", 5) == 0)
 			ft_echo(args);
 		if (args && args[0] && ft_strncmp(args[0], "export", 7) == 0)
 			ft_export(args);
 		if (args && args[0] && ft_strncmp(args[0], "env", 4) == 0)
-			ft_env();
+			ft_env(args);
 		if (args && args[0] && ft_strncmp(args[0], "unset", 6) == 0)
 			ft_unset(args);
+		if (args && args[0] && ft_strncmp(args[0], "heredoc", 8) == 0)
+			create_heredoc_fd("EOF");
 		free_double_tab(args);
 		free(prompt);
 		free(line);

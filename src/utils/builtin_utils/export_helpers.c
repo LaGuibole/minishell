@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:10:15 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/16 19:48:08 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:14:16 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /// @return true if the name is valid, false otherwise
 bool	is_valid_identifier(const char *name)
 {
-	int	i;
+	size_t	i;
 
 	if (!name || !*name)
 		return (false);
@@ -60,12 +60,12 @@ int	process_export_with_equal(char *arg, char *equal_sign)
 {
 	char	*name;
 
-	*equal_sign = '\0';
 	if (!is_valid_identifier(arg))
 	{
 		print_invalid_identifier(arg);
 		return (RET_ERR);
 	}
+	*equal_sign = '\0';
 	name = arg;
 	ft_setenv(name, equal_sign + 1);
 	return (RET_OK);
@@ -101,33 +101,25 @@ void	print_sorted_env(void)
 	print_and_free_sorted_env(sorted_env);
 }
 
-/// @brief Print the begininng of env variable
-/// @param var Variable to display
-/// @param equal_sign Pointer to equal sign or NULL
-// static void	print_export_var_name(char *var, char *equal_sign)
+// t_list	*add(t_list *a, t_list *b)
 // {
-// 	fd_printf(STDOUT_FILENO, "declare -x ");
-// 	if (equal_sign)
-// 	{
-// 		write(STDOUT_FILENO, var, equal_sign - var);
-// 		fd_printf(STDOUT_FILENO, "=\"");
-// 	}
-// 	else
-// 		fd_printf(STDOUT_FILENO, var);
-// }
+// 	const char	*to_add = (const char *)b->content;
+// 	char		*env_var;
+// 	t_list		**list_ptr;
 
-/// @brief Display env variable to export format
-/// @param var Variable to display
-// static void	print_export_var(char *var)
-// {
-// 	char	*equal_sign;
+// 	list_ptr = &a;
 
-// 	equal_sign = ft_strchr(var, '=');
-// 	print_export_var_name(var, equal_sign);
-// 	if (equal_sign)
+// 	while (*list_ptr)
 // 	{
-// 		fd_printf(STDOUT_FILENO, equal_sign + 1);
-// 		fd_printf(STDOUT_FILENO, "\"");
+// 		env_var = (const char *)(*list_ptr)->content;
+// 		if (strcmp(to_add, env_var) <= 0)
+// 		{
+// 			b->next = *list_ptr;
+// 			*list_ptr = b;
+// 			return (a);
+// 		}
+// 		list_ptr = &(*list_ptr)->next;
 // 	}
-// 	fd_printf(STDOUT_FILENO, "\n");
+// 	*list_ptr = b;
+// 	return (a);
 // }
