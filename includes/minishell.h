@@ -105,4 +105,10 @@ int		create_heredoc_fd(const char *delimiter);
 // ERRORS
 void	print_invalid_identifier(char *arg);
 
+// PATHING
+char	*get_env_path(char **envp);
+char	**get_paths(char **envp);
+char	*join_cmd_paths(char *path, char *cmd);
+char	*get_cmd_path(t_cmd *cmd, char **envp);
+
 # endif
