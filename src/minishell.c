@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 16:51:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:15:45 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,57 +125,125 @@ static void	free_cmd_chain(t_cmd *cmd)
 	}
 }
 
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_cmd	cmd1;
+// 	t_cmd	cmd2;
+// 	t_cmd	cmd3;
+// 	t_cmd	cmd4;
+// 	t_cmd	cmd5;
+// 	t_cmd	builtin;
+
+// 	(void)argc;
+// 	(void)argv;
+
+// 	// Commande 1 : ls -l
+// 	cmd1.cmd = "ls";
+// 	cmd1.params = ft_split("ls -l", ' ');
+// 	cmd1.redir = NULL;
+// 	cmd1.type_link_next = L_PIPE;
+// 	cmd1.next = &cmd2;
+
+// 	// Commande 2 : grep minishell
+// 	cmd2.cmd = "cat";
+// 	cmd2.params = ft_split("cat Makefile", ' ');
+// 	cmd2.redir = NULL;
+// 	cmd2.type_link_next = L_PIPE;
+// 	cmd2.next = &cmd3;
+
+// 	// Commande 3 : wc -l
+// 	cmd3.cmd = "grep";
+// 	cmd3.params = ft_split("grep $", ' ');
+// 	cmd3.redir = NULL;
+// 	cmd3.type_link_next = L_PIPE;
+// 	cmd3.next = &cmd4;
+
+// 	// Commande 4 : wc -l
+// 	cmd4.cmd = "wc";
+// 	cmd4.params = ft_split("wc -l", ' ');
+// 	cmd4.redir = NULL;
+// 	cmd4.type_link_next = L_PIPE;
+// 	cmd4.next = &builtin;
+
+// 	//Commande 5 : builtin
+// 	builtin.cmd = "echo";
+// 	builtin.params = ft_split("echo -n coucou", ' ');
+// 	builtin.redir = NULL;
+// 	builtin.type_link_next = L_PIPE;
+// 	builtin.next = &cmd5;
+
+// 	cmd5.cmd = "heredoc";
+// 	int fd = create_heredoc_fd("EOF");
+// 	write(fd, "test\n42\nEOF\n", 12);
+// 	close(fd);
+// 	// Exécution pipeline (3 commandes)
+// 	exec_pipeline(&cmd1, envp);
+
+
+// 	// Nettoyage
+// 	free_cmd_chain(&cmd1);
+// 	free_double_tab(builtin.params);
+
+// 	return (0);
+// }
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_cmd	cmd1;
-	t_cmd	cmd2;
-	t_cmd	cmd3;
+	t_cmd		cmd1;
+	t_cmd		cmd2;
+	t_cmd		cmd3;
+	t_redir		*redir1;
+	t_redir		*redir2;
+	t_redir		*redir_in;
+	t_list		*lst1;
+	t_list		*lst2;
 
 	(void)argc;
 	(void)argv;
 
-	// Commande 1 : ls -l
-	cmd1.cmd = "ls";
-	cmd1.params = ft_split("ls -l", ' ');
-	cmd1.redir = NULL;
+	// --- cmd1 : echo coucou > test1 > test2
+	cmd1.cmd = "echo";
+	cmd1.params = ft_split("echo coucou", ' ');
 	cmd1.type_link_next = L_PIPE;
 	cmd1.next = &cmd2;
 
-	// Commande 2 : grep minishell
+	redir1 = malloc(sizeof(t_redir));
+	redir1->type = R_OUTPUT;
+	redir1->filename = ft_strdup("test1");
+
+	redir2 = malloc(sizeof(t_redir));
+	redir2->type = R_OUTPUT;
+	redir2->filename = ft_strdup("test2");
+
+	lst1 = ft_lstnew(redir1);
+	lst2 = ft_lstnew(redir2);
+	ft_lstadd_back(&lst1, lst2);
+
+	cmd1.redir = lst1;
+
+	// --- cmd2 : < test2 grep coucou
 	cmd2.cmd = "grep";
-	cmd2.params = ft_split("grep minishell", ' ');
-	cmd2.redir = NULL;
+	cmd2.params = ft_split("grep coucou", ' ');
 	cmd2.type_link_next = L_PIPE;
 	cmd2.next = &cmd3;
 
-	// Commande 3 : wc -l
+	redir_in = malloc(sizeof(t_redir));
+	redir_in->type = R_INPUT;
+	redir_in->filename = ft_strdup("test2");
+	cmd2.redir = ft_lstnew(redir_in);
+
+	// --- cmd3 : wc -l
 	cmd3.cmd = "wc";
 	cmd3.params = ft_split("wc -l", ' ');
-	cmd3.redir = NULL;
 	cmd3.type_link_next = L_BACK;
+	cmd3.redir = NULL;
 	cmd3.next = NULL;
 
-	// Exécution pipeline (3 commandes)
+	// --- Exécution
 	exec_pipeline(&cmd1, envp);
 
-	// // Builtin simple : echo hello
-	// t_cmd	builtin;
-	// builtin.cmd = "echo";
-	// builtin.params = ft_split("echo hello", ' ');
-	// builtin.redir = NULL;
-	// builtin.type_link_next = L_BACK;
-	// builtin.next = NULL;
-	// exec_cmd(&builtin, envp);
-
-
-	// int fd = create_heredoc_fd("EOF");
-	// write(fd, "test\n42\nEOF\n", 12);
-	// close(fd);
-
-	// Nettoyage
+	// --- Nettoyage
 	free_cmd_chain(&cmd1);
-	// free_double_tab(builtin.params);
-
 	return (0);
 }
 

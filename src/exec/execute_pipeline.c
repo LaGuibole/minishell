@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 16:53:14 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:16:57 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /// @param input_fd The fd to use as STDIN
 /// @param pipefd The pipe array (only used if the command is not last)
 /// @param has_next True if there is a next command
-void	setup_redirections(int input_fd, int *pipefd, bool has_next)
+void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 {
 	if (input_fd != STDIN_FILENO)
 	{
@@ -48,7 +48,11 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 		return (-1);
 	if (pid == 0)
 	{
-		setup_redirections(input_fd, pipefd, has_next);
+		setup_pipe_redirections(input_fd, pipefd, has_next);
+		if (cmd->redir)
+			apply_shell_redirections(cmd->redir);
+		if (cmd_is_builtin(cmd->cmd))
+			exit(exec_builtin(cmd));
 		exec_cmd(cmd, envp);
 		exit(EXIT_FAILURE);
 	}
