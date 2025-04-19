@@ -28,6 +28,7 @@ SOURCES = \
 	./src/exec/dummy.c \
 	./src/exec/execute_builtin.c \
 	./src/exec/execute_cmd.c \
+	./src/exec/execute_pipeline.c \
 	./src/minishell.c \
 	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/export_helpers.c \

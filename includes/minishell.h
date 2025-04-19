@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 17:03:19 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:26:03 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,12 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char		*cmd;
-	bool		is_builtin;
-	char		**params;
-	t_list		*redir;
-	t_link_type	type_link_next;
+	char			*cmd;
+	bool			is_builtin;
+	char			**params;
+	t_list			*redir;
+	t_link_type		type_link_next;
+	struct s_cmd	*next;
 }	t_cmd;
 
 // PROMPT
@@ -114,4 +115,12 @@ char	*get_cmd_path(t_cmd *cmd, char **envp);
 //DUMMY
 void	set_dummy_params(t_cmd *cmd);
 int		exec_cmd(t_cmd *cmd, char **envp);
+
+//PIPELINE EXEC
+void	setup_redirections(int input_fd, int *pipefd, bool has_next);
+pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp);
+int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
+void	wait_children(void);
+int		exec_pipeline(t_cmd *cmds, char **envp);
+
 #endif
