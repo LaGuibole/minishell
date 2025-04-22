@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 16:02:29 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:03:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 # define RET_OK 0
 # define RET_ERR 1
+
+static volatile sig_atomic_t	g_signal = 0;
 
 typedef enum e_redir_type
 {
@@ -127,4 +129,7 @@ void	apply_shell_redirections(t_redir *redir);
 void	free_redirections(t_redir *redir_list);
 void	free_all_and_exit(t_cmd *cmd, int code);
 
+//TEST
+void	signal_handler(int signo);
+void	handle_sigint(int sig);
 #endif
