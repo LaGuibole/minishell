@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 16:12:29 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:00:09 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	handle_sigint(int sig)
 {
 	(void) sig;
+	g_signal = 1;
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	write(1, "\n", 1);
@@ -63,13 +64,14 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
-	// int heredoc_fd = -1;
+	int heredoc_fd = -1;
 	sa_c.sa_handler = handle_sigint;
 	sa_c.sa_flags = 0;
 	sigemptyset(&sa_c.sa_mask);
 	sigaction(SIGINT, &sa_c, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	ft_envp(envp);
+	g_signal = 0;
 	while (1)
 	{
 		char	*prompt = display_prompt();
@@ -84,6 +86,10 @@ int	main(int argc, char **argv, char **envp)
 		if (*line)
 			add_history(line);
 		char **args = split_free(line, ' ', false);
+		if (ft_strcmp(args[0], "heredoc") == 0)
+			heredoc_fd = create_heredoc_fd("EOF");
+		if (heredoc_fd > 0)
+			close(heredoc_fd);
 		if (args && args[0])
 		{
 			t_cmd cmd;

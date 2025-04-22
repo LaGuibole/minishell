@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 17:31:03 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:05:17 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static int	write_heredoc_content(int fd, const char *delimiter)
 		fd_printf(fd, "%s\n", line);
 		free(line);
 	}
-	free(line);
+	if (line)
+		free(line);
 	return (RET_OK);
 }
 
@@ -55,3 +56,31 @@ int	create_heredoc_fd(const char *delimiter)
 	free(path);
 	return (fd);
 }
+
+// int	prepare_heredocs(t_cmd *cmds)
+// {
+// 	t_cmd	*curr;
+// 	t_redir	*r;
+// 	t_list	*redir_list;
+// 	int		fd;
+
+// 	curr = cmds;
+// 	while (curr)
+// 	{
+// 		redir_list = curr->redir;
+// 		while (redir_list)
+// 		{
+// 			r = (t_redir *)redir_list->content;
+// 			if (r->type == R_HEREDOC)
+// 			{
+// 				fd = create_heredoc_fd(r->filename);
+// 				if (fd == -1)
+// 					return (RET_ERR);
+// 				close(fd);
+// 			}
+// 			redir_list = redir_list->next;
+// 		}
+// 		curr = curr->next;
+// 	}
+// 	return (RET_OK);
+// }

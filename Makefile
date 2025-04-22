@@ -37,7 +37,8 @@ SOURCES = \
 	./src/utils/cmd_utils/clear_exit.c \
 	./src/utils/errors/env_errors.c \
 	./src/utils/heredoc_utils/create_heredoc.c \
-	./src/utils/heredoc_utils/ft_mktemp.c
+	./src/utils/heredoc_utils/ft_mktemp.c \
+	./src/utils/signals/signal_handler.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))
 
