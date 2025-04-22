@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 18:16:57 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 12:58:17 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,5 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 		curr = curr->next;
 	}
 	wait_children();
-	return (0);
+	return (RET_OK);
 }

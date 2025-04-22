@@ -30,6 +30,7 @@ SOURCES = \
 	./src/exec/execute_pipeline.c \
 	./src/exec/handle_redirections.c \
 	./src/minishell.c \
+	./src/pathing/cmd_path2.c \
 	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/export_helpers.c \
 	./src/utils/builtin_utils/unset_helpers.c \

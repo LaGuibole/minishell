@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 18:16:50 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:23:21 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	redir_input(char *filename)
 
 static void	redir_output(char *filename)
 {
-	int fd;
+	int	fd;
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -43,6 +43,7 @@ static void	redir_output(char *filename)
 static void	redir_append(char *filename)
 {
 	int	fd;
+
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
@@ -69,7 +70,7 @@ static void	redir_heredoc(char *delimiter)
 
 void	apply_shell_redirections(t_list *redir)
 {
-	t_redir *r;
+	t_redir	*r;
 
 	while (redir)
 	{
