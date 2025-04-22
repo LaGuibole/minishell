@@ -16,12 +16,26 @@ RESET = \033[0m
 
 SOURCES = \
 	./src/builtins/cd.c \
+	./src/builtins/echo.c \
+	./src/builtins/env.c \
+	./src/builtins/exit.c \
+	./src/builtins/export.c \
 	./src/builtins/pwd.c \
+	./src/builtins/unset.c \
 	./src/core/display_prompt.c \
+	./src/env/env_helpers.c \
 	./src/env/ft_envp.c \
+	./src/exec/execute_builtin.c \
+	./src/exec/execute_cmd.c \
+	./src/exec/execute_pipeline.c \
+	./src/exec/handle_redirections.c \
 	./src/minishell.c \
-	./src/parse/parsing.c \
-	./src/parse/parsing_command.c
+	./src/pathing/cmd_path.c \
+	./src/utils/builtin_utils/export_helpers.c \
+	./src/utils/builtin_utils/unset_helpers.c \
+	./src/utils/errors/env_errors.c \
+	./src/utils/heredoc_utils/create_heredoc.c \
+	./src/utils/heredoc_utils/ft_mktemp.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS := $(addprefix build/, $(OBJECTS))
 

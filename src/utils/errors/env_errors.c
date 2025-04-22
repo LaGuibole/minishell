@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env_errors.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:52:41 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 11:24:06 by guphilip         ###   ########.fr       */
+/*   Created: 2025/04/16 14:16:33 by guphilip          #+#    #+#             */
+/*   Updated: 2025/04/16 19:48:52 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Builtin implementation of the pwd command
-/// @return 0 on success, 1 otherwise (getcwd failed)
-int	ft_pwd(char **args)
+/// @brief Print error message for invalid identifier
+/// @param arg Invalid arg
+void	print_invalid_identifier(char *arg)
 {
-	char	*pwd;
-
-	(void)args;
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		fd_printf(STDERR_FILENO, "pwd: getcwd failed\n");
-		fd_printf(STDERR_FILENO, strerror(errno));
-		return (RET_ERR);
-	}
-	fd_printf(STDOUT_FILENO, "%s\n", pwd);
-	free(pwd);
-	return (RET_OK);
+	fd_printf(STDERR_FILENO, "minishell: export: `%s':\
+		not a valid identifier\n", arg);
 }

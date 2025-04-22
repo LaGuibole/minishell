@@ -6,12 +6,14 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/14 19:09:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/17 11:59:22 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Save the current workind directory to OLDPWD
+/// @return 0 on success, 1 otherwise (eg ; getcwd failed)
 static int	save_old_pwd(void)
 {
 	char	*old_pwd;
@@ -27,6 +29,8 @@ static int	save_old_pwd(void)
 	return (RET_OK);
 }
 
+/// @brief Update the current working directory in PWD
+/// @return 0 on success, 1 otherwise (eg ; getcwd failed)
 static int	update_pwd(void)
 {
 	char	*new_pwd;
@@ -42,11 +46,20 @@ static int	update_pwd(void)
 	return (RET_OK);
 }
 
+/// @brief Get the target path from cd args
+/// @param args The args list passed to cd
+/// @return A malloc'd string containing the path to change to, NULL on error
 static char	*get_target_path(char **args)
 {
 	char	*path;
 
-	if (!args[1] || !args[1][0])
+	if (!args[1])
+	{
+		path = ft_getenv("HOME");
+		if (!path)
+			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
+	}
+	else if (ft_strcmp(args[1], "~") == 0 || ft_strcmp(args[1], "--") == 0)
 	{
 		path = ft_getenv("HOME");
 		if (!path)
@@ -63,6 +76,9 @@ static char	*get_target_path(char **args)
 	return (path);
 }
 
+/// @brief Builtin implementation of the cd command
+/// @param args The arg list passed to cd
+/// @return 0 on success, 1 otherwise
 int	ft_cd(char **args)
 {
 	char	*path;
