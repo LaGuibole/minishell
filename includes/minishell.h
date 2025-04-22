@@ -44,6 +44,7 @@ typedef struct s_redir
 {
 	t_redir_type	type;
 	char			*filename;
+	struct s_redir	*next;
 }	t_redir;
 
 typedef struct s_cmd
@@ -56,7 +57,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-// PROMPT
 char	*display_prompt(void);
 
 // ENV
