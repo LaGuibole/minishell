@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 14:21:55 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:14:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	exec_child_process(t_cmd *cmd, char **envp)
 	char	*path;
 
 	if (cmd_is_builtin(cmd->cmd))
-		exit(exec_builtin(cmd));
+		free_all_and_exit(cmd, exec_builtin(cmd));
 	path = get_cmd_path(cmd, envp);
 	if (!path)
 	{
@@ -45,7 +45,7 @@ int	exec_cmd(t_cmd *cmd, char **envp)
 	if (pid == 0)
 	{
 		if (cmd_is_builtin(cmd->cmd))
-			exit(exec_builtin(cmd));
+			free_all_and_exit(cmd, exec_builtin(cmd));
 		exec_child_process(cmd, envp);
 	}
 	waitpid(pid, &status, 0);

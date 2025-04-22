@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   clear_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 12:57:05 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 14:56:15 by guphilip         ###   ########.fr       */
+/*   Created: 2025/04/22 15:34:03 by guphilip          #+#    #+#             */
+/*   Updated: 2025/04/22 16:02:55 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Builtin implementation of the env command
-int	ft_env(char **args)
+void	free_redirections(t_redir *redir_list)
 {
-	t_list	*envp;
-	char	*entry;
-	char	*value;
+	t_redir	*tmp;
 
-	(void)args;
-	envp = *ft_envp(NULL);
-	while (envp)
+	while (redir_list)
 	{
-		entry = (char *)envp->content;
-		value = ft_strchr(entry, '=');
-		if (value && value[1] != '\0')
-			fd_printf(STDOUT_FILENO, "%s\n", envp->content);
-		envp = envp->next;
+		tmp = redir_list->next;
+		if (redir_list)
+		{
+			free(redir_list->filename);
+		}
+		free(redir_list);
+		redir_list = tmp;
 	}
-	return (RET_OK);
+}
+
+void	free_all_and_exit(t_cmd *cmd, int code)
+{
+	free_double_tab(cmd->params);
+	if (cmd->redir)
+		free_redirections(cmd->redir);
+	ft_lstclear(ft_envp(NULL), free);
+	rl_clear_history();
+	exit(code);
 }

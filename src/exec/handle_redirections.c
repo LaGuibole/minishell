@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 14:23:21 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:56:17 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,18 @@ static void	redir_heredoc(char *delimiter)
 	close(fd);
 }
 
-void	apply_shell_redirections(t_list *redir)
+void	apply_shell_redirections(t_redir *redir)
 {
-	t_redir	*r;
-
 	while (redir)
 	{
-		r = (t_redir *)redir->content;
-		if (r->type == R_INPUT)
-			redir_input(r->filename);
-		else if (r->type == R_OUTPUT)
-			redir_output(r->filename);
-		else if (r->type == R_APPEND)
-			redir_append(r->filename);
-		else if (r->type == R_HEREDOC)
-			redir_heredoc(r->filename);
+		if (redir->type == R_INPUT)
+			redir_input(redir->filename);
+		else if (redir->type == R_OUTPUT)
+			redir_output(redir->filename);
+		else if (redir->type == R_APPEND)
+			redir_append(redir->filename);
+		else if (redir->type == R_HEREDOC)
+			redir_heredoc(redir->filename);
 		redir = redir->next;
 	}
 }

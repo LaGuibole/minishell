@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 12:43:22 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 16:12:29 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@ int	main(int argc, char **argv, char **envp)
 	{
 		char	*prompt = display_prompt();
 		char	*line = readline(prompt);
+		free(prompt);
 		if (!line)
 		{
-			free(prompt);
 			ft_lstclear(ft_envp(NULL), free);
 			fd_printf(STDOUT_FILENO, "exit\n");
 			return (1);
@@ -95,11 +95,9 @@ int	main(int argc, char **argv, char **envp)
 			exec_cmd(&cmd, envp);
 		}
 		free_double_tab(args);
-		free(prompt);
 		free(line);
 	}
-	// ft_lstclear(ft_envp(NULL), free);
-	// return (0);
+	ft_lstclear(ft_envp(NULL), free);
 }
 
 // static void	free_cmd_chain(t_cmd *cmd)
@@ -130,60 +128,60 @@ int	main(int argc, char **argv, char **envp)
 // {
 // 	t_cmd	cmd1;
 // 	t_cmd	cmd2;
-// 	t_cmd	cmd3;
-// 	t_cmd	cmd4;
-// 	t_cmd	cmd5;
-// 	t_cmd	builtin;
+// 	// t_cmd	cmd3;
+// 	// t_cmd	cmd4;
+// 	// t_cmd	cmd5;
+// 	// t_cmd	builtin;
 
 // 	(void)argc;
 // 	(void)argv;
 
 // 	// Commande 1 : ls -l
 // 	cmd1.cmd = "ls";
-// 	cmd1.params = ft_split("ls -l", ' ');
+// 	cmd1.params = ft_split("ls", ' ');
 // 	cmd1.redir = NULL;
 // 	cmd1.type_link_next = L_PIPE;
 // 	cmd1.next = &cmd2;
 
 // 	// Commande 2 : grep minishell
-// 	cmd2.cmd = "cat";
-// 	cmd2.params = ft_split("cat Makefile", ' ');
+// 	cmd2.cmd = "wc";
+// 	cmd2.params = ft_split("wc -l", ' ');
 // 	cmd2.redir = NULL;
-// 	cmd2.type_link_next = L_PIPE;
-// 	cmd2.next = &cmd3;
+// 	cmd2.type_link_next = L_BACK;
+// 	cmd2.next = NULL;
 
-// 	// Commande 3 : wc -l
-// 	cmd3.cmd = "grep";
-// 	cmd3.params = ft_split("grep $", ' ');
-// 	cmd3.redir = NULL;
-// 	cmd3.type_link_next = L_PIPE;
-// 	cmd3.next = &cmd4;
+// 	// // Commande 3 : wc -l
+// 	// cmd3.cmd = "grep";
+// 	// cmd3.params = ft_split("grep $", ' ');
+// 	// cmd3.redir = NULL;
+// 	// cmd3.type_link_next = L_PIPE;
+// 	// cmd3.next = &cmd4;
 
-// 	// Commande 4 : wc -l
-// 	cmd4.cmd = "wc";
-// 	cmd4.params = ft_split("wc -l", ' ');
-// 	cmd4.redir = NULL;
-// 	cmd4.type_link_next = L_PIPE;
-// 	cmd4.next = &builtin;
+// 	// // Commande 4 : wc -l
+// 	// cmd4.cmd = "wc";
+// 	// cmd4.params = ft_split("wc -l", ' ');
+// 	// cmd4.redir = NULL;
+// 	// cmd4.type_link_next = L_PIPE;
+// 	// cmd4.next = &builtin;
 
-// 	//Commande 5 : builtin
-// 	builtin.cmd = "echo";
-// 	builtin.params = ft_split("echo -n coucou", ' ');
-// 	builtin.redir = NULL;
-// 	builtin.type_link_next = L_PIPE;
-// 	builtin.next = &cmd5;
+// 	// //Commande 5 : builtin
+// 	// builtin.cmd = "echo";
+// 	// builtin.params = ft_split("echo -n coucou", ' ');
+// 	// builtin.redir = NULL;
+// 	// builtin.type_link_next = L_PIPE;
+// 	// builtin.next = &cmd5;
 
-// 	cmd5.cmd = "heredoc";
-// 	int fd = create_heredoc_fd("EOF");
-// 	write(fd, "test\n42\nEOF\n", 12);
-// 	close(fd);
+// 	// cmd5.cmd = "heredoc";
+// 	// int fd = create_heredoc_fd("EOF");
+// 	// write(fd, "test\n42\nEOF\n", 12);
+// 	// close(fd);
 // 	// Exécution pipeline (3 commandes)
 // 	exec_pipeline(&cmd1, envp);
 
 
 // 	// Nettoyage
 // 	free_cmd_chain(&cmd1);
-// 	free_double_tab(builtin.params);
+// 	// free_double_tab(builtin.params);
 
 // 	return (0);
 // }
