@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 11:52:41 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 11:24:06 by guphilip         ###   ########.fr       */
+/*   Created: 2025/04/15 12:57:05 by guphilip          #+#    #+#             */
+/*   Updated: 2025/04/18 11:25:35 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Builtin implementation of the pwd command
-/// @return 0 on success, 1 otherwise (getcwd failed)
-int	ft_pwd(char **args)
+/// @brief Builtin implementation of the env command
+int	ft_env(char **args)
 {
-	char	*pwd;
+	t_list	*envp;
+	char	*entry;
+	char	*value;
 
 	(void)args;
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
+	envp = *ft_envp(NULL);
+	while (envp)
 	{
-		fd_printf(STDERR_FILENO, "pwd: getcwd failed\n");
-		fd_printf(STDERR_FILENO, strerror(errno));
-		return (RET_ERR);
+		entry = (char *)envp->content;
+		value = ft_strchr(entry, '=');
+		if (value && value[1] != '\0')
+			fd_printf(STDOUT_FILENO, "%s\n", envp->content);
+		envp = envp->next;
 	}
-	fd_printf(STDOUT_FILENO, "%s\n", pwd);
-	free(pwd);
 	return (RET_OK);
 }
