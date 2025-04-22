@@ -6,76 +6,41 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 17:05:23 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:24:42 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	exec_cmd(t_cmd *cmd, char **envp)
-// {
-// 	char	*path;
-
-// 	cmd->is_builtin = cmd_is_builtin(cmd->cmd);
-// 	if (cmd->is_builtin)
-// 		return (exec_builtin(cmd));
-// 	path = get_cmd_path(cmd, envp);
-// 	if (!path)
-// 	{
-// 		fd_printf(STDERR_FILENO, "Command not found\n");
-// 		return (127);
-// 	}
-// 	int pid = fork();
-// 	if (pid != 0)
-// 		return (waitpid(-1, NULL, 0), RET_OK);
-// 	if (execve(path, cmd->params, envp) == -1)
-// 	{
-// 		perror("execve");
-// 		free(path);
-// 		return (RET_ERR);
-// 	}
-// 	return (RET_OK);
-// }
-
-// int	exec_cmd(t_cmd *cmd, char **envp)
-// {
-// 	char	*path;
-// 	int		pid;
-// 	int		status;
-
-// 	cmd->is_builtin = cmd_is_builtin(cmd->cmd);
-// 	if (cmd->is_builtin)
-// 		return (exec_builtin(cmd));
-// 	path = get_cmd_path(cmd, envp);
-// 	if (!path)
-// 	{
-// 		fd_printf(STDERR_FILENO, "Command not found\n");
-// 		return (127);
-// 	}
-// 	pid = fork();
-// 	if (pid == -1)
-// 	{
-// 		perror("fork");
-// 		free(path);
-// 		return (RET_ERR);
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		if (execve(path, cmd->params, envp) == -1)
-// 		{
-// 			perror("execve");
-// 			free(path);
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// 	free(path);
-// 	waitpid(pid, &status, 0);
-// 	return (RET_OK);
-// }
-
-int	exec_cmd(t_cmd *cmd, char **envp)
+/// @brief Execute a command in a child process (builtin or external)
+/// @param cmd The command structure containing the command and its arguments
+/// @param envp The environment variables used for execve
+static void	exec_child_process(t_cmd *cmd, char **envp)
 {
 	char	*path;
+
+	if (cmd_is_builtin(cmd->cmd))
+		free_all_and_exit(cmd, exec_builtin(cmd));
+	path = get_cmd_path(cmd, envp);
+	if (!path)
+	{
+		fd_printf(STDERR_FILENO, "Command not found\n");
+		exit (127);
+	}
+	if (execve(path, cmd->params, envp) == -1)
+	{
+		perror("execve");
+		free(path);
+		exit(EXIT_FAILURE);
+	}
+}
+
+/// @brief Execute a single command (builtin or external), forking if necessary
+/// @param cmd The command structure containing the command and its arguments
+/// @param envp The environement variables used for execve
+/// @return 0 on success, or 1 on fork error
+int	exec_cmd(t_cmd *cmd, char **envp)
+{
 	pid_t	pid;
 	int		status;
 
@@ -87,19 +52,8 @@ int	exec_cmd(t_cmd *cmd, char **envp)
 	if (pid == 0)
 	{
 		if (cmd_is_builtin(cmd->cmd))
-			exit(exec_builtin(cmd));
-		path = get_cmd_path(cmd, envp);
-		if (!path)
-		{
-			fd_printf(STDERR_FILENO, "Command not found\n");
-			exit (127);
-		}
-		if (execve(path, cmd->params, envp) == -1)
-		{
-			perror("execve");
-			free(path);
-			exit(EXIT_FAILURE);
-		}
+			free_all_and_exit(cmd, exec_builtin(cmd));
+		exec_child_process(cmd, envp);
 	}
 	waitpid(pid, &status, 0);
 	return (RET_OK);

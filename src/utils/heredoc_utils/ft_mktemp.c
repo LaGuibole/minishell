@@ -6,12 +6,16 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:06:57 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/18 11:33:48 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:33:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Construct a temporary filename based on the process ID and a counter
+/// @param pid The process ID used to build the name
+/// @param count A counter used to ensure uniqueness
+/// @return A newly allocated string containing the full temp path |NULL (error)
 static char	*build_tmp_name(pid_t pid, int count)
 {
 	char	*id;
@@ -24,6 +28,8 @@ static char	*build_tmp_name(pid_t pid, int count)
 	return (full);
 }
 
+/// @brief Generate a unique temp filename in /tmp for heredoc usage
+/// @return A newly allocated string containing a unique filename | NULL(error)
 char	*ft_mktemp(void)
 {
 	static size_t	count;

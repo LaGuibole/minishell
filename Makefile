@@ -30,9 +30,11 @@ SOURCES = \
 	./src/exec/execute_pipeline.c \
 	./src/exec/handle_redirections.c \
 	./src/minishell.c \
+	./src/pathing/cmd_path2.c \
 	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/export_helpers.c \
 	./src/utils/builtin_utils/unset_helpers.c \
+	./src/utils/cmd_utils/clear_exit.c \
 	./src/utils/errors/env_errors.c \
 	./src/utils/heredoc_utils/create_heredoc.c \
 	./src/utils/heredoc_utils/ft_mktemp.c
