@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 18:17:02 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 20:03:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define ERR_MALLOC "NOT ENOUGH MEMORY\n"
 # define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
 # define ERR_CHEV "bash: syntax error near unexpected token"
+
+static volatile sig_atomic_t	g_signal = 0;
 
 typedef enum e_redir_type
 {
@@ -129,7 +131,11 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp);
 int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
 void	wait_children(void);
 int		exec_pipeline(t_cmd *cmds, char **envp);
-void	apply_shell_redirections(t_list *redir);
+void	apply_shell_redirections(t_redir *redir);
+
+//CLEAN && EXIT
+void	free_redirections(t_redir *redir_list);
+void	free_all_and_exit(t_cmd *cmd, int code);
 
 //PARSING
 t_cmd	*parsing_cmd(char *str);
@@ -140,5 +146,9 @@ t_cmd	*cmdnew(void);
 t_redir	*rdrlast(t_redir *rdr);
 void	rdradd_back(t_redir **rdr, t_redir *new);
 t_redir	*rdrnew(void);
+
+//TEST
+void	signal_handler(int signo);
+void	handle_sigint(int sig);
 
 #endif

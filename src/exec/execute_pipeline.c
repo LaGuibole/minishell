@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/19 18:16:57 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:21:59 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@ void	wait_children(void)
 		;
 }
 
+/// @brief Execute a pipeline of commands, handling pipes and process creation
+/// @param cmds The linked list of commands forming the pipeline
+/// @param envp The environment variables passed to execve
+/// @return 0 on success, 1 on pipe or fork failure
 int	exec_pipeline(t_cmd *cmds, char **envp)
 {
 	t_cmd	*curr;
@@ -103,5 +107,5 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 		curr = curr->next;
 	}
 	wait_children();
-	return (0);
+	return (RET_OK);
 }
