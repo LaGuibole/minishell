@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 17:21:59 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:50:44 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,12 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 	{
 		setup_pipe_redirections(input_fd, pipefd, has_next);
 		if (cmd->redir)
+		{
 			apply_shell_redirections(cmd->redir);
-		if (cmd_is_builtin(cmd->cmd))
+		}
+		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
-		exec_cmd(cmd, envp);
+		exec_child_process(cmd, envp);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);

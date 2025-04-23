@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 20:00:09 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 13:35:08 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,37 @@ void	handle_sigint(int sig)
 	rl_on_new_line();
 	write(1, "\n", 1);
 	rl_redisplay();
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	struct sigaction	sa_c;
+
+	(void)argc;
+	(void)argv;
+	sa_c.sa_handler = handle_sigint;
+	sa_c.sa_flags = 0;
+	sigemptyset(&sa_c.sa_mask);
+	sigaction(SIGINT, &sa_c, NULL);
+	signal(SIGQUIT, SIG_IGN);
+	ft_envp(envp);
+	t_cmd	*cmds = NULL;
+
+	while (1)
+	{
+		char	*prompt = display_prompt();
+		char	*line = readline(prompt);
+		if (!line)
+			return (free(prompt), ft_lstclear(ft_envp(NULL), free), \
+					ft_printf("exit\n"), 1);
+		if (line)
+			add_history(line);
+		parse_cmd(line, &cmds);
+		if (cmds)
+			exec_pipeline(cmds, envp);
+	}
+	ft_lstclear(ft_envp(NULL), free);
+	return (0);
 }
 
 // int	main(int argc, char **argv, char **envp)
@@ -85,7 +116,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		char	*prompt = display_prompt();
 		char	*line = readline(prompt);
-	
+
 		if (*line)
 		{
 			add_history(line);
@@ -360,4 +391,3 @@ int	main(int argc, char **argv, char **envp)
 // 	free_cmd_chain(&cmd1);
 // 	return (0);
 // }
-
