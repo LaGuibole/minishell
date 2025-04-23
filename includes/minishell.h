@@ -25,11 +25,17 @@
 
 # define RET_OK 0
 # define RET_ERR 1
+# define ERR_QUOTE "MISSING QUOTE\n"
+# define ERR_PIPE "zsh: parse error near `|'\n"
+# define ERR_MALLOC "NOT ENOUGH MEMORY\n"
+# define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
+# define ERR_CHEV "bash: syntax error near unexpected token"
 
 static volatile sig_atomic_t	g_signal = 0;
 
 typedef enum e_redir_type
 {
+	R_NONE,
 	R_INPUT,
 	R_OUTPUT,
 	R_APPEND,
@@ -38,6 +44,7 @@ typedef enum e_redir_type
 
 typedef enum e_link_type
 {
+	L_NONE,
 	L_PIPE,
 	L_BACK
 }	t_link_type;
@@ -51,12 +58,13 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char					*cmd;
-	bool					is_builtin;
-	char					**params;
-	struct s_redir			*redir;
-	t_link_type				type_link_next;
-	struct s_cmd			*next;
+	char			*cmd;
+	bool			is_builtin;
+	char			**params;
+	int				nbparams;
+	struct s_redir	*redir;
+	t_link_type		type_link_next;
+	struct s_cmd	*next;
 }	t_cmd;
 
 char	*display_prompt(void);
@@ -129,7 +137,18 @@ void	apply_shell_redirections(t_redir *redir);
 void	free_redirections(t_redir *redir_list);
 void	free_all_and_exit(t_cmd *cmd, int code);
 
+//PARSING
+t_cmd	*parsing_cmd(char *str);
+int		parse_cmd(char *str, t_cmd *cmd);
+t_cmd	*cmdlast(t_cmd *cmd);
+void	cmdadd_back(t_cmd **cmd, t_cmd *new);
+t_cmd	*cmdnew(void);
+t_redir	*rdrlast(t_redir *rdr);
+void	rdradd_back(t_redir **rdr, t_redir *new);
+t_redir	*rdrnew(void);
+
 //TEST
 void	signal_handler(int signo);
 void	handle_sigint(int sig);
+
 #endif
