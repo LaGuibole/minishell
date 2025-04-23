@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 13:35:08 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:06:18 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,28 @@ int	main(int argc, char **argv, char **envp)
 	sigaction(SIGINT, &sa_c, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	ft_envp(envp);
-	t_cmd	*cmds = NULL;
 
 	while (1)
 	{
+		t_cmd	*cmds = NULL;
 		char	*prompt = display_prompt();
 		char	*line = readline(prompt);
+		free(prompt);
 		if (!line)
-			return (free(prompt), ft_lstclear(ft_envp(NULL), free), \
+			return (ft_lstclear(ft_envp(NULL), free), \
 					ft_printf("exit\n"), 1);
 		if (line)
 			add_history(line);
+		if (ft_strlen(line) == 0)
+			continue ;
 		parse_cmd(line, &cmds);
 		if (cmds)
+		{
 			exec_pipeline(cmds, envp);
+			// print_cmd_list(cmds);
+			free_cmd_list(cmds);
+		}
+		free(line);
 	}
 	ft_lstclear(ft_envp(NULL), free);
 	return (0);

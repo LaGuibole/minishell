@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 11:50:24 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:49:38 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,16 @@ int	exec_cmd(t_cmd *cmd, char **envp)
 	int		status;
 
 	if (cmd_is_builtin(cmd->cmd) && !is_builtin_pipeable(cmd->cmd))
+	{
 		return (exec_builtin(cmd));
+	}
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), RET_ERR);
 	if (pid == 0)
 	{
+		if (cmd->redir)
+			apply_shell_redirections(cmd->redir);
 		if (cmd_is_builtin(cmd->cmd))
 			free_all_and_exit(cmd, exec_builtin(cmd));
 		exec_child_process(cmd, envp);
