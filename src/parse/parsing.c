@@ -12,45 +12,79 @@
 
 #include "minishell.h"
 
-static int	set_next_cmd(char *str, t_cmd *cmd)
+static bool	empty_link(char *str)
 {
-	(void) str;
-	(void) cmd;
-	return (RET_ERR);
+	bool	pipe;
+	bool	single_quote;
+	bool	double_quote;
+
+	pipe = 0;
+	while (*str == ' ')
+		str++;
+	if (*str == '|')
+	{
+		fd_printf(STDOUT_FILENO, ERR_PIPE);
+		return (RET_ERR);
+	}
+	single_quote = 0;
+	double_quote = 0;
+	while (*str)
+	{
+		if (*str == '\'' && !double_quote)
+			single_quote = !single_quote;
+		if (*str == '"' && !single_quote)
+			double_quote = !double_quote;
+		if (*str == '&' && !single_quote && !double_quote)
+			return (RET_ERR);
+		if (*str == '|' && !single_quote && !double_quote)
+		{
+			if (pipe == 1)
+			{
+				fd_printf(STDOUT_FILENO, ERR_PIPE);
+				return (pipe);
+			}
+			pipe = 1;
+		}
+		if (*str != '|' && *str != ' ')
+			pipe = 0;
+		str++;
+	}
+	return (pipe);
 }
 
-static int	set_is_builtin(t_cmd *cmd)
+static bool	unclosed_quotes(char *str)
 {
-	(void) cmd;
-	return (RET_ERR);
-}
+	bool	single_quote;
+	bool	double_quote;
 
-static int	empty_link(char *str)
-{
-	(void) str;
-	return (RET_ERR);
-}
-
-static int	unclosed_quotes(char *str)
-{
-	(void) str;
-	return (RET_ERR);
+	single_quote = 0;
+	double_quote = 0;
+	while (*str)
+	{
+		if (*str == '\'' && !double_quote)
+			single_quote = !single_quote;
+		if (*str == '"' && !single_quote)
+			double_quote = !double_quote;
+		str++;
+	}
+	if (single_quote || double_quote)
+		fd_printf(STDOUT_FILENO, ERR_QUOTE);
+	return (single_quote || double_quote);
 }
 
 t_cmd	*parsing_cmd(char *str)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd) + 1);
+	cmd = NULL;
 	if (
 		unclosed_quotes(str) || //Gestion ' et " pour readline
-		empty_link(str) || //Separation | et & pour la structure
-		parse_cmd(str, cmd) || //Separation cmd, parameters et redirection
-		set_is_builtin(cmd) || //Gestion is_builtin
-		set_next_cmd(str, cmd) //Gestion next
+		empty_link(str) || //Gestion des pipe et esperluette
+		parse_cmd(str, cmd) //Separation cmd, parameters et redirection dans cmd
 	)
 	{
-		free(cmd);
+		if (cmd)
+			free(cmd);
 		return (NULL);
 	}
 	return (cmd);

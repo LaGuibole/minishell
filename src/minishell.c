@@ -57,6 +57,33 @@ void	handle_sigint(int sig)
 // 	return (RET_OK);
 // }
 
+int main(void)
+{
+	t_cmd *cmd;
+
+
+	/*char *tmp[] = {"cat", "-nE", "Makefile", ">", "poubelle", NULL};
+	execve("/usr/bin/cat", tmp, NULL);
+	perror("execve");*/
+	while (1)
+	{
+		char	*prompt = display_prompt();
+		char	*line = readline(prompt);
+	
+		if (*line)
+		{
+			add_history(line);
+			cmd = parsing_cmd(line);
+			if (!cmd)
+				ft_printf("\n");
+			else
+				free(cmd);
+		}
+		free(prompt);
+		free(line);
+	}
+}
+
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	struct sigaction	sa_c;
@@ -101,7 +128,7 @@ void	handle_sigint(int sig)
 // 	}
 // }
 
-static void	free_cmd_chain(t_cmd *cmd)
+/*static void	free_cmd_chain(t_cmd *cmd)
 {
 	t_cmd	*next;
 	size_t	i;
@@ -123,7 +150,7 @@ static void	free_cmd_chain(t_cmd *cmd)
 		// si redir est alloc, tu pourrais free ici aussi
 		cmd = next;
 	}
-}
+}*/
 
 // int	main(int argc, char **argv, char **envp)
 // {
@@ -186,7 +213,7 @@ static void	free_cmd_chain(t_cmd *cmd)
 
 // 	return (0);
 // }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	t_cmd		cmd1;
@@ -245,5 +272,5 @@ int	main(int argc, char **argv, char **envp)
 	// --- Nettoyage
 	free_cmd_chain(&cmd1);
 	return (0);
-}
+}*/
 
