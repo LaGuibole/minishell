@@ -22,6 +22,7 @@ SOURCES = \
 	./src/builtins/export.c \
 	./src/builtins/pwd.c \
 	./src/builtins/unset.c \
+	./src/clean/clean_cmd.c \
 	./src/core/display_prompt.c \
 	./src/env/env_helpers.c \
 	./src/env/ft_envp.c \
@@ -31,13 +32,15 @@ SOURCES = \
 	./src/exec/handle_redirections.c \
 	./src/minishell.c \
 	./src/parse/cmd.c \
-	./src/parse/parsing.c \
 	./src/parse/parsing_command.c \
+	./src/parse/redir.c \
 	./src/pathing/cmd_path2.c \
 	./src/pathing/cmd_path.c \
+	./src/utils/builtin_utils/cd_helpers.c \
 	./src/utils/builtin_utils/export_helpers.c \
 	./src/utils/builtin_utils/unset_helpers.c \
 	./src/utils/cmd_utils/clear_exit.c \
+	./src/utils/debug/debug.c \
 	./src/utils/errors/env_errors.c \
 	./src/utils/heredoc_utils/create_heredoc.c \
 	./src/utils/heredoc_utils/ft_mktemp.c \

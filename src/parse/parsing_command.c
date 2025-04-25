@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_command.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlintot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 22:15:45 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/14 22:15:46 by mlintot          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:12:57 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	set_parameters(char *str, t_cmd *cmd)
 	bool	double_quote;
 
 	str = clean_parameters(str);
-	params = malloc(sizeof(char *) + 1);
+	params = malloc(sizeof(char *) + 2);
 	if (!params)
 	{
 		fd_printf(STDOUT_FILENO, ERR_MALLOC);
@@ -127,6 +127,7 @@ static int	set_parameters(char *str, t_cmd *cmd)
 		}
 		start += ++end;
 	}
+	params[cmd->nbparams] = NULL;
 	cmd->params = params;
 	free(str);
 	return (RET_OK);
@@ -252,13 +253,13 @@ static int	split_cmd(char **line, char *str)
 	return (nbline);
 }
 
-int	parse_cmd(char *str, t_cmd *cmd)
+int	parse_cmd(char *str, t_cmd **cmd)
 {
 	char	**line;
 	int		nbline;
 	int		cpt;
 	t_cmd	*current;
-	
+
 	line = malloc(sizeof(char *) + 1);
 	if (!line)
 	{
@@ -290,9 +291,9 @@ int	parse_cmd(char *str, t_cmd *cmd)
 			return (RET_ERR);
 		}
 		if (!cmd)
-			cmd = current;
+			cmd = &current;
 		else
-			cmdadd_back(&cmd, current);
+			cmdadd_back(cmd, current);
 		cpt++;
 	}
 	return (RET_OK);
