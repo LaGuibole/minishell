@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:51:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:56:25 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_redir
 	t_redir_type	type;
 	char			*filename;
 	struct s_redir	*next;
+	int				fd;
 }	t_redir;
 
 typedef struct s_cmd
@@ -159,9 +160,13 @@ int		set_parameters(char *str, t_cmd *cmd);
 void	signal_handler(int signo);
 void	handle_sigint(int sig);
 void	exec_child_process(t_cmd *cmd, char **envp);
+void	apply_heredoc_redirections(t_redir *redir);
 
 
 void	print_cmd_list(t_cmd *cmd); // debug
 void	free_cmd_list(t_cmd *cmd);
+void	prepare_heredocs(t_cmd *cmds);
+void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 11:43:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:47:30 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			print_cmd_list(cmds);
 			exec_pipeline(cmds, envp);
-			//free_cmd_list(cmds);
+			// free_cmd_list(cmds);
 		}
 		free(line);
 	}

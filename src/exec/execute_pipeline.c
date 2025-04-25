@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:24:23 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:56:51 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,15 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 		return (-1);
 	if (pid == 0)
 	{
-		setup_pipe_redirections(input_fd, pipefd, has_next);
 		if (cmd->redir)
 			apply_shell_redirections(cmd->redir); // redirections du here_doc a revoir
+		else
+			setup_pipe_redirections(input_fd, pipefd, has_next);
+		close_other_heredocs(cmd->params, cmd);
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
-		exec_child_process(cmd, envp);
+		if (cmd->cmd)
+			exec_child_process(cmd, envp);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);
@@ -94,10 +97,13 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 	int		input_fd;
 	pid_t	pid;
 
+
 	if (!cmds)
 		return (RET_ERR);
+
+	prepare_heredocs(cmds);
 	if (!cmds->next)
-		return(exec_cmd(cmds, envp));
+		return (exec_cmd(cmds, envp));
 	input_fd = STDIN_FILENO;
 	curr = cmds;
 	while (curr)

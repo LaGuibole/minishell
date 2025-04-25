@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 20:57:59 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:55:07 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static int	write_heredoc_content(int fd, const char *delimiter)
 {
 	char	*line;
 
+	signal(SIGINT, SIG_IGN);
 	while (1)
 	{
 		line = readline("> ");
@@ -31,6 +32,7 @@ static int	write_heredoc_content(int fd, const char *delimiter)
 	}
 	if (line)
 		free(line);
+	signal(SIGINT, SIG_DFL);
 	return (RET_OK);
 }
 
@@ -49,7 +51,8 @@ int	create_heredoc_fd(const char *delimiter)
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd == -1)
 		return (free(path), perror("heredoc: open"), -1);
-	write_heredoc_content(fd, delimiter);
+	if (write_heredoc_content(fd, delimiter) == -1)
+		return (close(fd), unlink(path), free(path), -1);
 	close(fd);
 	fd = open(path, O_RDONLY);
 	unlink(path);
@@ -57,30 +60,56 @@ int	create_heredoc_fd(const char *delimiter)
 	return (fd);
 }
 
-// int	prepare_heredocs(t_cmd *cmds)
-// {
-// 	t_cmd	*curr;
-// 	t_redir	*r;
-// 	t_list	*redir_list;
-// 	int		fd;
+void	prepare_heredocs(t_cmd *cmds)
+{
+	t_cmd	*cmd;
+	t_redir	*redir;
+	int		fd;
 
-// 	curr = cmds;
-// 	while (curr)
-// 	{
-// 		redir_list = curr->redir;
-// 		while (redir_list)
-// 		{
-// 			r = (t_redir *)redir_list->content;
-// 			if (r->type == R_HEREDOC)
-// 			{
-// 				fd = create_heredoc_fd(r->filename);
-// 				if (fd == -1)
-// 					return (RET_ERR);
-// 				close(fd);
-// 			}
-// 			redir_list = redir_list->next;
-// 		}
-// 		curr = curr->next;
-// 	}
-// 	return (RET_OK);
-// }
+	cmd = cmds;
+	while (cmd)
+	{
+		redir = cmd->redir;
+		while (redir)
+		{
+			if (redir->type == R_HEREDOC)
+			{
+				fd = create_heredoc_fd(redir->filename);
+				if (fd == -1)
+				{
+					perror("heredoc");
+					exit(EXIT_FAILURE);
+				}
+				redir->fd = fd;
+			}
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
+void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current)
+{
+	t_cmd	*tmp;
+	t_redir	*redir;
+
+	tmp = all_cmds;
+	while (tmp)
+	{
+		if (tmp != current)
+		{
+			redir = tmp->redir;
+			while (redir)
+			{
+				if (redir->type == R_HEREDOC && redir->fd != -1)
+				{
+					close(redir->fd);
+					redir->fd = -1;
+				}
+				redir = redir->next;
+			}
+		}
+		tmp = tmp->next;
+	}
+}
+

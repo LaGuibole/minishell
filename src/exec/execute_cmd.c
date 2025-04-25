@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 11:35:56 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:30:55 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ void	exec_child_process(t_cmd *cmd, char **envp)
 	if (cmd_is_builtin(cmd->cmd))
 		free_all_and_exit(cmd, exec_builtin(cmd));
 	path = get_cmd_path(cmd, envp);
-	// if (ft_strcmp(path, "<<") == 0)
-	// 	return ;
+	if (ft_strcmp(path, "<<") == 0)
+		return ;
 	if (!path)
 	{
-		fd_printf(STDERR_FILENO, "Command not found\n");
+		ft_lstclear(ft_envp(NULL), free);
+		fd_printf(STDERR_FILENO, "%s: Command not found\n", cmd->cmd);
 		exit (127);
 	}
 	if (execve(path, cmd->params, envp) == -1)
@@ -47,9 +48,7 @@ int	exec_cmd(t_cmd *cmd, char **envp)
 	int		status;
 
 	if (cmd_is_builtin(cmd->cmd) && !is_builtin_pipeable(cmd->cmd))
-	{
 		return (exec_builtin(cmd));
-	}
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), RET_ERR);
