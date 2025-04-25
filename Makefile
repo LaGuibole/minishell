@@ -32,6 +32,7 @@ SOURCES = \
 	./src/exec/handle_redirections.c \
 	./src/minishell.c \
 	./src/parse/cmd.c \
+	./src/parse/parse.c \
 	./src/parse/parsing_command.c \
 	./src/parse/redir.c \
 	./src/pathing/cmd_path2.c \
