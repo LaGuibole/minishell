@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 20:03:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 21:51:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,10 @@ int		sort_env_list_part(t_list *sorted_env, t_list **current, t_list *last);
 void	sort_env_list(t_list *sorted_env);
 bool	is_valid_identifier(const char *name);
 
+//CD HELPER
+char	*get_home_path(void);
+char	*get_oldpwd_path(void);
+
 //HEREDOC HELPER
 char	*ft_mktemp(void);
 int		create_heredoc_fd(const char *delimiter);
@@ -139,7 +143,7 @@ void	free_all_and_exit(t_cmd *cmd, int code);
 
 //PARSING
 t_cmd	*parsing_cmd(char *str);
-int		parse_cmd(char *str, t_cmd *cmd);
+int		parse_cmd(char *str, t_cmd **cmd);
 t_cmd	*cmdlast(t_cmd *cmd);
 void	cmdadd_back(t_cmd **cmd, t_cmd *new);
 t_cmd	*cmdnew(void);
@@ -150,5 +154,10 @@ t_redir	*rdrnew(void);
 //TEST
 void	signal_handler(int signo);
 void	handle_sigint(int sig);
+void	exec_child_process(t_cmd *cmd, char **envp);
+
+
+void	print_cmd_list(t_cmd *cmd); // debug
+void	free_cmd_list(t_cmd *cmd);
 
 #endif

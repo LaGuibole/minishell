@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:07:01 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 17:25:09 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:15:33 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	exec_builtin(t_cmd *cmd)
 	return (RET_ERR);
 }
 
-/// @brief 
+/// @brief
 /// @param name
 /// @return
 bool	cmd_is_builtin(char *name)
