@@ -1,0 +1,125 @@
+     1	# **************************************************************************** #$
+     2	#                                                                              #$
+     3	#                                                         :::      ::::::::    #$
+     4	#    Makefile                                           :+:      :+:    :+:    #$
+     5	#                                                     +:+ +:+         +:+      #$
+     6	#    By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+         #$
+     7	#                                                 +#+#+#+#+#+   +#+            #$
+     8	#    Created: 2025/04/07 11:03:15 by guphilip          #+#    #+#              #$
+     9	#    Updated: 2025/04/14 12:15:24 by guphilip         ###   ########.fr        #$
+    10	#                                                                              #$
+    11	# **************************************************************************** #$
+    12	$
+    13	BLUE = \033[1;34m$
+    14	GREEN =	\033[1;32m$
+    15	RESET = \033[0m$
+    16	$
+    17	SOURCES = \$
+    18		./src/builtins/cd.c \$
+    19		./src/builtins/echo.c \$
+    20		./src/builtins/env.c \$
+    21		./src/builtins/exit.c \$
+    22		./src/builtins/export.c \$
+    23		./src/builtins/pwd.c \$
+    24		./src/builtins/unset.c \$
+    25		./src/clean/clean_cmd.c \$
+    26		./src/core/display_prompt.c \$
+    27		./src/env/env_helpers.c \$
+    28		./src/env/ft_envp.c \$
+    29		./src/exec/execute_builtin.c \$
+    30		./src/exec/execute_cmd.c \$
+    31		./src/exec/execute_pipeline.c \$
+    32		./src/exec/handle_redirections.c \$
+    33		./src/minishell.c \$
+    34		./src/parse/cmd.c \$
+    35		./src/parse/parameters.c \$
+    36		./src/parse/parse.c \$
+    37		./src/parse/parsing_command.c \$
+    38		./src/parse/redir.c \$
+    39		./src/pathing/cmd_path2.c \$
+    40		./src/pathing/cmd_path.c \$
+    41		./src/utils/builtin_utils/cd_helpers.c \$
+    42		./src/utils/builtin_utils/export_helpers.c \$
+    43		./src/utils/builtin_utils/unset_helpers.c \$
+    44		./src/utils/cmd_utils/clear_exit.c \$
+    45		./src/utils/debug/debug.c \$
+    46		./src/utils/errors/env_errors.c \$
+    47		./src/utils/heredoc_utils/create_heredoc.c \$
+    48		./src/utils/heredoc_utils/ft_mktemp.c \$
+    49		./src/utils/signals/signal_handler.c$
+    50	OBJECTS = $(SOURCES:.c=.o)$
+    51	OBJECTS := $(addprefix build/, $(OBJECTS))$
+    52	$
+    53	CC = cc$
+    54	CFLAGS = -g -Wall -Wextra -Werror $(INCLUDES) $
+    55	LFLAGS = -lreadline$
+    56	NAME = minishell$
+    57	$
+    58	LIBFT_GIT = https://github.com/LaGuibole/Libft_Boosted.git$
+    59	$
+    60	LIBFT_PATH = ./libs/Libft$
+    61	$
+    62	LIBFT = $(LIBFT_PATH)/libft.a$
+    63	$
+    64	INCLUDES = \$
+    65		-Iincludes \$
+    66		-Ilibs/Libft/includes$
+    67	all: $(NAME)$
+    68		$
+    69	build/%.o: %.c$
+    70		@mkdir -p $(dir $@)$
+    71		@$(CC) $(CFLAGS) -c $< -o $@$
+    72	$
+    73	$(LIBFT):$
+    74		@if [ ! -d "$(LIBFT_PATH)" ]; then \$
+    75			printf "Cloning lib \"%s\" into \"%s\"..." $(LIBFT_GIT) $(LIBFT_PATH);\$
+    76			git clone $(LIBFT_GIT) $(LIBFT_PATH);\$
+    77			rm -rf $(LIBFT_PATH)/.git; \$
+    78		fi$
+    79		@make -sC $(LIBFT_PATH)$
+    80	$
+    81	$(NAME): $(LIBFT) $(OBJECTS)$
+    82		$(CC) $(CFLAGS) $(OBJECTS) $(LIBFT) $(LFLAGS) -o $(NAME)$
+    83		@echo "🎉 Executable$(BLUE) $(NAME) $(RESET)created."$
+    84	$
+    85	clean:$
+    86		@rm -rf build$
+    87		@make -sC $(LIBFT_PATH) clean$
+    88	$
+    89	fclean: clean$
+    90		@rm -f $(NAME)$
+    91		@make -sC $(LIBFT_PATH) fclean$
+    92	$
+    93	removeLibft:$
+    94		@rm -rf $(LIBFT_PATH)$
+    95		@echo "$(GREEN)Libft$(RESET) remove"$
+    96	$
+    97	updateSources:$
+    98		@bash -c '\$
+    99			IGNORED_DIRS=("libs" "src/dontcopy"); \$
+   100			FIND_CMD="find -type f -name '\''*.c'\''"; \$
+   101			for dir in "$${IGNORED_DIRS[@]}"; do \$
+   102				FIND_CMD+=" ! -path './\''$$dir/*'\''"; \$
+   103			done; \$
+   104			eval $$FIND_CMD | sort | awk '\''{print "\t" $$0 " \\"}'\'' \$
+   105			| sed '\''$$ s/ \\$$//'\'' > .sources_block; \$
+   106			cat .sources_block; \$
+   107			echo "SOURCES = \\" > .sources_full; \$
+   108			cat .sources_block >> .sources_full; \$
+   109			awk '\'' \$
+   110				FNR==NR { lines[NR] = $$0; next } \$
+   111				/^SOURCES =/ { \$
+   112					for (i=1; i<=length(lines); i++) print lines[i]; \$
+   113					in_block=1; next \$
+   114				} \$
+   115				in_block && /^[^\t]/ { in_block=0 } \$
+   116				!in_block { print } \$
+   117			'\'' .sources_full Makefile > Makefile.tmp; \$
+   118			mv Makefile.tmp Makefile; \$
+   119			rm -f .sources_block .sources_full; \$
+   120			echo "✅ Makefile mis à jour avec les fichiers sources." \$
+   121		'$
+   122		$
+   123	re: fclean all$
+   124	$
+   125	.PHONY: all clean fclean re$

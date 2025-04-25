@@ -31,26 +31,26 @@ char	*clean_parameters(char *str)
 	double_quote = 0;
 	j = 0;
 	cleaned = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	while (str[i])
+	while (*str)
 	{
-		if (str[i] == '\'' && !double_quote)
+		if (*str == '\'' && !double_quote)
 			single_quote = !single_quote;
-		else if (str[i] == '"' && !single_quote)
+		else if (*str == '"' && !single_quote)
 			double_quote = !double_quote;
-		if (!single_quote && !double_quote && is_redir_char(str[i]))
+		if (!single_quote && !double_quote && is_redir_char(*str))
 		{
-			if (str[i] == str[i + 1])
-				i += 2;
+			if (*str == *str + 1)
+				str += 2;
 			else
-				i += 1;
-			while (str[i] == ' ')
-				i++;
-			while (str[i] && str[i] != ' ' && !is_redir_char(str[i]))
-				i++;
+				str++;
+			while (*str == ' ')
+				str++;
+			while (*str && *str != ' ' && !is_redir_char(*str))
+				str++;
 			continue ;
 		}
 		else
-			cleaned[j++] = str[i++];
+			cleaned[j++] = *str++;
 	}
 	cleaned[j] = '\0';
 	return (cleaned);
@@ -89,8 +89,12 @@ int	set_parameters(char *str, t_cmd *cmd)
 			end++;
 		}
 		params[cmd->nbparams++] = ft_substr(str, start, end);
+		if (ft_strlen(params[cmd->nbparams - 1]) == 0)
+			free(params[cmd->nbparams--]);
 		if (!params[cmd->nbparams - 1])
 		{
+			cmd->params = params;
+			cmd->nbparams--;
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
 			free(str);
 			return (RET_ERR);

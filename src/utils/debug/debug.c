@@ -12,19 +12,19 @@
 
 #include "minishell.h"
 
-static void	print_params(char **params)
+static void	print_params(char **params, int nbparams)
 {
 	int	i;
 
 	if (!params)
 	{
-		printf("  params: (null)\n");
+		ft_printf("  params: (null)\n");
 		return ;
 	}
 	i = 0;
-	while (params[i])
+	while (i <= nbparams)
 	{
-		printf("  param[%d]: %s\n", i, params[i]);
+		ft_printf("  param[%d]: %s\n", i, params[i]);
 		i++;
 	}
 }
@@ -33,16 +33,16 @@ static void	print_redir(t_redir *redir)
 {
 	while (redir)
 	{
-		printf("  redir: ");
+		ft_printf("  redir: ");
 		if (redir->type == R_INPUT)
-			printf("< ");
+			ft_printf("< ");
 		else if (redir->type == R_OUTPUT)
-			printf("> ");
+			ft_printf("> ");
 		else if (redir->type == R_APPEND)
-			printf(">> ");
+			ft_printf(">> ");
 		else if (redir->type == R_HEREDOC)
-			printf("<< ");
-		printf("%s\n", redir->filename);
+			ft_printf("<< ");
+		ft_printf("%s\n", redir->filename);
 		redir = redir->next;
 	}
 }
@@ -51,10 +51,10 @@ static void	print_next_cmd(t_cmd *next)
 {
 	if (!next)
 	{
-		printf("  next: (null)\n");
+		ft_printf("  next: (null)\n");
 		return ;
 	}
-	printf("  next: %s\n", next->cmd);
+	ft_printf("  next: %s\n", next->cmd);
 }
 
 void	print_cmd_list(t_cmd *cmd)
@@ -64,16 +64,16 @@ void	print_cmd_list(t_cmd *cmd)
 	i = 0;
 	while (cmd)
 	{
-		printf("=== Command %d ===\n", i);
-		printf("  cmd: %s\n", cmd->cmd);
-		printf("  is_builtin: %s\n", cmd->is_builtin ? "true" : "false");
-		printf("  nbparams: %d\n", cmd->nbparams);
-		print_params(cmd->params);
+		ft_printf("=== Command %d ===\n", i);
+		ft_printf("  cmd: %s\n", cmd->cmd);
+		ft_printf("  is_builtin: %s\n", cmd->is_builtin ? "true" : "false");
+		ft_printf("  nbparams: %d\n", cmd->nbparams);
+		print_params(cmd->params, cmd->nbparams);
 		print_redir(cmd->redir);
 		if (cmd->type_link_next == L_PIPE)
-			printf("  type_link_next: PIPE\n");
+			ft_printf("  type_link_next: PIPE\n");
 		else
-			printf("  type_link_next: END\n");
+			ft_printf("  type_link_next: END\n");
 		print_next_cmd(cmd->next);
 		cmd = cmd->next;
 		i++;
