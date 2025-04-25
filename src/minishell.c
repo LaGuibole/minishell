@@ -37,7 +37,7 @@ int	main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
-		t_cmd	*cmds = NULL;
+		t_cmd	*cmds;
 		char	*prompt = display_prompt();
 		char	*line = readline(prompt);
 		free(prompt);
@@ -48,7 +48,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		if (ft_strlen(line) == 0)
 			continue ;
-		parse_cmd(line, &cmds);
+		cmds = parsing_cmd(line);
 		if (cmds)
 		{
 			exec_pipeline(cmds, envp);
