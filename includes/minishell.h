@@ -147,9 +147,13 @@ int		parse_cmd(char *str, t_cmd **cmd);
 t_cmd	*cmdlast(t_cmd *cmd);
 void	cmdadd_back(t_cmd **cmd, t_cmd *new);
 t_cmd	*cmdnew(void);
-t_redir	*rdrlast(t_redir *rdr);
-void	rdradd_back(t_redir **rdr, t_redir *new);
-t_redir	*rdrnew(void);
+bool	print_error(char *str);
+bool	ft_quote(char type, bool upd);
+int		add_redir(t_cmd *cmd, t_redir_type type, char *filename);
+bool	is_redir_char(char c);
+int		set_env_parameters(t_cmd *cmd);
+char	*clean_parameters(char *str);
+int		set_parameters(char *str, t_cmd *cmd);
 
 //TEST
 void	signal_handler(int signo);

@@ -12,37 +12,50 @@
 
 #include "minishell.h"
 
+bool	ft_quote(char type, bool upd)
+{
+	static bool	single_quote = 0;
+	static bool	double_quote = 0;
+
+	if (type == '\'' && !double_quote)
+	{
+		if (upd)
+			single_quote = !single_quote;
+		return (single_quote);
+	}
+	if (type == '"' && !single_quote)
+	{
+		if (upd)
+			double_quote = !double_quote;
+		return (double_quote);
+	}
+	return (0);
+}
+
+bool	print_error(char *str)
+{
+	fd_printf(STDOUT_FILENO, str);
+	return (RET_ERR);
+}
+
 static bool	empty_link(char *str)
 {
 	bool	pipe;
-	bool	single_quote;
-	bool	double_quote;
 
 	pipe = 0;
 	while (*str == ' ')
 		str++;
 	if (*str == '|')
-	{
-		fd_printf(STDOUT_FILENO, ERR_PIPE);
-		return (RET_ERR);
-	}
-	single_quote = 0;
-	double_quote = 0;
+		print_error(ERR_PIPE);
 	while (*str)
 	{
-		if (*str == '\'' && !double_quote)
-			single_quote = !single_quote;
-		if (*str == '"' && !single_quote)
-			double_quote = !double_quote;
-		if (*str == '&' && !single_quote && !double_quote)
+		ft_quote(*str, 1);
+		if (*str == '&' && !ft_quote('\'', 0) && !ft_quote('"', 0))
 			return (RET_ERR);
-		if (*str == '|' && !single_quote && !double_quote)
+		if (*str == '|' && !ft_quote('\'', 0) && !ft_quote('"', 0))
 		{
 			if (pipe == 1)
-			{
-				fd_printf(STDOUT_FILENO, ERR_PIPE);
-				return (pipe);
-			}
+				print_error(ERR_PIPE);
 			pipe = 1;
 		}
 		if (*str != '|' && *str != ' ')
@@ -54,22 +67,11 @@ static bool	empty_link(char *str)
 
 static bool	unclosed_quotes(char *str)
 {
-	bool	single_quote;
-	bool	double_quote;
-
-	single_quote = 0;
-	double_quote = 0;
 	while (*str)
-	{
-		if (*str == '\'' && !double_quote)
-			single_quote = !single_quote;
-		if (*str == '"' && !single_quote)
-			double_quote = !double_quote;
-		str++;
-	}
-	if (single_quote || double_quote)
+		ft_quote(*str++, 1);
+	if (ft_quote('\'', 0) && ft_quote('"', 0))
 		fd_printf(STDOUT_FILENO, ERR_QUOTE);
-	return (single_quote || double_quote);
+	return (ft_quote('\'', 0) || ft_quote('"', 0));
 }
 
 t_cmd	*parsing_cmd(char *str)
@@ -77,11 +79,7 @@ t_cmd	*parsing_cmd(char *str)
 	t_cmd	*cmd;
 
 	cmd = NULL;
-	if (
-		unclosed_quotes(str) || //Gestion ' et " pour readline
-		empty_link(str) || //Gestion des pipe et esperluette
-		parse_cmd(str, &cmd) //Separation cmd, parameters et redirection dans cmd
-	)
+	if (unclosed_quotes(str) || empty_link(str) || parse_cmd(str, &cmd))
 	{
 		if (cmd)
 			free(cmd);

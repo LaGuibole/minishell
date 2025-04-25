@@ -34,7 +34,6 @@ int	main(int argc, char **argv, char **envp)
 	sigaction(SIGINT, &sa_c, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	ft_envp(envp);
-
 	while (1)
 	{
 		t_cmd	*cmds;
@@ -53,7 +52,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			print_cmd_list(cmds);
 			exec_pipeline(cmds, envp);
-			free_cmd_list(cmds);
+			//free_cmd_list(cmds);
 		}
 		free(line);
 	}
