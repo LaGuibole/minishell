@@ -12,38 +12,30 @@
 
 #include "minishell.h"
 
-t_redir	*rdrlast(t_redir *rdr)
+int	add_redir(t_cmd *cmd, t_redir_type type, char *filename)
 {
-	t_redir	*temp;
+	t_redir	*new;
+	t_redir	*tmp;
 
-	if (!rdr)
-		return (NULL);
-	temp = rdr;
-	while (temp->next)
-		temp = temp->next;
-	return (temp);
-}
-
-void	rdradd_back(t_redir **rdr, t_redir *new)
-{
-	t_redir	*last;
-
-	last = rdrlast(*rdr);
-	if (!last)
-		*rdr = new;
+	new = malloc(sizeof(t_redir));
+	if (!new)
+		return (RET_ERR);
+	new->type = type;
+	new->filename = filename;
+	new->next = NULL;
+	if (!cmd->redir)
+		cmd->redir = new;
 	else
-		last->next = new;
+	{
+		tmp = cmd->redir;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+	return (RET_OK);
 }
 
-t_redir	*rdrnew(void)
+bool	is_redir_char(char c)
 {
-	t_redir	*rdr;
-
-	rdr = malloc(sizeof(t_redir) + 1);
-	if (!rdr)
-		return (NULL);
-	rdr->type = R_NONE;
-	rdr->filename = NULL;
-	rdr->next = NULL;
-	return (rdr);
+	return (c == '<' || c == '>');
 }
