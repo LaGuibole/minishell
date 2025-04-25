@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 20:49:38 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:35:56 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	exec_child_process(t_cmd *cmd, char **envp)
 	if (cmd_is_builtin(cmd->cmd))
 		free_all_and_exit(cmd, exec_builtin(cmd));
 	path = get_cmd_path(cmd, envp);
+	// if (ft_strcmp(path, "<<") == 0)
+	// 	return ;
 	if (!path)
 	{
 		fd_printf(STDERR_FILENO, "Command not found\n");

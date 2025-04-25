@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 10:43:38 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:43:15 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	main(int argc, char **argv, char **envp)
 		cmds = parsing_cmd(line);
 		if (cmds)
 		{
-			exec_pipeline(cmds, envp);
 			print_cmd_list(cmds);
+			exec_pipeline(cmds, envp);
 			free_cmd_list(cmds);
 		}
 		free(line);
