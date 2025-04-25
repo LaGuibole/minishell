@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 22:15:45 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/23 20:12:57 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 11:51:31 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,21 @@ static int	set_is_builtin(t_cmd *cmd)
 
 static int	set_cmd(char *str, t_cmd *cmd)
 {
-	int	start;
-	int end;
+	(void)str;
+	cmd->cmd = cmd->params[0];
+	// int	start;
+	// int end;
 
-	start = 0;
-	while (str[start] && str[start] == ' ')
-		start++;
-	end = 0;
-	while (str[start + end] && str[start + end] != ' ')
-		end++;
-	cmd->cmd = ft_substr(str, start, end);
-	if (cmd->cmd)
-		return (RET_OK);
-	return (RET_ERR);
+	// start = 0;
+	// while (str[start] && str[start] == ' ')
+	// 	start++;
+	// end = 0;
+	// while (str[start + end] && str[start + end] != ' ')
+	// 	end++;
+	// cmd->cmd = ft_substr(str, start, end);
+	// if (cmd->cmd)
+	// 	return (RET_OK);
+	return (RET_OK);
 }
 
 static int	set_env_parameters(t_cmd *cmd)
@@ -278,9 +280,9 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		}
 		current->nbparams = 0;
 		if (
-			set_cmd(line[cpt], current) || //Recuperation command
 			set_redirect(line[cpt], current) || //Recuperation des redirections de la command
 			set_parameters(line[cpt], current) || //Recuperation des parametres de la command
+			set_cmd(line[cpt], current) || //Recuperation command
 			set_is_builtin(current) || //Gestion is_builtin
 			set_env_parameters(current) // Gestion variable env
 		)
