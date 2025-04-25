@@ -91,7 +91,7 @@ int	set_parameters(char *str, t_cmd *cmd)
 		params[cmd->nbparams++] = ft_substr(str, start, end);
 		if (ft_strlen(params[cmd->nbparams - 1]) == 0)
 			free(params[cmd->nbparams--]);
-		if (!params[cmd->nbparams - 1])
+		else if (!params[cmd->nbparams - 1])
 		{
 			cmd->params = params;
 			cmd->nbparams--;
