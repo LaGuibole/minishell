@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parameters.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlintot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:43:05 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/25 12:43:06 by mlintot          ###   ########.fr       */
+/*   Updated: 2025/04/26 14:47:51 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	set_env_parameters(t_cmd *cmd)
 
 char	*clean_parameters(char *str)
 {
-	int		i;
+	// int		i;
 	bool	single_quote;
 	bool	double_quote;
 	char	*cleaned;
 	int		j;
 
-	i = 0;
+	// i = 0;
 	single_quote = 0;
 	double_quote = 0;
 	j = 0;

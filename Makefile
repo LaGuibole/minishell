@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+         #
+#    By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/07 11:03:15 by guphilip          #+#    #+#              #
-#    Updated: 2025/04/14 12:15:24 by guphilip         ###   ########.fr        #
+#    Updated: 2025/04/26 14:55:56 by guillaumeph      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ BLUE = \033[1;34m
 GREEN =	\033[1;32m
 RESET = \033[0m
 
-SOURCES = \
+SOURCES =  \
 	./src/builtins/cd.c \
 	./src/builtins/echo.c \
 	./src/builtins/env.c \
@@ -52,7 +52,7 @@ OBJECTS := $(addprefix build/, $(OBJECTS))
 
 CC = cc
 CFLAGS = -g -Wall -Wextra -Werror $(INCLUDES) 
-LFLAGS = -lreadline
+LFLAGS = -L/usr/local/Cellar/readline/8.2.13/lib -lreadline
 NAME = minishell
 
 LIBFT_GIT = https://github.com/LaGuibole/Libft_Boosted.git
@@ -63,7 +63,8 @@ LIBFT = $(LIBFT_PATH)/libft.a
 
 INCLUDES = \
 	-Iincludes \
-	-Ilibs/Libft/includes
+	-Ilibs/Libft/includes \
+	-I /usr/local/Cellar/readline/8.2.13/include 
 all: $(NAME)
 	
 build/%.o: %.c

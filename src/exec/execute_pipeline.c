@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 23:56:51 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:10:51 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 		dup2(input_fd, STDIN_FILENO);
 		close(input_fd);
 	}
-	if (has_next)
+	else if (has_next)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -52,7 +52,7 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 			apply_shell_redirections(cmd->redir); // redirections du here_doc a revoir
 		else
 			setup_pipe_redirections(input_fd, pipefd, has_next);
-		close_other_heredocs(cmd->params, cmd);
+		close_other_heredocs(cmd->all_cmds, cmd);
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
 		if (cmd->cmd)

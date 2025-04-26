@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 23:56:25 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:27:43 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_cmd
 	struct s_redir	*redir;
 	t_link_type		type_link_next;
 	struct s_cmd	*next;
+	struct s_cmd	*all_cmds;
 }	t_cmd;
 
 char	*display_prompt(void);
