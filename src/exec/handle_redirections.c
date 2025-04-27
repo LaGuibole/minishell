@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
+/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 23:22:26 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:09:29 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,17 @@ void	apply_shell_redirections(t_redir *redir)
 		}
 		close(last_input_fd);
 	}
+}
+
+bool	has_output_redirections(t_redir *redir)
+{
+	while (redir)
+	{
+		if (redir->type == R_OUTPUT || redir->type == R_APPEND)
+			return (true);
+		redir = redir->next;
+	}
+	return (false);
 }
 
 // void	apply_heredoc_redirections(t_redir *redir)

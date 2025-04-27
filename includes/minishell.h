@@ -6,7 +6,7 @@
 /*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/26 17:27:43 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/27 16:09:27 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,6 @@ void	print_cmd_list(t_cmd *cmd); // debug
 void	free_cmd_list(t_cmd *cmd);
 void	prepare_heredocs(t_cmd *cmds);
 void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current);
-
+bool	has_output_redirections(t_redir *redir);
 
 #endif

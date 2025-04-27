@@ -4,4 +4,4 @@ build/
 libs/
 minishell
 .cache/oh-my-posh/
-
+Makefile
