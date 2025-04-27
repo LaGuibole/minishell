@@ -6,7 +6,7 @@
 /*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/27 16:09:25 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/27 17:01:02 by guillaumeph      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,45 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 /// @param pipefd Current pipe (to next process)
 /// @param envp Environement variables
 /// @return pid of the child processm or -1 on error
+// pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
+// {
+// 	pid_t	pid;
+// 	bool	has_next;
+// 	bool	has_out_redir;
+
+// 	has_next = (cmd->next != NULL);
+// 	has_out_redir = has_output_redirections(cmd->redir);
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (-1);
+// 	if (pid == 0)
+// 	{
+// 		if (cmd->redir)
+// 			apply_shell_redirections(cmd->redir); // redirections du here_doc a revoir
+// 		if (!cmd->redir)
+// 			setup_pipe_redirections(input_fd, pipefd, has_next);
+// 		else if (has_next && !has_out_redir)
+// 		{
+// 			close(pipefd[0]);
+// 			dup2(pipefd[1], STDOUT_FILENO);
+// 			close(pipefd[1]);
+// 		}
+// 		// close_other_heredocs(cmd->all_cmds, cmd);
+// 		if (cmd->is_builtin)
+// 			exit(exec_builtin(cmd));
+// 		if (cmd->cmd)
+// 			exec_child_process(cmd, envp);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	return (pid);
+// }
+
+/// @brief Forks and executes a command in a pipeline
+/// @param cmd Current command
+/// @param input_fd fd for input (from previous pipe)
+/// @param pipefd Current pipe (to next process)
+/// @param envp Environement variables
+/// @return pid of the child processm or -1 on error
 pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 {
 	pid_t	pid;
@@ -45,22 +84,33 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 
 	has_next = (cmd->next != NULL);
 	has_out_redir = has_output_redirections(cmd->redir);
+
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 	{
+		if (input_fd != STDIN_FILENO)
+		{
+			if (dup2(input_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2 input_fd");
+				exit(EXIT_FAILURE);
+			}
+			close(input_fd);
+		}
 		if (cmd->redir)
-			apply_shell_redirections(cmd->redir); // redirections du here_doc a revoir
-		if (!cmd->redir)
-			setup_pipe_redirections(input_fd, pipefd, has_next);
-		else if (has_next && !has_out_redir)
+			apply_shell_redirections(cmd->redir);
+		if (has_next && !has_out_redir)
 		{
 			close(pipefd[0]);
-			dup2(pipefd[1], STDOUT_FILENO);
+			if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+			{
+				perror("dup2 pipefd[1]");
+				exit(EXIT_FAILURE);
+			}
 			close(pipefd[1]);
 		}
-		// close_other_heredocs(cmd->all_cmds, cmd);
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
 		if (cmd->cmd)
@@ -69,6 +119,7 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 	}
 	return (pid);
 }
+
 
 /// @brief Cleans up unused pipe ends and returns next input fd
 /// @param input_fd Previous input fd
