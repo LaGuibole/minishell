@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/27 16:09:29 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/28 13:38:26 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,44 @@ static void	redir_append(char *filename)
 
 /// @brief Apply all redirections defined in a redirection list
 /// @param redir Pointer to the redirection list to apply
+// void	apply_shell_redirections(t_redir *redir)
+// {
+// 	int	last_input_fd;
+
+// 	last_input_fd = -1;
+// 	while (redir)
+// 	{
+// 		if (redir->type == R_INPUT || redir->type == R_HEREDOC)
+// 		{
+// 			if (last_input_fd != -1)
+// 				close(last_input_fd);
+// 			if (redir->type == R_INPUT)
+// 				last_input_fd = open(redir->filename, O_RDONLY);
+// 			else if (redir->type == R_HEREDOC)
+// 				last_input_fd = redir->fd;
+// 			if (last_input_fd == -1)
+// 			{
+// 				perror("redirection input");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 		}
+// 		else if (redir->type == R_OUTPUT)
+// 			redir_output(redir->filename);
+// 		else if (redir->type == R_APPEND)
+// 			redir_append(redir->filename);
+// 		redir = redir->next;
+// 	}
+// 	if (last_input_fd != -1)
+// 	{
+// 		if (dup2(last_input_fd, STDIN_FILENO) == -1)
+// 		{
+// 			perror("dup2");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(last_input_fd);
+// 	}
+// }
+
 void	apply_shell_redirections(t_redir *redir)
 {
 	int	last_input_fd;
@@ -85,17 +123,20 @@ void	apply_shell_redirections(t_redir *redir)
 	last_input_fd = -1;
 	while (redir)
 	{
-		if (redir->type == R_INPUT || redir->type == R_HEREDOC)
+		if (redir->type == R_INPUT)
 		{
 			if (last_input_fd != -1)
 				close(last_input_fd);
-			if (redir->type == R_INPUT)
-				last_input_fd = open(redir->filename, O_RDONLY);
-			else if (redir->type == R_HEREDOC)
-				last_input_fd = redir->fd;
+			last_input_fd = open(redir->filename, O_RDONLY);
+		}
+		else if (redir->type == R_HEREDOC)
+		{
+			if (last_input_fd != -1)
+				close(last_input_fd);
+			last_input_fd = dup(redir->fd);
 			if (last_input_fd == -1)
 			{
-				perror("redirection input");
+				perror("dup heredoc fd");
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -109,7 +150,7 @@ void	apply_shell_redirections(t_redir *redir)
 	{
 		if (dup2(last_input_fd, STDIN_FILENO) == -1)
 		{
-			perror("dup2");
+			perror("dup2 input");
 			exit(EXIT_FAILURE);
 		}
 		close(last_input_fd);

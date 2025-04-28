@@ -14,7 +14,7 @@ BLUE = \033[1;34m
 GREEN =	\033[1;32m
 RESET = \033[0m
 
-SOURCES =  \
+SOURCES = \
 	./src/builtins/cd.c \
 	./src/builtins/echo.c \
 	./src/builtins/env.c \

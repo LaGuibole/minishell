@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 23:55:07 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:33:00 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	create_heredoc_fd(const char *delimiter)
 {
 	char	*path;
 	int		fd;
+	int		fd_read;
 
 	path = ft_mktemp();
 	if (!path)
@@ -54,10 +55,12 @@ int	create_heredoc_fd(const char *delimiter)
 	if (write_heredoc_content(fd, delimiter) == -1)
 		return (close(fd), unlink(path), free(path), -1);
 	close(fd);
-	fd = open(path, O_RDONLY);
-	unlink(path);
+	fd_read = open(path, O_RDONLY);
+	if (fd_read == -1)
+		return (unlink(path), free(path), -1);
+	// unlink(path);
 	free(path);
-	return (fd);
+	return (fd_read);
 }
 
 void	prepare_heredocs(t_cmd *cmds)
@@ -66,6 +69,7 @@ void	prepare_heredocs(t_cmd *cmds)
 	t_redir	*redir;
 	int		fd;
 
+	fd = -1;
 	cmd = cmds;
 	while (cmd)
 	{

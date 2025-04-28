@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:06:57 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 17:33:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:32:12 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,7 @@ char	*ft_mktemp(void)
 	count = 0;
 	pid = getpid();
 	tmp = build_tmp_name(pid, count);
-	while (tmp && access(tmp, F_OK) == 0)
-	{
-		free(tmp);
-		count++;
-		tmp = build_tmp_name(pid, count);
-	}
+	count++;
 	result = ft_strdup(tmp);
 	free(tmp);
 	return (result);

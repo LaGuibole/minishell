@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/27 17:01:02 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/28 14:47:19 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,25 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 		}
 		if (cmd->redir)
 			apply_shell_redirections(cmd->redir);
-		if (has_next && !has_out_redir)
+		close_other_heredocs(cmd->all_cmds, cmd);
+		if (has_next)
 		{
 			close(pipefd[0]);
-			if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+			if (!has_out_redir)
 			{
-				perror("dup2 pipefd[1]");
-				exit(EXIT_FAILURE);
+				if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+				{
+					perror("dup2 pipefd[1]");
+					exit(EXIT_FAILURE);
+				}
 			}
 			close(pipefd[1]);
 		}
+		// else
+		// {
+		// 	close(pipefd[0]);
+		// 	close(pipefd[1]);
+		// }
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
 		if (cmd->cmd)
@@ -134,6 +143,10 @@ int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
 	{
 		close(pipefd[1]);
 		return (pipefd[0]);
+	}
+	else
+	{
+		close(pipefd[0]);
 	}
 	return (STDIN_FILENO);
 }
