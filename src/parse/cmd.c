@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlintot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:51:19 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/22 17:51:20 by mlintot          ###   ########.fr       */
+/*   Updated: 2025/04/29 13:46:51 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_cmd	*cmdnew(void)
 		return (NULL);
 	cmd->cmd = NULL;
 	cmd->is_builtin = 0;
+	cmd->pid = -1;
 	cmd->params = NULL;
 	cmd->nbparams = 0;
 	cmd->redir = NULL;

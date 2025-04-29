@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:24:23 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:23:44 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 		dup2(input_fd, STDIN_FILENO);
 		close(input_fd);
 	}
-	if (has_next)
+	else if (has_next)
 	{
 		close(pipefd[0]);
 		dup2(pipefd[1], STDOUT_FILENO);
@@ -41,19 +41,23 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 {
 	pid_t	pid;
 	bool	has_next;
+	bool	has_out_redir;
 
 	has_next = (cmd->next != NULL);
+	has_out_redir = has_output_redirections(cmd->redir);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 	{
-		setup_pipe_redirections(input_fd, pipefd, has_next);
+		redirect_input_fd(input_fd);
 		if (cmd->redir)
-			apply_shell_redirections(cmd->redir); // redirections du here_doc a revoir
+			apply_shell_redirections(cmd->redir);
+		redirect_output_fd(cmd, pipefd, has_next, has_out_redir);
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
-		exec_child_process(cmd, envp);
+		if (cmd->cmd)
+			exec_child_process(cmd, envp);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);
@@ -73,14 +77,30 @@ int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
 		close(pipefd[1]);
 		return (pipefd[0]);
 	}
+	else
+	{
+		close(pipefd[0]);
+	}
 	return (STDIN_FILENO);
 }
 
 /// @brief Waits for all children processes to finish
-void	wait_children(void)
+void	wait_children(t_cmd *cmds)
 {
-	while (wait(NULL) > 0)
-		;
+	t_cmd	*cmd;
+	int		last_status;
+
+	cmd = cmds;
+	while (cmd)
+	{
+		if (waitpid(cmd->pid, &last_status, 0) == -1)
+			perror("waitpid error");
+		if (WIFEXITED(last_status))
+			g_signal = WEXITSTATUS(last_status);
+		if (WIFSIGNALED(last_status))
+			g_signal = 130;
+		cmd = cmd->next;
+	}
 }
 
 /// @brief Execute a pipeline of commands, handling pipes and process creation
@@ -92,24 +112,24 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 	t_cmd	*curr;
 	int		pipefd[2];
 	int		input_fd;
-	pid_t	pid;
 
 	if (!cmds)
 		return (RET_ERR);
+	prepare_heredocs(cmds);
 	if (!cmds->next)
-		return(exec_cmd(cmds, envp));
+		return (exec_cmd(cmds, envp));
 	input_fd = STDIN_FILENO;
 	curr = cmds;
 	while (curr)
 	{
 		if (curr->next && pipe(pipefd) == -1)
 			return (perror("pipe error"), 1);
-		pid = fork_child(curr, input_fd, pipefd, envp);
-		if (pid == -1)
+		curr->pid = fork_child(curr, input_fd, pipefd, envp);
+		if (curr->pid == -1)
 			return (perror("fork error"), 1);
 		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
 		curr = curr->next;
 	}
-	wait_children();
+	wait_children(cmds);
 	return (RET_OK);
 }

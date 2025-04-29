@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:34:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 19:32:01 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:17:46 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	free_all_and_exit(t_cmd *cmd, int code)
 	if (cmd->redir)
 		free_redirections(cmd->redir);
 	ft_lstclear(ft_envp(NULL), free);
+	free(cmd);
 	rl_clear_history();
 	exit(code);
 }

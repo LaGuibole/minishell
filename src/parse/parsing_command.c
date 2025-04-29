@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 22:15:45 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/25 11:51:31 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/28 15:13:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	set_is_builtin(t_cmd *cmd)
 
 static int	set_cmd(t_cmd *cmd)
 {
-	cmd->cmd = cmd->params[0];
+	cmd->cmd = ft_strdup(cmd->params[0]);
 	return (RET_OK);
 }
 
