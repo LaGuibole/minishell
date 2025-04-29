@@ -100,8 +100,6 @@ ERR_CHEV, str[i], str[i]);
 static int	split_cmd(char **line, char *str)
 {
 	char	*tmp;
-	bool	single_quote;
-	bool	double_quote;
 	int		start;
 	int		cpt;
 	int		nbline;
@@ -110,16 +108,11 @@ static int	split_cmd(char **line, char *str)
 	start = 0;
 	cpt = 0;
 	nbline = 0;
-	single_quote = 0;
-	double_quote = 0;
 	while (*tmp)
 	{
-		if (*tmp == '\'' && !double_quote)
-			single_quote = !single_quote;
-		if (*tmp == '"' && !single_quote)
-			double_quote = !double_quote;
+		ft_quote(*tmp, 1);
 		cpt++;
-		if (*tmp == '|' && !double_quote && !single_quote)
+		if (*tmp == '|' && !ft_quote('\'', 0) && !ft_quote('"', 0))
 		{
 			line[nbline++] = ft_substr(str, start, cpt - 1);
 			start = start + cpt;
@@ -140,38 +133,20 @@ int	parse_cmd(char *str, t_cmd **cmd)
 
 	line = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!line)
-	{
-		fd_printf(STDOUT_FILENO, ERR_MALLOC);
-		return (RET_ERR);
-	}
+		return (print_error(ERR_MALLOC));
 	nbline = split_cmd(line, str);
 	cpt = 0;
 	while (cpt < nbline)
 	{
 		current = cmdnew();
 		if (!current)
-		{
-			fd_printf(STDOUT_FILENO, ERR_MALLOC);
-			free_strstr(line, nbline);
-			return (RET_ERR);
-		}
+			return (free_strstr(line, nbline), print_error(ERR_MALLOC));
 		current->nbparams = 0;
-		if (
-			set_redirect(line[cpt], current) || \
-set_parameters(line[cpt], current) || \
-set_cmd(current) || \
-set_is_builtin(current) || \
-set_env_parameters(current)
-		)
-		{
-			fd_printf(STDOUT_FILENO, ERR_PARSE);
-			free_strstr(line, nbline);
-			return (RET_ERR);
-		}
-		if (!cmd)
-			cmd = &current;
-		else
-			cmdadd_back(cmd, current);
+		if (set_redirect(line[cpt], current) || \
+set_parameters(line[cpt], current) || set_cmd(current) || \
+set_is_builtin(current) || set_env_parameters(current))
+			return (free_strstr(line, nbline), print_error(ERR_PARSE));
+		cmdadd_back(cmd, current);
 		cpt++;
 	}
 	free_strstr(line, nbline);
