@@ -25,16 +25,15 @@ char	*clean_parameters(char *str)
 
 	j = 0;
 	cleaned = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!cleaned)
+		return (NULL);
 	while (*str)
 	{
 		ft_quote(*str, 1);
 		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && is_redir_char(*str))
 		{
-			if (*str == *str + 1)
-				str += 2;
-			else
-				str++;
-			while (*str == ' ')
+			str += (*str == *str + 1) + 1;
+			while (*str && *str == ' ')
 				str++;
 			while (*str && *str != ' ' && !is_redir_char(*str))
 				str++;
@@ -54,12 +53,11 @@ int	set_parameters(char *str, t_cmd *cmd)
 	char	**params;
 
 	str = clean_parameters(str);
+	if (!str)
+		return (print_error(ERR_MALLOC));
 	params = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!params)
-	{
-		fd_printf(STDOUT_FILENO, ERR_MALLOC);
-		return (RET_ERR);
-	}
+		return (print_error(ERR_MALLOC));
 	start = 0;
 	while (str[start] && str[start] == ' ')
 		start++;
@@ -77,9 +75,8 @@ ft_quote('\'', 0) || ft_quote('"', 0))
 		{
 			cmd->params = params;
 			cmd->nbparams--;
-			fd_printf(STDOUT_FILENO, ERR_MALLOC);
 			free(str);
-			return (RET_ERR);
+			return (print_error(ERR_MALLOC));
 		}
 		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
 			free(params[cmd->nbparams--]);

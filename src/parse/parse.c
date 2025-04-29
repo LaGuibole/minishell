@@ -46,16 +46,16 @@ static bool	empty_link(char *str)
 	while (*str == ' ')
 		str++;
 	if (*str == '|')
-		print_error(ERR_PIPE);
+		return (print_error(ERR_PIPE));
 	while (*str)
 	{
 		ft_quote(*str, 1);
 		if (*str == '&' && !ft_quote('\'', 0) && !ft_quote('"', 0))
-			return (RET_ERR);
+			return (print_error(ERR_PARSE));
 		if (*str == '|' && !ft_quote('\'', 0) && !ft_quote('"', 0))
 		{
 			if (pipe == 1)
-				print_error(ERR_PIPE);
+				return (print_error(ERR_PIPE));
 			pipe = 1;
 		}
 		if (*str != '|' && *str != ' ')
@@ -70,7 +70,7 @@ static bool	unclosed_quotes(char *str)
 	while (*str)
 		ft_quote(*str++, 1);
 	if (ft_quote('\'', 0) && ft_quote('"', 0))
-		fd_printf(STDOUT_FILENO, ERR_QUOTE);
+		return (print_error(ERR_QUOTE));
 	return (ft_quote('\'', 0) || ft_quote('"', 0));
 }
 
