@@ -157,6 +157,7 @@ bool	is_redir_char(char c);
 int		set_env_parameters(t_cmd *cmd);
 char	*clean_parameters(char *str);
 int		set_parameters(char *str, t_cmd *cmd);
+void	free_strstr(char **str, int nbr);
 
 //TEST
 void	signal_handler(int signo);

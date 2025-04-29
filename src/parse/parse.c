@@ -81,8 +81,12 @@ t_cmd	*parsing_cmd(char *str)
 	cmd = NULL;
 	if (unclosed_quotes(str) || empty_link(str) || parse_cmd(str, &cmd))
 	{
+		if (ft_quote('\'', 0))
+			ft_quote('\'', 1);
+		if (ft_quote('"', 0))
+			ft_quote('"', 1);
 		if (cmd)
-			free(cmd);
+			free_cmd_list(cmd);
 		return (NULL);
 	}
 	return (cmd);

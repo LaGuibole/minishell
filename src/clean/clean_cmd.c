@@ -28,7 +28,20 @@
 	}
 }*/
 
-void free_redir(t_redir *redir)
+void	free_strstr(char **str, int nbr)
+{
+	int	i;
+
+	i = 0;
+	if (str)
+	{
+		while (i < nbr)
+			free(str[i++]);
+		free(str);
+	}
+}
+
+void	free_redir(t_redir *redir)
 {
 	if (redir)
 	{
@@ -40,14 +53,19 @@ void free_redir(t_redir *redir)
 	}
 }
 
-void free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
 	int	i;
 
 	i = 0;
 	if (cmd->nbparams > 0)
+	{
 		while (i < cmd->nbparams)
 			free(cmd->params[i++]);
+		free(cmd->params);
+	}
+	if (cmd->cmd)
+		free(cmd->cmd);
 	free_redir(cmd->redir);
 	free(cmd);
 }
