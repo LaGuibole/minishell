@@ -152,7 +152,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		if (!current)
 		{
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
-			free(line);
+			free_strstr(line, nbline);
 			return (RET_ERR);
 		}
 		current->nbparams = 0;
@@ -165,7 +165,7 @@ set_env_parameters(current)
 		)
 		{
 			fd_printf(STDOUT_FILENO, ERR_PARSE);
-			free(line);
+			free_strstr(line, nbline);
 			return (RET_ERR);
 		}
 		if (!cmd)
@@ -174,6 +174,6 @@ set_env_parameters(current)
 			cmdadd_back(cmd, current);
 		cpt++;
 	}
-	free(line);
+	free_strstr(line, nbline);
 	return (RET_OK);
 }
