@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/28 13:38:26 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:22:33 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,12 +168,3 @@ bool	has_output_redirections(t_redir *redir)
 	return (false);
 }
 
-// void	apply_heredoc_redirections(t_redir *redir)
-// {
-// 	while (redir)
-// 	{
-// 		if (redir->type == R_HEREDOC)
-// 			redir_heredoc(redir->filename);
-// 		redir = redir->next;
-// 	}
-// }

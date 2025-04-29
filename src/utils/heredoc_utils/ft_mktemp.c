@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:06:57 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/28 14:32:12 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/28 14:49:43 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,11 @@ static char	*build_tmp_name(pid_t pid, int count)
 /// @return A newly allocated string containing a unique filename | NULL(error)
 char	*ft_mktemp(void)
 {
-	static size_t	count;
+	static size_t	count = 0;
 	pid_t			pid;
 	char			*tmp;
 	char			*result;
 
-	count = 0;
 	pid = getpid();
 	tmp = build_tmp_name(pid, count);
 	count++;

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/28 14:47:19 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:31:58 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,6 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 			}
 			close(pipefd[1]);
 		}
-		// else
-		// {
-		// 	close(pipefd[0]);
-		// 	close(pipefd[1]);
-		// }
 		if (cmd->is_builtin)
 			exit(exec_builtin(cmd));
 		if (cmd->cmd)

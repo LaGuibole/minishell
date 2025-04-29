@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/28 14:33:00 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:33:34 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current)
 			redir = tmp->redir;
 			while (redir)
 			{
-				if (redir->type == R_HEREDOC && redir->fd != -1)
+				if (redir->type == R_HEREDOC && (tmp != current) && redir->fd != -1)
 				{
 					close(redir->fd);
 					redir->fd = -1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parameters.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:43:05 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/26 14:47:51 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/28 15:21:42 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
