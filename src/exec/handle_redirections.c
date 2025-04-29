@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:22:33 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:43:08 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,16 @@ void	apply_shell_redirections(t_redir *redir)
 		{
 			if (last_input_fd != -1)
 				close(last_input_fd);
-			last_input_fd = dup(redir->fd);
+			// last_input_fd = dup(redir->fd);
+			// if (last_input_fd == -1)
+			// {
+			// 	perror("dup heredoc fd");
+			// 	exit(EXIT_FAILURE);
+			// }
+			last_input_fd = open(redir->filename, O_RDONLY);
 			if (last_input_fd == -1)
 			{
-				perror("dup heredoc fd");
+				perror("opening heredoc file");
 				exit(EXIT_FAILURE);
 			}
 		}

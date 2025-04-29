@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: guillaumephilippe <guillaumephilippe@st    +#+  +:+       +#+        */
+/*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/27 16:09:27 by guillaumeph      ###   ########.fr       */
+/*   Updated: 2025/04/29 13:41:09 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char	*get_oldpwd_path(void);
 
 //HEREDOC HELPER
 char	*ft_mktemp(void);
-int		create_heredoc_fd(const char *delimiter);
+char	*create_heredoc_fd(const char *delimiter);
 
 // ERRORS
 void	print_invalid_identifier(char *arg);

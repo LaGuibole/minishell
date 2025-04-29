@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:31:58 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:39:04 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 		}
 		if (cmd->redir)
 			apply_shell_redirections(cmd->redir);
-		close_other_heredocs(cmd->all_cmds, cmd);
+		// close_other_heredocs(cmd->all_cmds, cmd);
 		if (has_next)
 		{
 			close(pipefd[0]);
