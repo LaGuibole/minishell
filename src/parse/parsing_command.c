@@ -72,9 +72,9 @@ static int	set_redirect(char *str, t_cmd *cmd)
 				if (str[i] == '\0')
 					fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
 				else if ((str[i] == '<' && str[i + 1] == '<') || \
-					(str[i] == '>' && str[i + 1] == '>'))
+(str[i] == '>' && str[i + 1] == '>'))
 					fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
-					ERR_CHEV, str[i], str[i]);
+ERR_CHEV, str[i], str[i]);
 				else
 					fd_printf(STDOUT_FILENO, "%s `%c'\n", ERR_CHEV, str[i]);
 				return (RET_ERR);
@@ -158,13 +158,13 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		current->nbparams = 0;
 		if (
 			set_redirect(line[cpt], current) || \
-			set_parameters(line[cpt], current) || \
-			set_cmd(current) || \
-			set_is_builtin(current) || \
-			set_env_parameters(current)
+set_parameters(line[cpt], current) || \
+set_cmd(current) || \
+set_is_builtin(current) || \
+set_env_parameters(current)
 		)
 		{
-			fd_printf(STDOUT_FILENO, ERR_PARSE); // A supp
+			fd_printf(STDOUT_FILENO, ERR_PARSE);
 			free(line);
 			return (RET_ERR);
 		}

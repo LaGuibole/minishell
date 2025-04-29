@@ -20,13 +20,11 @@ int	set_env_parameters(t_cmd *cmd)
 
 char	*clean_parameters(char *str)
 {
-	// int		i;
 	bool	single_quote;
 	bool	double_quote;
 	char	*cleaned;
 	int		j;
 
-	// i = 0;
 	single_quote = 0;
 	double_quote = 0;
 	j = 0;
@@ -80,7 +78,7 @@ int	set_parameters(char *str, t_cmd *cmd)
 	{
 		end = 0;
 		while ((str[start + end] && str[start + end] != ' ') || \
-				double_quote || single_quote)
+double_quote || single_quote)
 		{
 			if (str[start + end] == '\'' && !double_quote)
 				single_quote = !single_quote;
@@ -96,7 +94,7 @@ int	set_parameters(char *str, t_cmd *cmd)
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
 			free(str);
 			return (RET_ERR);
-		} 
+		}
 		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
 			free(params[cmd->nbparams--]);
 		start += ++end;
