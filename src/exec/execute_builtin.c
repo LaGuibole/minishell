@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:07:01 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 17:15:33 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:29:13 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int	exec_builtin(t_cmd *cmd)
 	return (RET_ERR);
 }
 
-/// @brief
-/// @param name
-/// @return
+/// @brief horrible function to check if cmd is a builtin
+/// @param name the cmd to be checked
+/// @return true if *name is a builtin, false otherwise
 bool	cmd_is_builtin(char *name)
 {
 	if (!name)

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:51:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:26:49 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
 # define ERR_CHEV "bash: syntax error near unexpected token"
 
-static volatile sig_atomic_t	g_signal = 0;
+extern int	g_signal;
 
 typedef enum e_redir_type
 {
@@ -54,6 +54,7 @@ typedef struct s_redir
 	t_redir_type	type;
 	char			*filename;
 	struct s_redir	*next;
+	int				fd;
 }	t_redir;
 
 typedef struct s_cmd
@@ -62,9 +63,11 @@ typedef struct s_cmd
 	bool			is_builtin;
 	char			**params;
 	int				nbparams;
+	int				pid;
 	struct s_redir	*redir;
 	t_link_type		type_link_next;
 	struct s_cmd	*next;
+	struct s_cmd	*all_cmds;
 }	t_cmd;
 
 char	*display_prompt(void);
@@ -115,7 +118,7 @@ char	*get_oldpwd_path(void);
 
 //HEREDOC HELPER
 char	*ft_mktemp(void);
-int		create_heredoc_fd(const char *delimiter);
+char	*create_heredoc_fd(const char *delimiter);
 
 // ERRORS
 void	print_invalid_identifier(char *arg);
@@ -133,7 +136,7 @@ int		exec_cmd(t_cmd *cmd, char **envp);
 void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next);
 pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp);
 int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
-void	wait_children(void);
+void	wait_children(t_cmd *cmds);
 int		exec_pipeline(t_cmd *cmds, char **envp);
 void	apply_shell_redirections(t_redir *redir);
 
@@ -159,9 +162,19 @@ int		set_parameters(char *str, t_cmd *cmd);
 void	signal_handler(int signo);
 void	handle_sigint(int sig);
 void	exec_child_process(t_cmd *cmd, char **envp);
+void	apply_heredoc_redirections(t_redir *redir);
 
 
 void	print_cmd_list(t_cmd *cmd); // debug
 void	free_cmd_list(t_cmd *cmd);
+void	prepare_heredocs(t_cmd *cmds);
+bool	has_output_redirections(t_redir *redir);
+
+void	redirect_input_fd(int input_fd);
+void	redirect_output_fd(t_cmd *cmd, int *pipefd, bool has_next, bool has_out_redir);
+void	redir_output(char *filename);
+void	redir_append(char *filename);
+void	handle_input_types(t_redir *redir, int *last_input_fd);
+
 
 #endif
