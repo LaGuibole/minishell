@@ -20,7 +20,8 @@ static int	set_is_builtin(t_cmd *cmd)
 
 static int	set_cmd(t_cmd *cmd)
 {
-	cmd->cmd = ft_strdup(cmd->params[0]);
+	if (cmd->params[0])
+		cmd->cmd = ft_strdup(cmd->params[0]);
 	return (RET_OK);
 }
 
@@ -137,7 +138,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 	int		cpt;
 	t_cmd	*current;
 
-	line = malloc(sizeof(char *) + 1);
+	line = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!line)
 	{
 		fd_printf(STDOUT_FILENO, ERR_MALLOC);
@@ -151,6 +152,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		if (!current)
 		{
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
+			free(line);
 			return (RET_ERR);
 		}
 		current->nbparams = 0;
@@ -163,6 +165,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		)
 		{
 			fd_printf(STDOUT_FILENO, ERR_PARSE); // A supp
+			free(line);
 			return (RET_ERR);
 		}
 		if (!cmd)
@@ -171,5 +174,6 @@ int	parse_cmd(char *str, t_cmd **cmd)
 			cmdadd_back(cmd, current);
 		cpt++;
 	}
+	free(line);
 	return (RET_OK);
 }

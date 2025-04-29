@@ -85,7 +85,5 @@ t_cmd	*parsing_cmd(char *str)
 			free(cmd);
 		return (NULL);
 	}
-	// if (!cmd->cmd)
-	// 	return (NULL);
 	return (cmd);
 }

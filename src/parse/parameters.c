@@ -65,7 +65,7 @@ int	set_parameters(char *str, t_cmd *cmd)
 	bool	double_quote;
 
 	str = clean_parameters(str);
-	params = malloc(sizeof(char *) * ft_strlen(str) + 1);
+	params = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!params)
 	{
 		fd_printf(STDOUT_FILENO, ERR_MALLOC);
@@ -89,16 +89,16 @@ int	set_parameters(char *str, t_cmd *cmd)
 			end++;
 		}
 		params[cmd->nbparams++] = ft_substr(str, start, end);
-		if (ft_strlen(params[cmd->nbparams - 1]) == 0)
-			free(params[cmd->nbparams--]);
-		else if (!params[cmd->nbparams - 1])
+		if (!params[cmd->nbparams - 1])
 		{
 			cmd->params = params;
 			cmd->nbparams--;
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
 			free(str);
 			return (RET_ERR);
-		}
+		} 
+		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
+			free(params[cmd->nbparams--]);
 		start += ++end;
 	}
 	params[cmd->nbparams] = NULL;
