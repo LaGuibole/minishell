@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:39:04 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:55:31 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,22 @@ int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
 }
 
 /// @brief Waits for all children processes to finish
-void	wait_children(void)
+void	wait_children(t_cmd *cmds)
 {
-	while (wait(NULL) > 0)
-		;
+	t_cmd	*cmd;
+	int		last_status;
+
+	cmd = cmds;
+	while (cmd)
+	{
+		if (waitpid(cmd->pid, &last_status, 0) == -1)
+			perror("waitpid error");
+		if (WIFEXITED(last_status))
+			g_signal = WEXITSTATUS(last_status);
+		if (WIFSIGNALED(last_status))
+			g_signal = 130;
+		cmd = cmd->next;
+	}
 }
 
 /// @brief Execute a pipeline of commands, handling pipes and process creation
@@ -162,7 +174,6 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 	t_cmd	*curr;
 	int		pipefd[2];
 	int		input_fd;
-	pid_t	pid;
 
 
 	if (!cmds)
@@ -177,12 +188,12 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 	{
 		if (curr->next && pipe(pipefd) == -1)
 			return (perror("pipe error"), 1);
-		pid = fork_child(curr, input_fd, pipefd, envp);
-		if (pid == -1)
+		curr->pid = fork_child(curr, input_fd, pipefd, envp);
+		if (curr->pid == -1)
 			return (perror("fork error"), 1);
 		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
 		curr = curr->next;
 	}
-	wait_children();
+	wait_children(cmds);
 	return (RET_OK);
 }

@@ -6,11 +6,13 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/28 14:56:56 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:53:53 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int g_signal = 0;
 
 void	handle_sigint(int sig)
 {

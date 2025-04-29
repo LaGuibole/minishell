@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:41:09 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:54:02 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
 # define ERR_CHEV "bash: syntax error near unexpected token"
 
-static volatile sig_atomic_t	g_signal = 0;
+extern int	g_signal;
 
 typedef enum e_redir_type
 {
@@ -63,6 +63,7 @@ typedef struct s_cmd
 	bool			is_builtin;
 	char			**params;
 	int				nbparams;
+	int				pid;
 	struct s_redir	*redir;
 	t_link_type		type_link_next;
 	struct s_cmd	*next;
@@ -135,7 +136,7 @@ int		exec_cmd(t_cmd *cmd, char **envp);
 void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next);
 pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp);
 int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
-void	wait_children(void);
+void	wait_children(t_cmd *cmds);
 int		exec_pipeline(t_cmd *cmds, char **envp);
 void	apply_shell_redirections(t_redir *redir);
 
