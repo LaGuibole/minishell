@@ -28,7 +28,7 @@
 	}
 }*/
 
-void free_redir(t_redir *redir)
+void	free_redir(t_redir *redir)
 {
 	if (redir)
 	{
@@ -40,7 +40,7 @@ void free_redir(t_redir *redir)
 	}
 }
 
-void free_cmd(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
 	int	i;
 
