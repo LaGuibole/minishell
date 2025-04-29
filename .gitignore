@@ -4,4 +4,5 @@ build/
 libs/
 minishell
 .cache/oh-my-posh/
+minishell.dSYM/
 Makefile

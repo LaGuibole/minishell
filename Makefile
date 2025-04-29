@@ -30,6 +30,9 @@ SOURCES = \
 	./src/exec/execute_cmd.c \
 	./src/exec/execute_pipeline.c \
 	./src/exec/handle_redirections.c \
+	./src/exec/pipe_utils.c \
+	./src/exec/redir_input.c \
+	./src/exec/redir_output.c \
 	./src/minishell.c \
 	./src/parse/cmd.c \
 	./src/parse/parameters.c \

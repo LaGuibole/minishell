@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:54:02 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:26:49 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,13 @@ void	apply_heredoc_redirections(t_redir *redir);
 void	print_cmd_list(t_cmd *cmd); // debug
 void	free_cmd_list(t_cmd *cmd);
 void	prepare_heredocs(t_cmd *cmds);
-void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current);
 bool	has_output_redirections(t_redir *redir);
+
+void	redirect_input_fd(int input_fd);
+void	redirect_output_fd(t_cmd *cmd, int *pipefd, bool has_next, bool has_out_redir);
+void	redir_output(char *filename);
+void	redir_append(char *filename);
+void	handle_input_types(t_redir *redir, int *last_input_fd);
+
 
 #endif

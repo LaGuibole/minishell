@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:56:47 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:27:35 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,57 +46,6 @@ static int	update_pwd(void)
 	return (RET_OK);
 }
 
-// /// @brief Get the target path from cd args
-// /// @param args The args list passed to cd
-// /// @return A malloc'd string containing the path to change to, NULL on error
-// static char	*get_target_path(char **args)
-// {
-// 	char	*path;
-
-// 	if (!args[1])
-// 	{
-// 		path = ft_getenv("HOME");
-// 		if (!path)
-// 			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
-// 	}
-// 	else if (ft_strcmp(args[1], "~") == 0 || ft_strcmp(args[1], "--") == 0)
-// 	{
-// 		path = ft_getenv("HOME");
-// 		if (!path)
-// 			return (fd_printf(STDERR_FILENO, "cd: HOME not set\n"), NULL);
-// 	}
-// 	else if (ft_strcmp(args[1], "-") == 0)
-// 	{
-// 		path = ft_getenv("OLDPWD");
-// 		if (!path)
-// 			return (fd_printf(STDERR_FILENO, "cd: OLDPWD not set\n"), NULL);
-// 	}
-// 	else
-// 		path = ft_strdup(args[1]);
-// 	return (path);
-// }
-
-// /// @brief Builtin implementation of the cd command
-// /// @param args The arg list passed to cd
-// /// @return 0 on success, 1 otherwise
-// int	ft_cd(char **args)
-// {
-// 	char	*path;
-// 	int		ret;
-
-// 	path = get_target_path(args);
-// 	if (!path)
-// 		return (RET_ERR);
-// 	ret = save_old_pwd();
-// 	if (ret != 0)
-// 		return (free(path), ret);
-// 	if (chdir(path) != 0)
-// 		return (fd_printf(STDERR_FILENO, "cd: %s: %s\n", path,
-// 				strerror(errno)), free(path), RET_ERR);
-// 	ret = update_pwd();
-// 	return (free(path), ret);
-// }
-
 static char	*get_target_path(char **args)
 {
 	char	*path;
@@ -131,11 +80,9 @@ int	ft_cd(char **args)
 	{
 		fd_printf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
 		free(path);
-		return(RET_ERR);
+		return (RET_ERR);
 	}
 	ret = update_pwd();
 	free(path);
 	return (ret);
 }
-
-

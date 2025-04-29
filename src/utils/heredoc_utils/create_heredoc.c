@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:41:29 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:26:42 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,6 @@ char	*create_heredoc_fd(const char *delimiter)
 	if (write_heredoc_content(fd, delimiter) == -1)
 		return (close(fd), unlink(path), free(path), NULL);
 	close(fd);
-	// fd_read = open(path, O_RDONLY);
-	// if (fd_read == -1)
-	// 	return (unlink(path), perror("heredoc: open"), free(path), NULL);
-	// unlink(path);
-	// close (fd_read);
 	return (path);
 }
 
@@ -89,29 +84,3 @@ void	prepare_heredocs(t_cmd *cmds)
 		cmd = cmd->next;
 	}
 }
-
-void	close_other_heredocs(t_cmd *all_cmds, t_cmd *current)
-{
-	t_cmd	*tmp;
-	t_redir	*redir;
-
-	tmp = all_cmds;
-	while (tmp)
-	{
-		if (tmp != current)
-		{
-			redir = tmp->redir;
-			while (redir)
-			{
-				if (redir->type == R_HEREDOC && (tmp != current) && redir->fd != -1)
-				{
-					close(redir->fd);
-					redir->fd = -1;
-				}
-				redir = redir->next;
-			}
-		}
-		tmp = tmp->next;
-	}
-}
-
