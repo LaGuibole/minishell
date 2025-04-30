@@ -46,21 +46,11 @@ char	*clean_parameters(char *str)
 	return (cleaned);
 }
 
-int	set_parameters(char *str, t_cmd *cmd)
+int	construct_params(char **params, char *str, t_cmd *cmd, size_t start)
 {
-	size_t	start;
 	size_t	end;
-	char	**params;
 
-	str = clean_parameters(str);
-	if (!str)
-		return (print_error(ERR_MALLOC));
-	params = malloc(sizeof(char *) * (ft_strlen(str) + 1));
-	if (!params)
-		return (print_error(ERR_MALLOC));
-	start = 0;
-	while (str[start] && str[start] == ' ')
-		start++;
+	end = 0;
 	while (start < ft_strlen(str))
 	{
 		end = 0;
@@ -82,6 +72,25 @@ ft_quote('\'', 0) || ft_quote('"', 0))
 			free(params[cmd->nbparams--]);
 		start += ++end;
 	}
+	return (RET_OK);
+}
+
+int	set_parameters(char *str, t_cmd *cmd)
+{
+	size_t	start;
+	char	**params;
+
+	str = clean_parameters(str);
+	if (!str)
+		return (print_error(ERR_MALLOC));
+	params = malloc(sizeof(char *) * (ft_strlen(str) + 1));
+	if (!params)
+		return (print_error(ERR_MALLOC));
+	start = 0;
+	while (str[start] && str[start] == ' ')
+		start++;
+	if (construct_params(params, str, cmd, start))
+		return (RET_ERR);
 	params[cmd->nbparams] = NULL;
 	cmd->params = params;
 	free(str);
