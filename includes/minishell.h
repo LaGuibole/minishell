@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 12:18:19 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:15:51 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char	*join_cmd_paths(char *path, char *cmd);
 char	*get_cmd_path(t_cmd *cmd, char **envp);
 
 //DUMMY
-int		exec_cmd(t_cmd *cmd, char **envp);
+int		exec_cmd(t_cmd *cmd);
 
 //PIPELINE EXEC
 void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next);
@@ -164,7 +164,7 @@ int		set_cmd(t_cmd *cmd);
 //TEST
 void	signal_handler(int signo);
 void	handle_sigint(int sig);
-void	exec_child_process(t_cmd *cmd, char **envp);
+void	exec_child_process(t_cmd *cmd);
 void	apply_heredoc_redirections(t_redir *redir);
 
 void	print_cmd_list(t_cmd *cmd); // debug
@@ -179,4 +179,9 @@ void	redir_append(char *filename);
 void	handle_input_types(t_redir *redir, int *last_input_fd);
 
 void	exit_child(t_cmd *cmd, int status);
+
+char	**env_to_array(void);
+void	free_array(char **array);
+
+
 #endif

@@ -26,6 +26,7 @@ SOURCES = \
 	./src/clean/exit_child.c \
 	./src/core/display_prompt.c \
 	./src/env/env_helpers.c \
+	./src/env/env_to_array.c \
 	./src/env/ft_envp.c \
 	./src/exec/execute_builtin.c \
 	./src/exec/execute_cmd.c \

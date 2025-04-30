@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 13:53:53 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:05:48 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	handle_sigint(int sig)
 int	main(int argc, char **argv, char **envp)
 {
 	struct sigaction	sa_c;
-
+	
 	(void)argc;
 	(void)argv;
 	sa_c.sa_handler = handle_sigint;
