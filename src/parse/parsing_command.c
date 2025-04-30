@@ -62,13 +62,10 @@ static int	set_redirect(char *str, t_cmd *cmd)
 			i += set_type_chev(&type, str[i], str[i + 1]);
 			while (str[i] == ' ')
 				i++;
-			if (ft_strlen(str) <= i)
-			{
-				if (check_more_chev(str[i], '\0'))
-					return (RET_ERR);
-				else if (check_more_chev(str[i], str[i + 1]))
-					return (RET_ERR);
-			}
+			if (ft_strlen(str) <= i && check_more_chev(str[i], '\0'))
+				return (RET_ERR);
+			else if (ft_strlen(str) > i && check_more_chev(str[i], str[i + 1]))
+				return (RET_ERR);
 			fname_start = i;
 			while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 				i++;
