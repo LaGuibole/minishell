@@ -52,3 +52,16 @@ t_cmd	*cmdnew(void)
 	cmd->next = NULL;
 	return (cmd);
 }
+
+int	set_is_builtin(t_cmd *cmd)
+{
+	cmd->is_builtin = cmd_is_builtin(cmd->cmd);
+	return (RET_OK);
+}
+
+int	set_cmd(t_cmd *cmd)
+{
+	if (cmd->params[0])
+		cmd->cmd = cmd->params[0];
+	return (RET_OK);
+}

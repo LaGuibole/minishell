@@ -12,22 +12,42 @@
 
 #include "minishell.h"
 
-static int	set_is_builtin(t_cmd *cmd)
+static int	check_more_chev(char c, char next)
 {
-	cmd->is_builtin = cmd_is_builtin(cmd->cmd);
+	if (c == '<' || c == '>' || c == '\0')
+	{
+		if (c == '\0')
+			fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
+		else if ((c == '<' && next == '<') || \
+(c == '>' && next == '>'))
+			fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
+ERR_CHEV, c, c);
+		else
+			fd_printf(STDOUT_FILENO, "%s `%c'\n", ERR_CHEV, c);
+		return (RET_ERR);
+	}
 	return (RET_OK);
 }
 
-static int	set_cmd(t_cmd *cmd)
+static int	set_type_chev(t_redir_type *type, char c, char next)
 {
-	if (cmd->params[0])
-		cmd->cmd = cmd->params[0];
-	return (RET_OK);
+	int	i;
+
+	i = 1;
+	if (c == '<' && next == '<' && i++)
+		*type = R_HEREDOC;
+	else if (c == '>' && next == '>' && i++)
+		*type = R_APPEND;
+	else if (c == '<')
+		*type = R_INPUT;
+	else
+		*type = R_OUTPUT;
+	return (i);
 }
 
 static int	set_redirect(char *str, t_cmd *cmd)
 {
-	int				i;
+	size_t				i;
 	t_redir_type	type;
 	int				fname_start;
 	char			*filename;
@@ -36,38 +56,23 @@ static int	set_redirect(char *str, t_cmd *cmd)
 	while (str[i])
 	{
 		ft_quote(str[i], 1);
-		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && (str[i] == '<' || str[i] == '>'))
+		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && \
+(str[i] == '<' || str[i] == '>'))
 		{
-			if (str[i] == '<' && str[i + 1] == '<' && i++)
-				type = R_HEREDOC;
-			else if (str[i] == '>' && str[i + 1] == '>' && i++)
-				type = R_APPEND;
-			else if (str[i] == '<')
-				type = R_INPUT;
-			else
-				type = R_OUTPUT;
-			i++;
+			i += set_type_chev(&type, str[i], str[i + 1]);
 			while (str[i] == ' ')
 				i++;
-			if (str[i] == '<' || str[i] == '>' || str[i] == '\0')
-			{
-				if (str[i] == '\0')
-					fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
-				else if ((str[i] == '<' && str[i + 1] == '<') || \
-(str[i] == '>' && str[i + 1] == '>'))
-					fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
-ERR_CHEV, str[i], str[i]);
-				else
-					fd_printf(STDOUT_FILENO, "%s `%c'\n", ERR_CHEV, str[i]);
+			if (ft_strlen(str) <= i && check_more_chev(str[i], '\0'))
 				return (RET_ERR);
-			}
+			else if (ft_strlen(str) > i && check_more_chev(str[i], str[i + 1]))
+				return (RET_ERR);
 			fname_start = i;
 			while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 				i++;
 			filename = ft_substr(str, fname_start, i - fname_start);
 			if (!filename)
 				return (RET_ERR);
-			if (add_redir(cmd, type, filename) != RET_OK)
+			if (add_redir(cmd, type, filename))
 				return (free(filename), RET_ERR);
 		}
 		else

@@ -158,6 +158,8 @@ int		set_env_parameters(t_cmd *cmd);
 char	*clean_parameters(char *str);
 int		set_parameters(char *str, t_cmd *cmd);
 void	free_strstr(char **str, int nbr);
+int		set_is_builtin(t_cmd *cmd);
+int		set_cmd(t_cmd *cmd);
 
 //TEST
 void	signal_handler(int signo);
