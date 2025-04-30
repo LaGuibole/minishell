@@ -165,7 +165,6 @@ void	handle_sigint(int sig);
 void	exec_child_process(t_cmd *cmd, char **envp);
 void	apply_heredoc_redirections(t_redir *redir);
 
-
 void	print_cmd_list(t_cmd *cmd); // debug
 void	free_cmd_list(t_cmd *cmd);
 void	prepare_heredocs(t_cmd *cmds);
@@ -178,5 +177,4 @@ void	redir_append(char *filename);
 void	handle_input_types(t_redir *redir, int *last_input_fd);
 
 void	exit_child(t_cmd *cmd, int status);
-
 #endif
