@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:26:49 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:18:19 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,5 +177,6 @@ void	redir_output(char *filename);
 void	redir_append(char *filename);
 void	handle_input_types(t_redir *redir, int *last_input_fd);
 
+void	exit_child(t_cmd *cmd, int status);
 
 #endif

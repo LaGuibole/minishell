@@ -23,6 +23,7 @@ SOURCES = \
 	./src/builtins/pwd.c \
 	./src/builtins/unset.c \
 	./src/clean/clean_cmd.c \
+	./src/clean/exit_child.c \
 	./src/core/display_prompt.c \
 	./src/env/env_helpers.c \
 	./src/env/ft_envp.c \
