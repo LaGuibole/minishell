@@ -21,7 +21,7 @@ static int	set_is_builtin(t_cmd *cmd)
 static int	set_cmd(t_cmd *cmd)
 {
 	if (cmd->params[0])
-		cmd->cmd = ft_strdup(cmd->params[0]);
+		cmd->cmd = cmd->params[0];
 	return (RET_OK);
 }
 

@@ -65,8 +65,6 @@ void	free_cmd(t_cmd *cmd)
 	}
 	if (cmd->params)
 		free(cmd->params);
-	if (cmd->cmd)
-		free(cmd->cmd);
 	free_redir(cmd->redir);
 	free(cmd);
 }
