@@ -28,43 +28,25 @@ static int	set_cmd(t_cmd *cmd)
 static int	set_redirect(char *str, t_cmd *cmd)
 {
 	int				i;
-	bool			single_quote;
-	bool			double_quote;
 	t_redir_type	type;
 	int				fname_start;
 	char			*filename;
 
 	i = 0;
-	single_quote = 0;
-	double_quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (str[i] == '"' && !single_quote)
-			double_quote = !double_quote;
-		if (!single_quote && !double_quote && (str[i] == '<' || str[i] == '>'))
+		ft_quote(str[i], 1);
+		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && (str[i] == '<' || str[i] == '>'))
 		{
-			if (str[i] == '<' && str[i + 1] == '<')
-			{
+			if (str[i] == '<' && str[i + 1] == '<' && i++)
 				type = R_HEREDOC;
-				i += 2;
-			}
-			else if (str[i] == '>' && str[i + 1] == '>')
-			{
+			else if (str[i] == '>' && str[i + 1] == '>' && i++)
 				type = R_APPEND;
-				i += 2;
-			}
 			else if (str[i] == '<')
-			{
 				type = R_INPUT;
-				i++;
-			}
 			else
-			{
 				type = R_OUTPUT;
-				i++;
-			}
+			i++;
 			while (str[i] == ' ')
 				i++;
 			if (str[i] == '<' || str[i] == '>' || str[i] == '\0')
@@ -86,10 +68,7 @@ ERR_CHEV, str[i], str[i]);
 			if (!filename)
 				return (RET_ERR);
 			if (add_redir(cmd, type, filename) != RET_OK)
-			{
-				free(filename);
-				return (RET_ERR);
-			}
+				return (free(filename), RET_ERR);
 		}
 		else
 			i++;

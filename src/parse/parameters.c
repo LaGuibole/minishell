@@ -69,7 +69,7 @@ ft_quote('\'', 0) || ft_quote('"', 0))
 			return (print_error(ERR_MALLOC));
 		}
 		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
-			free(params[cmd->nbparams--]);
+			free(params[cmd->nbparams-- - 1]);
 		start += ++end;
 	}
 	return (RET_OK);
