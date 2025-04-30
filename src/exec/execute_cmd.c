@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 17:15:36 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:25:57 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	exec_child_process(t_cmd *cmd)
 	if (cmd_is_builtin(cmd->cmd))
 		free_all_and_exit(cmd, exec_builtin(cmd));
 	path = get_cmd_path(cmd, my_env);
+	// if (strcmp(path, "<<") == 0)
+	// 	return ;
 	if (!path)
 	{
 		ft_lstclear(ft_envp(NULL), free);
@@ -34,7 +36,7 @@ void	exec_child_process(t_cmd *cmd)
 		free_double_tab(my_env);
 		exit (127);
 	}
-	if (execve(path, cmd->params, my_env) == -1)
+	if (execve(path, cmd->params, my_env) == -1 && ft_strcmp(path, "<<") != 0)
 	{
 		perror("execve");
 		free(path);

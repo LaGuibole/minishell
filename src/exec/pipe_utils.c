@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:13:11 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:35:22 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:42:41 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /// @brief Redirect a given input fd to STDIN
 /// @param input_fd The input file descriptor to redirect
-void	redirect_input_fd(int input_fd)
+void	redirect_input_fd(int input_fd, int *pipefd)
 {
 	if (input_fd != STDIN_FILENO)
 	{
@@ -25,6 +25,11 @@ void	redirect_input_fd(int input_fd)
 		}
 		close(input_fd);
 	}
+	else
+	{
+		dup2(pipefd[0], STDIN_FILENO);
+	}
+	close(pipefd[0]);
 }
 
 /// @brief Redirect STDOUT to the pipe if needed, or close the pipe otherwise
@@ -51,6 +56,6 @@ void	redirect_output_fd(
 				exit(EXIT_FAILURE);
 			}
 		}
-		close(pipefd[1]);
 	}
+	close(pipefd[1]);
 }

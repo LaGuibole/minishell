@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 12:18:05 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:41:18 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 /// @param pipefd Current pipe (to next process)
 /// @param envp Environement variables
 /// @return pid of the child processm or -1 on error
-pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
+pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd)
 {
 	pid_t	pid;
 	bool	has_next;
@@ -50,14 +50,14 @@ pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
 		return (-1);
 	if (pid == 0)
 	{
-		redirect_input_fd(input_fd);
+		redirect_input_fd(input_fd, pipefd);
 		if (cmd->redir)
 			apply_shell_redirections(cmd->redir);
 		redirect_output_fd(cmd, pipefd, has_next, has_out_redir);
 		if (cmd->is_builtin)
 			exit_child(cmd, exec_builtin(cmd));
 		if (cmd->cmd)
-			exec_child_process(cmd, envp);
+			exec_child_process(cmd);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);
@@ -93,12 +93,15 @@ void	wait_children(t_cmd *cmds)
 	cmd = cmds;
 	while (cmd)
 	{
-		if (waitpid(cmd->pid, &last_status, 0) == -1)
-			perror("waitpid error");
-		if (WIFEXITED(last_status))
-			g_signal = WEXITSTATUS(last_status);
-		if (WIFSIGNALED(last_status))
-			g_signal = 130;
+		if (cmd->pid != -2)
+		{
+			if (waitpid(cmd->pid, &last_status, 0) == -1)
+				perror("waitpid error");
+			if (WIFEXITED(last_status))
+				g_signal = WEXITSTATUS(last_status);
+			if (WIFSIGNALED(last_status))
+				g_signal = 130;
+		}
 		cmd = cmd->next;
 	}
 }
@@ -107,7 +110,7 @@ void	wait_children(t_cmd *cmds)
 /// @param cmds The linked list of commands forming the pipeline
 /// @param envp The environment variables passed to execve
 /// @return 0 on success, 1 on pipe or fork failure
-int	exec_pipeline(t_cmd *cmds, char **envp)
+int	exec_pipeline(t_cmd *cmds)
 {
 	t_cmd	*curr;
 	int		pipefd[2];
@@ -116,15 +119,24 @@ int	exec_pipeline(t_cmd *cmds, char **envp)
 	if (!cmds)
 		return (RET_ERR);
 	prepare_heredocs(cmds);
-	if (!cmds->next)
-		return (exec_cmd(cmds, envp));
+	if (!cmds->next && cmds->cmd)
+		return (exec_cmd(cmds));
 	input_fd = STDIN_FILENO;
 	curr = cmds;
 	while (curr)
 	{
-		if (curr->next && pipe(pipefd) == -1)
+		if (!curr->cmd)
+		{
+			if (input_fd != STDIN_FILENO)
+				close(input_fd);
+			input_fd = STDIN_FILENO;
+			curr->pid = -2;
+			curr = curr->next;
+			continue ;
+		}
+		if (pipe(pipefd) == -1)
 			return (perror("pipe error"), 1);
-		curr->pid = fork_child(curr, input_fd, pipefd, envp);
+		curr->pid = fork_child(curr, input_fd, pipefd);
 		if (curr->pid == -1)
 			return (perror("fork error"), 1);
 		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);

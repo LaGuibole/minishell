@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 17:15:51 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:41:11 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,10 +134,10 @@ int		exec_cmd(t_cmd *cmd);
 
 //PIPELINE EXEC
 void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next);
-pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp);
+pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd);
 int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
 void	wait_children(t_cmd *cmds);
-int		exec_pipeline(t_cmd *cmds, char **envp);
+int		exec_pipeline(t_cmd *cmds);
 void	apply_shell_redirections(t_redir *redir);
 
 //CLEAN && EXIT
@@ -172,7 +172,7 @@ void	free_cmd_list(t_cmd *cmd);
 void	prepare_heredocs(t_cmd *cmds);
 bool	has_output_redirections(t_redir *redir);
 
-void	redirect_input_fd(int input_fd);
+void	redirect_input_fd(int input_fd, int *pipefd);
 void	redirect_output_fd(t_cmd *cmd, int *pipefd, bool has_next, bool has_out_redir);
 void	redir_output(char *filename);
 void	redir_append(char *filename);
