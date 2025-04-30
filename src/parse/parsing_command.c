@@ -20,7 +20,8 @@ static int	set_is_builtin(t_cmd *cmd)
 
 static int	set_cmd(t_cmd *cmd)
 {
-	cmd->cmd = ft_strdup(cmd->params[0]);
+	if (cmd->params[0])
+		cmd->cmd = ft_strdup(cmd->params[0]);
 	return (RET_OK);
 }
 
@@ -71,9 +72,9 @@ static int	set_redirect(char *str, t_cmd *cmd)
 				if (str[i] == '\0')
 					fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
 				else if ((str[i] == '<' && str[i + 1] == '<') || \
-					(str[i] == '>' && str[i + 1] == '>'))
+(str[i] == '>' && str[i + 1] == '>'))
 					fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
-					ERR_CHEV, str[i], str[i]);
+ERR_CHEV, str[i], str[i]);
 				else
 					fd_printf(STDOUT_FILENO, "%s `%c'\n", ERR_CHEV, str[i]);
 				return (RET_ERR);
@@ -137,7 +138,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 	int		cpt;
 	t_cmd	*current;
 
-	line = malloc(sizeof(char *) + 1);
+	line = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!line)
 	{
 		fd_printf(STDOUT_FILENO, ERR_MALLOC);
@@ -151,18 +152,20 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		if (!current)
 		{
 			fd_printf(STDOUT_FILENO, ERR_MALLOC);
+			free_strstr(line, nbline);
 			return (RET_ERR);
 		}
 		current->nbparams = 0;
 		if (
 			set_redirect(line[cpt], current) || \
-			set_parameters(line[cpt], current) || \
-			set_cmd(current) || \
-			set_is_builtin(current) || \
-			set_env_parameters(current)
+set_parameters(line[cpt], current) || \
+set_cmd(current) || \
+set_is_builtin(current) || \
+set_env_parameters(current)
 		)
 		{
-			fd_printf(STDOUT_FILENO, ERR_PARSE); // A supp
+			fd_printf(STDOUT_FILENO, ERR_PARSE);
+			free_strstr(line, nbline);
 			return (RET_ERR);
 		}
 		if (!cmd)
@@ -171,5 +174,6 @@ int	parse_cmd(char *str, t_cmd **cmd)
 			cmdadd_back(cmd, current);
 		cpt++;
 	}
+	free_strstr(line, nbline);
 	return (RET_OK);
 }

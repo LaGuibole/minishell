@@ -20,30 +20,20 @@ int	set_env_parameters(t_cmd *cmd)
 
 char	*clean_parameters(char *str)
 {
-	// int		i;
-	bool	single_quote;
-	bool	double_quote;
 	char	*cleaned;
 	int		j;
 
-	// i = 0;
-	single_quote = 0;
-	double_quote = 0;
 	j = 0;
 	cleaned = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!cleaned)
+		return (NULL);
 	while (*str)
 	{
-		if (*str == '\'' && !double_quote)
-			single_quote = !single_quote;
-		else if (*str == '"' && !single_quote)
-			double_quote = !double_quote;
-		if (!single_quote && !double_quote && is_redir_char(*str))
+		ft_quote(*str, 1);
+		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && is_redir_char(*str))
 		{
-			if (*str == *str + 1)
-				str += 2;
-			else
-				str++;
-			while (*str == ' ')
+			str += (*str == *str + 1) + 1;
+			while (*str && *str == ' ')
 				str++;
 			while (*str && *str != ' ' && !is_redir_char(*str))
 				str++;
@@ -61,44 +51,35 @@ int	set_parameters(char *str, t_cmd *cmd)
 	size_t	start;
 	size_t	end;
 	char	**params;
-	bool	single_quote;
-	bool	double_quote;
 
 	str = clean_parameters(str);
-	params = malloc(sizeof(char *) * ft_strlen(str) + 1);
+	if (!str)
+		return (print_error(ERR_MALLOC));
+	params = malloc(sizeof(char *) * (ft_strlen(str) + 1));
 	if (!params)
-	{
-		fd_printf(STDOUT_FILENO, ERR_MALLOC);
-		return (RET_ERR);
-	}
+		return (print_error(ERR_MALLOC));
 	start = 0;
 	while (str[start] && str[start] == ' ')
 		start++;
-	single_quote = 0;
-	double_quote = 0;
 	while (start < ft_strlen(str))
 	{
 		end = 0;
 		while ((str[start + end] && str[start + end] != ' ') || \
-				double_quote || single_quote)
+ft_quote('\'', 0) || ft_quote('"', 0))
 		{
-			if (str[start + end] == '\'' && !double_quote)
-				single_quote = !single_quote;
-			if (str[start + end] == '"' && !single_quote)
-				double_quote = !double_quote;
+			ft_quote(str[start + end], 1);
 			end++;
 		}
 		params[cmd->nbparams++] = ft_substr(str, start, end);
-		if (ft_strlen(params[cmd->nbparams - 1]) == 0)
-			free(params[cmd->nbparams--]);
-		else if (!params[cmd->nbparams - 1])
+		if (!params[cmd->nbparams - 1])
 		{
 			cmd->params = params;
 			cmd->nbparams--;
-			fd_printf(STDOUT_FILENO, ERR_MALLOC);
 			free(str);
-			return (RET_ERR);
+			return (print_error(ERR_MALLOC));
 		}
+		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
+			free(params[cmd->nbparams--]);
 		start += ++end;
 	}
 	params[cmd->nbparams] = NULL;

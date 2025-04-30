@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	free_cmd_list(t_cmd *cmd)
+/*void	free_cmd_list(t_cmd *cmd)
 {
 	t_cmd	*next;
 
@@ -25,5 +25,58 @@ void	free_cmd_list(t_cmd *cmd)
 		free_redirections(cmd->redir);
 		free(cmd);
 		cmd = next;
+	}
+}*/
+
+void	free_strstr(char **str, int nbr)
+{
+	int	i;
+
+	i = 0;
+	if (str)
+	{
+		while (i < nbr)
+			free(str[i++]);
+		free(str);
+	}
+}
+
+void	free_redir(t_redir *redir)
+{
+	if (redir)
+	{
+		if (redir->next)
+			free_redir(redir->next);
+		if (redir->filename)
+			free(redir->filename);
+		free(redir);
+	}
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd->nbparams > 0)
+	{
+		while (i < cmd->nbparams)
+			free(cmd->params[i++]);
+	}
+	if (cmd->params)
+		free(cmd->params);
+	if (cmd->cmd)
+		free(cmd->cmd);
+	free_redir(cmd->redir);
+	free(cmd);
+}
+
+void	free_cmd_list(t_cmd *cmd)
+{
+	if (cmd)
+	{
+		if (cmd->next)
+			free_cmd_list(cmd->next);
+		free_cmd(cmd);
 	}
 }

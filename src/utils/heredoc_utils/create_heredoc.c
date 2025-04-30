@@ -61,10 +61,8 @@ void	prepare_heredocs(t_cmd *cmds)
 {
 	t_cmd	*cmd;
 	t_redir	*redir;
-	int		fd;
 	char	*path;
 
-	fd = -1;
 	cmd = cmds;
 	while (cmd)
 	{
