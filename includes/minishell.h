@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 17:41:11 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:41:46 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,9 @@ void	exit_child(t_cmd *cmd, int status);
 
 char	**env_to_array(void);
 void	free_array(char **array);
+bool	skip_empty_cmd(t_cmd **curr, int *input_fd);
+int		setup_pipe(int pipefd[2], bool has_next);
+int		validate_redirections(t_cmd *cmds);
 
 
 #endif

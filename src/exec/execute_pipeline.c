@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/05 12:34:14 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 15:20:40 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,18 @@ int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
 {
 	if (input_fd != STDIN_FILENO)
 		close(input_fd);
-	if (has_next)
+	if (pipefd)
 	{
-		close(pipefd[1]);
+		if (has_next && pipefd[1] != -1)
+			close(pipefd[1]);
+		if (!has_next && pipefd[0] != -1)
+			close(pipefd[0]);
+	}
+	if (has_next && pipefd && pipefd[0] != -1)
 		return (pipefd[0]);
-	}
-	else
-	{
-		close(pipefd[0]);
-	}
 	return (STDIN_FILENO);
 }
+
 
 /// @brief Waits for all children processes to finish
 void	wait_children(t_cmd *cmds)
@@ -110,6 +111,42 @@ void	wait_children(t_cmd *cmds)
 /// @param cmds The linked list of commands forming the pipeline
 /// @param envp The environment variables passed to execve
 /// @return 0 on success, 1 on pipe or fork failure
+// int	exec_pipeline(t_cmd *cmds)
+// {
+// 	t_cmd	*curr;
+// 	int		pipefd[2];
+// 	int		input_fd;
+
+// 	if (!cmds)
+// 		return (RET_ERR);
+// 	prepare_heredocs(cmds);
+// 	if (!cmds->next && cmds->cmd)
+// 		return (exec_cmd(cmds));
+// 	input_fd = STDIN_FILENO;
+// 	curr = cmds;
+// 	while (curr)
+// 	{
+// 		if (!curr->cmd)
+// 		{
+// 			if (input_fd != STDIN_FILENO)
+// 				close(input_fd);
+// 			input_fd = STDIN_FILENO;
+// 			curr->pid = -2;
+// 			curr = curr->next;
+// 			continue ;
+// 		}
+// 		if (curr->next && pipe(pipefd) == -1)
+// 			return (perror("pipe error"), 1);
+// 		curr->pid = fork_child(curr, input_fd, pipefd);
+// 		if (curr->pid == -1)
+// 			return (perror("fork error"), 1);
+// 		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
+// 		curr = curr->next;
+// 	}
+// 	wait_children(cmds);
+// 	return (RET_OK);
+// }
+
 int	exec_pipeline(t_cmd *cmds)
 {
 	t_cmd	*curr;
@@ -119,29 +156,23 @@ int	exec_pipeline(t_cmd *cmds)
 	if (!cmds)
 		return (RET_ERR);
 	prepare_heredocs(cmds);
+	if (validate_redirections(cmds) != RET_OK)
+		return (RET_ERR);
 	if (!cmds->next && cmds->cmd)
 		return (exec_cmd(cmds));
 	input_fd = STDIN_FILENO;
 	curr = cmds;
 	while (curr)
 	{
-		if (!curr->cmd)
-		{
-			if (input_fd != STDIN_FILENO)
-				close(input_fd);
-			input_fd = STDIN_FILENO;
-			curr->pid = -2;
-			curr = curr->next;
+		if (skip_empty_cmd(&curr, &input_fd))
 			continue ;
-		}
-		if (curr->next && pipe(pipefd) == -1)
-			return (perror("pipe error"), 1);
+		if (setup_pipe(pipefd, curr->next != NULL) != RET_OK)
+			return (RET_ERR);
 		curr->pid = fork_child(curr, input_fd, pipefd);
 		if (curr->pid == -1)
-			return (perror("fork error"), 1);
+			return (perror("fork error"), RET_ERR);
 		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
 		curr = curr->next;
 	}
-	wait_children(cmds);
-	return (RET_OK);
+	return (wait_children(cmds), RET_OK);
 }

@@ -30,6 +30,7 @@ SOURCES = \
 	./src/env/ft_envp.c \
 	./src/exec/execute_builtin.c \
 	./src/exec/execute_cmd.c \
+	./src/exec/execute_helpers.c \
 	./src/exec/execute_pipeline.c \
 	./src/exec/handle_redirections.c \
 	./src/exec/pipe_utils.c \

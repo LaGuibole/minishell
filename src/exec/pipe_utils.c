@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:13:11 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 17:42:41 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:58:52 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,15 @@ void	redirect_input_fd(int input_fd, int *pipefd)
 		}
 		close(input_fd);
 	}
-	else
+	else if (pipefd && pipefd[0] != -1)
 	{
-		dup2(pipefd[0], STDIN_FILENO);
+		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 pipefd[0]");
+			exit(EXIT_FAILURE);
+		}
+		close(pipefd[0]);
 	}
-	close(pipefd[0]);
 }
 
 /// @brief Redirect STDOUT to the pipe if needed, or close the pipe otherwise
@@ -45,7 +49,7 @@ void	redirect_output_fd(
 )
 {
 	(void)cmd;
-	if (has_next)
+	if (has_next && pipefd[1] != -1)
 	{
 		close(pipefd[0]);
 		if (!has_out_redir)
@@ -57,5 +61,6 @@ void	redirect_output_fd(
 			}
 		}
 	}
-	close(pipefd[1]);
+	if (pipefd && pipefd[1] != -1)
+		close(pipefd[1]);
 }
