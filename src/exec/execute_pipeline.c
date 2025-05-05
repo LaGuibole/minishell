@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/30 17:41:18 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:34:14 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int	exec_pipeline(t_cmd *cmds)
 			curr = curr->next;
 			continue ;
 		}
-		if (pipe(pipefd) == -1)
+		if (curr->next && pipe(pipefd) == -1)
 			return (perror("pipe error"), 1);
 		curr->pid = fork_child(curr, input_fd, pipefd);
 		if (curr->pid == -1)
