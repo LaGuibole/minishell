@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 15:34:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 21:17:46 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:32:50 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ void	free_redirections(t_redir *redir_list)
 /// @param code The exit code to return from the process
 void	free_all_and_exit(t_cmd *cmd, int code)
 {
-	free_double_tab(cmd->params);
-	if (cmd->redir)
-		free_redirections(cmd->redir);
+	// free_double_tab(cmd->params);
+	// if (cmd->redir)
+	// 	free_redirections(cmd->redir);
 	ft_lstclear(ft_envp(NULL), free);
-	free(cmd);
+	// free(cmd);
+	free_cmd_list(cmd);
 	rl_clear_history();
 	exit(code);
 }

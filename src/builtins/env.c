@@ -6,15 +6,16 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 12:57:05 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 15:16:53 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:22:54 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /// @brief Builtin implementation of the env command
-int	ft_env(char **args)
+int	ft_env(t_cmd *cmd, char **args)
 {
+	(void)cmd;
 	t_list	*envp;
 	char	*entry;
 	char	*value;

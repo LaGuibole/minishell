@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_cmd.c                                      :+:      :+:    :+:   */
+/*   execute_single_cmd.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 11:00:56 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:26:32 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 static void	execve_cmd(char *path, t_cmd *cmd, char **my_env);
 

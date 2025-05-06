@@ -6,11 +6,12 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 10:07:01 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 11:42:31 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:39:16 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 /// @brief Executes a builtin command if the cmd matches a known builtin name
 ///	The builtin table maps cmd names to their corresponding function pointers
@@ -23,7 +24,7 @@ int	exec_builtin(t_cmd *cmd)
 	{"cd", &ft_cd},
 	{"echo", &ft_echo},
 	{"env", &ft_env},
-	//{"exit", &ft_exit},
+	{"exit", &ft_exit},
 	{"export", &ft_export},
 	{"pwd", &ft_pwd},
 	{"unset", &ft_unset},
@@ -36,7 +37,7 @@ int	exec_builtin(t_cmd *cmd)
 	while (builtins[i].name)
 	{
 		if (ft_strcmp(cmd->cmd, builtins[i].name) == 0)
-			return (builtins[i].func(cmd->params));
+			return (builtins[i].func(cmd, cmd->params));
 		i++;
 	}
 	return (RET_ERR);

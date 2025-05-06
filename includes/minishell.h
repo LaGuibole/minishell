@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 14:53:21 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:48:21 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include "builtins.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -70,6 +69,12 @@ typedef struct s_cmd
 	struct s_cmd	*all_cmds;
 }	t_cmd;
 
+typedef struct s_exec_ctx
+{
+	t_cmd	*curr;
+	t_cmd	*head;
+}	t_exec_ctx;
+
 char	*display_prompt(void);
 
 // ENV
@@ -79,12 +84,14 @@ void	ft_setenv(const char *name, const char *value);
 void	ft_unsetenv(const char *name);
 
 // BUILTINS
-int		ft_cd(char **args);
-int		ft_pwd(char **args);
-int		ft_echo(char **args);
-int		ft_export(char **args);
-int		ft_env(char **args);
-int		ft_unset(char **args);
+int		ft_cd(t_cmd *cmd, char **args);
+int		ft_pwd(t_cmd *cmd, char **args);
+int		ft_echo(t_cmd *cmd, char **args);
+int		ft_export(t_cmd *cmd, char **args);
+int		ft_env(t_cmd *cmd, char **args);
+int		ft_unset(t_cmd *cmd, char **args);
+int		ft_exit(t_cmd *cmd, char **args);
+
 
 //EXEC BUILTINS
 bool	is_parent_builtin(char *cmd);
