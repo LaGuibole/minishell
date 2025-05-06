@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:48:21 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:03:13 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,19 @@ void	ft_setenv(const char *name, const char *value);
 void	ft_unsetenv(const char *name);
 
 // BUILTINS
-int		ft_cd(t_cmd *cmd, char **args);
-int		ft_pwd(t_cmd *cmd, char **args);
-int		ft_echo(t_cmd *cmd, char **args);
-int		ft_export(t_cmd *cmd, char **args);
-int		ft_env(t_cmd *cmd, char **args);
-int		ft_unset(t_cmd *cmd, char **args);
-int		ft_exit(t_cmd *cmd, char **args);
+int		ft_cd(t_exec_ctx *ctx, char **args);
+int		ft_pwd(t_exec_ctx *ctx, char **args);
+int		ft_echo(t_exec_ctx *ctx, char **args);
+int		ft_export(t_exec_ctx *ctx, char **args);
+int		ft_env(t_exec_ctx *ctx, char **args);
+int		ft_unset(t_exec_ctx *ctx, char **args);
+int		ft_exit(t_exec_ctx *ctx, char **args);
 
 
 //EXEC BUILTINS
 bool	is_parent_builtin(char *cmd);
 bool	is_builtin_pipeable(const char *name);
-int		exec_builtin(t_cmd *cmd);
+int		exec_builtin(t_exec_ctx *ctx);
 
 // EXPORT HELPERS
 void	print_invalid_identifier(char *arg);
@@ -137,14 +137,14 @@ char	*join_cmd_paths(char *path, char *cmd);
 char	*get_cmd_path(t_cmd *cmd, char **envp);
 
 //DUMMY
-int		exec_cmd(t_cmd *cmd);
+int		exec_cmd(t_exec_ctx *ctx);
 
 //PIPELINE EXEC
 void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next);
-pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd);
+pid_t	fork_child(t_exec_ctx *ctx, int input_fd, int *pipefd);
 int		parent_cleanup(int input_fd, int *pipefd, bool has_next);
 void	wait_children(t_cmd *cmds);
-int		exec_pipeline(t_cmd *cmds);
+int		exec_pipeline(t_exec_ctx *ctx);
 void	apply_shell_redirections(t_redir *redir);
 
 //CLEAN && EXIT
@@ -171,7 +171,7 @@ int		set_cmd(t_cmd *cmd);
 //TEST
 void	handle_signal_interactive(int sig);
 void	handle_signal_executing(int sig);
-void	exec_child_process(t_cmd *cmd);
+void	exec_child_process(t_exec_ctx *ctx);
 void	apply_heredoc_redirections(t_redir *redir);
 
 void	print_cmd_list(t_cmd *cmd); // debug

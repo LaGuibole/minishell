@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:03:21 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:39:40 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:03:35 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,27 @@
 /// @param pipefd Current pipe (to next process)
 /// @param envp Environement variables
 /// @return pid of the child processm or -1 on error
-pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd)
+pid_t	fork_child(t_exec_ctx *ctx, int input_fd, int *pipefd)
 {
 	pid_t	pid;
 	bool	has_next;
 	bool	has_out_redir;
 
-	has_next = (cmd->next != NULL);
-	has_out_redir = has_output_redirections(cmd->redir);
+	has_next = (ctx->curr->next != NULL);
+	has_out_redir = has_output_redirections(ctx->curr->redir);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
 	{
 		redirect_input_fd(input_fd, pipefd);
-		if (cmd->redir)
-			apply_shell_redirections(cmd->redir);
-		redirect_output_fd(cmd, pipefd, has_next, has_out_redir);
-		if (cmd->is_builtin)
-			exit_child(cmd, exec_builtin(cmd));
-		if (cmd->cmd)
-			exec_child_process(cmd);
+		if (ctx->curr->redir)
+			apply_shell_redirections(ctx->curr->redir);
+		redirect_output_fd(ctx->curr, pipefd, has_next, has_out_redir);
+		if (ctx->curr->is_builtin)
+			exit_child(ctx->curr, exec_builtin(ctx));
+		if (ctx->curr->cmd)
+			exec_child_process(ctx);
 		exit(EXIT_FAILURE);
 	}
 	return (pid);

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:22:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:27 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:57:53 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /// @brief Builtin implementation of the unset command
 /// @param args The argument list passed to unset (args[0] is "unset")
 /// @return 0 always (RET_OK)
-int	ft_unset(t_cmd *cmd, char **args)
+int	ft_unset(t_exec_ctx *ctx, char **args)
 {
-	(void)cmd;
+	(void)ctx;
 	int	i;
 
 	if (!args || !args[1])

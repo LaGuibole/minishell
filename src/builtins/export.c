@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 14:10:19 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:23:07 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:57:38 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ void	print_export_var(char *var)
 /// @brief Builtin implementation of the export command
 /// @param args The argument list passed to export
 /// @return 0 on success, 1 otherwise
-int	ft_export(t_cmd *cmd, char **args)
+int	ft_export(t_exec_ctx *ctx, char **args)
 {
-	(void)cmd;
+	(void)ctx;
 	if (!args[1])
 	{
 		print_sorted_env();

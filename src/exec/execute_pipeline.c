@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:39:27 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:01:41 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,29 @@ static int	try_setup_pipe(int *pipefd, int has_next);
 /// @param cmds The linked list of commands forming the pipeline
 /// @param envp The environment variables passed to execve
 /// @return 0 on success, 1 on pipe or fork failure
-int	exec_pipeline(t_cmd *cmds)
+int	exec_pipeline(t_exec_ctx *ctx)
 {
-	t_cmd	*curr;
 	int		pipefd[2];
 	int		input_fd;
 
-	if (prepare_checks(cmds) != RET_OK)
+	if (prepare_checks(ctx->head) != RET_OK)
 		return (RET_ERR);
-	if (!cmds->next && cmds->cmd)
-		return (exec_cmd(cmds));
+	if (!ctx->head->next && ctx->head->cmd)
+		return (exec_cmd(ctx));
 	input_fd = STDIN_FILENO;
-	curr = cmds;
-	while (curr)
+	while (ctx->curr)
 	{
-		if (skip_empty_cmd(&curr, &input_fd))
+		if (skip_empty_cmd(&ctx->curr, &input_fd))
 			continue ;
-		if (try_setup_pipe(pipefd, curr->next != NULL) != RET_OK)
+		if (try_setup_pipe(pipefd, ctx->curr->next != NULL) != RET_OK)
 			return (RET_ERR);
-		curr->pid = fork_child(curr, input_fd, pipefd);
-		if (curr->pid == -1)
+		ctx->curr->pid = fork_child(ctx, input_fd, pipefd);
+		if (ctx->curr->pid == -1)
 			return (perror("error"), RET_ERR);
-		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
-		curr = curr->next;
+		input_fd = parent_cleanup(input_fd, pipefd, ctx->curr->next != NULL);
+		ctx->curr = ctx->curr->next;
 	}
-	wait_children(cmds);
+	wait_children(ctx->head);
 	return (RET_OK);
 }
 
