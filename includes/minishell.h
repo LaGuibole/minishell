@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/05 14:41:46 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:53:21 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,8 @@ int		set_is_builtin(t_cmd *cmd);
 int		set_cmd(t_cmd *cmd);
 
 //TEST
-void	signal_handler(int signo);
-void	handle_sigint(int sig);
+void	handle_signal_interactive(int sig);
+void	handle_signal_executing(int sig);
 void	exec_child_process(t_cmd *cmd);
 void	apply_heredoc_redirections(t_redir *redir);
 
@@ -185,6 +185,14 @@ void	free_array(char **array);
 bool	skip_empty_cmd(t_cmd **curr, int *input_fd);
 int		setup_pipe(int pipefd[2], bool has_next);
 int		validate_redirections(t_cmd *cmds);
+
+void	set_sig_executing(void);
+
+
+bool	is_exported(const char *name);
+int		mark_for_export(const char *name);
+void	remove_from_export_list(const char *name);
+
 
 
 #endif

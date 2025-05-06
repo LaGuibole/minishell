@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 12:57:05 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/22 14:56:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:16:53 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_env(char **args)
 	{
 		entry = (char *)envp->content;
 		value = ft_strchr(entry, '=');
-		if (value && value[1] != '\0')
+		if (value)
 			fd_printf(STDOUT_FILENO, "%s\n", envp->content);
 		envp = envp->next;
 	}

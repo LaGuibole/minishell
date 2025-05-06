@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 12:48:52 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/05 14:47:07 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:31:25 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	setup_pipe(int pipefd[2], bool has_next)
 	if (has_next)
 	{
 		if (pipe(pipefd) == -1)
-			return(perror("pipe error"), RET_ERR);
+			return (perror("pipe error"), RET_ERR);
 	}
 	else
 	{
