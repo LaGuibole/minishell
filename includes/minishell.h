@@ -26,6 +26,7 @@
 # define RET_OK 0
 # define RET_ERR 1
 # define ERR_QUOTE "MISSING QUOTE\n"
+# define ERR_REDIR "ERROR WITH < / >\n"
 # define ERR_PIPE "zsh: parse error near `|'\n"
 # define ERR_MALLOC "NOT ENOUGH MEMORY\n"
 # define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
