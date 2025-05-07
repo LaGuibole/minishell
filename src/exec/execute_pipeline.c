@@ -6,11 +6,44 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:23:44 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:01:41 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	prepare_checks(t_cmd *cmds);
+static int	try_setup_pipe(int *pipefd, int has_next);
+
+/// @brief Execute a pipeline of commands, handling pipes and process creation
+/// @param cmds The linked list of commands forming the pipeline
+/// @param envp The environment variables passed to execve
+/// @return 0 on success, 1 on pipe or fork failure
+int	exec_pipeline(t_exec_ctx *ctx)
+{
+	int		pipefd[2];
+	int		input_fd;
+
+	if (prepare_checks(ctx->head) != RET_OK)
+		return (RET_ERR);
+	if (!ctx->head->next && ctx->head->cmd)
+		return (exec_cmd(ctx));
+	input_fd = STDIN_FILENO;
+	while (ctx->curr)
+	{
+		if (skip_empty_cmd(&ctx->curr, &input_fd))
+			continue ;
+		if (try_setup_pipe(pipefd, ctx->curr->next != NULL) != RET_OK)
+			return (RET_ERR);
+		ctx->curr->pid = fork_child(ctx, input_fd, pipefd);
+		if (ctx->curr->pid == -1)
+			return (perror("error"), RET_ERR);
+		input_fd = parent_cleanup(input_fd, pipefd, ctx->curr->next != NULL);
+		ctx->curr = ctx->curr->next;
+	}
+	wait_children(ctx->head);
+	return (RET_OK);
+}
 
 /// @brief Set up stdin and stdout redirections for child procees
 /// @param input_fd The fd to use as STDIN
@@ -31,105 +64,33 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 	}
 }
 
-/// @brief Forks and executes a command in a pipeline
-/// @param cmd Current command
-/// @param input_fd fd for input (from previous pipe)
-/// @param pipefd Current pipe (to next process)
-/// @param envp Environement variables
-/// @return pid of the child processm or -1 on error
-pid_t	fork_child(t_cmd *cmd, int input_fd, int *pipefd, char **envp)
+/// @brief
+/// @param cmds
+/// @return
+static int	prepare_checks(t_cmd *cmds)
 {
-	pid_t	pid;
-	bool	has_next;
-	bool	has_out_redir;
-
-	has_next = (cmd->next != NULL);
-	has_out_redir = has_output_redirections(cmd->redir);
-	pid = fork();
-	if (pid == -1)
-		return (-1);
-	if (pid == 0)
-	{
-		redirect_input_fd(input_fd);
-		if (cmd->redir)
-			apply_shell_redirections(cmd->redir);
-		redirect_output_fd(cmd, pipefd, has_next, has_out_redir);
-		if (cmd->is_builtin)
-			exit(exec_builtin(cmd));
-		if (cmd->cmd)
-			exec_child_process(cmd, envp);
-		exit(EXIT_FAILURE);
-	}
-	return (pid);
-}
-
-/// @brief Cleans up unused pipe ends and returns next input fd
-/// @param input_fd Previous input fd
-/// @param pipefd Current pipe array
-/// @param has_next True if there is a next command
-/// @return Next input fd (pipefd[0]) or STDIN if last
-int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
-{
-	if (input_fd != STDIN_FILENO)
-		close(input_fd);
-	if (has_next)
-	{
-		close(pipefd[1]);
-		return (pipefd[0]);
-	}
-	else
-	{
-		close(pipefd[0]);
-	}
-	return (STDIN_FILENO);
-}
-
-/// @brief Waits for all children processes to finish
-void	wait_children(t_cmd *cmds)
-{
-	t_cmd	*cmd;
-	int		last_status;
-
-	cmd = cmds;
-	while (cmd)
-	{
-		if (waitpid(cmd->pid, &last_status, 0) == -1)
-			perror("waitpid error");
-		if (WIFEXITED(last_status))
-			g_signal = WEXITSTATUS(last_status);
-		if (WIFSIGNALED(last_status))
-			g_signal = 130;
-		cmd = cmd->next;
-	}
-}
-
-/// @brief Execute a pipeline of commands, handling pipes and process creation
-/// @param cmds The linked list of commands forming the pipeline
-/// @param envp The environment variables passed to execve
-/// @return 0 on success, 1 on pipe or fork failure
-int	exec_pipeline(t_cmd *cmds, char **envp)
-{
-	t_cmd	*curr;
-	int		pipefd[2];
-	int		input_fd;
-
 	if (!cmds)
 		return (RET_ERR);
 	prepare_heredocs(cmds);
-	if (!cmds->next)
-		return (exec_cmd(cmds, envp));
-	input_fd = STDIN_FILENO;
-	curr = cmds;
-	while (curr)
+	set_sig_executing();
+	if (validate_redirections(cmds) != RET_OK)
+		return (RET_ERR);
+	return (RET_OK);
+}
+
+/// @brief
+/// @param pipefd
+/// @param has_next
+/// @return
+static int	try_setup_pipe(int *pipefd, int has_next)
+{
+	int	result;
+
+	result = setup_pipe(pipefd, has_next);
+	if (result != RET_OK)
 	{
-		if (curr->next && pipe(pipefd) == -1)
-			return (perror("pipe error"), 1);
-		curr->pid = fork_child(curr, input_fd, pipefd, envp);
-		if (curr->pid == -1)
-			return (perror("fork error"), 1);
-		input_fd = parent_cleanup(input_fd, pipefd, curr->next != NULL);
-		curr = curr->next;
+		perror("error");
+		return (RET_ERR);
 	}
-	wait_children(cmds);
 	return (RET_OK);
 }

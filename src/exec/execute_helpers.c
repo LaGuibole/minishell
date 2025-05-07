@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   execute_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/15 12:57:05 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:32:52 by guphilip         ###   ########.fr       */
+/*   Created: 2025/05/05 12:48:52 by guphilip          #+#    #+#             */
+/*   Updated: 2025/05/05 16:31:25 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief Builtin implementation of the env command
-int	ft_env(t_exec_ctx *ctx, char **args)
+bool	skip_empty_cmd(t_cmd **curr, int *input_fd)
 {
-	t_list	*envp;
-	char	*entry;
-	char	*value;
-
-	(void)ctx;
-	(void)args;
-	envp = *ft_envp(NULL);
-	while (envp)
+	if (!(*curr)->cmd)
 	{
-		entry = (char *)envp->content;
-		value = ft_strchr(entry, '=');
-		if (value)
-			fd_printf(STDOUT_FILENO, "%s\n", envp->content);
-		envp = envp->next;
+		if (*input_fd != STDIN_FILENO)
+			close(*input_fd);
+		*input_fd = STDIN_FILENO;
+		(*curr)->pid = -2;
+		*curr = (*curr)->next;
+		return (true);
+	}
+	return (false);
+}
+
+int	setup_pipe(int pipefd[2], bool has_next)
+{
+	if (has_next)
+	{
+		if (pipe(pipefd) == -1)
+			return (perror("pipe error"), RET_ERR);
+	}
+	else
+	{
+		pipefd[0] = -1;
+		pipefd[1] = -1;
 	}
 	return (RET_OK);
 }

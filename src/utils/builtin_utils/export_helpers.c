@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:10:15 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/17 13:14:16 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:34:04 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,11 @@ bool	is_valid_identifier(const char *name)
 /// @return 0 on success, 1 otherwise (invalid identifier)
 int	process_export_no_equal(char *arg)
 {
-	char	*value;
-
 	if (!is_valid_identifier(arg))
 	{
 		print_invalid_identifier(arg);
 		return (RET_ERR);
 	}
-	value = ft_getenv(arg);
-	if (value)
-		free(value);
-	else
-		ft_setenv(arg, "");
 	return (RET_OK);
 }
 
@@ -59,15 +52,23 @@ int	process_export_no_equal(char *arg)
 int	process_export_with_equal(char *arg, char *equal_sign)
 {
 	char	*name;
+	char	*value;
+	char	*tmp;
 
 	if (!is_valid_identifier(arg))
 	{
 		print_invalid_identifier(arg);
 		return (RET_ERR);
 	}
+	tmp = ft_strdup(arg);
+	if (!tmp)
+		return (RET_ERR);
+	equal_sign = ft_strchr(tmp, '=');
 	*equal_sign = '\0';
-	name = arg;
-	ft_setenv(name, equal_sign + 1);
+	name = tmp;
+	value = equal_sign + 1;
+	ft_setenv(name, value);
+	free(tmp);
 	return (RET_OK);
 }
 
@@ -100,26 +101,3 @@ void	print_sorted_env(void)
 	sort_env_list(sorted_env);
 	print_and_free_sorted_env(sorted_env);
 }
-
-// t_list	*add(t_list *a, t_list *b)
-// {
-// 	const char	*to_add = (const char *)b->content;
-// 	char		*env_var;
-// 	t_list		**list_ptr;
-
-// 	list_ptr = &a;
-
-// 	while (*list_ptr)
-// 	{
-// 		env_var = (const char *)(*list_ptr)->content;
-// 		if (strcmp(to_add, env_var) <= 0)
-// 		{
-// 			b->next = *list_ptr;
-// 			*list_ptr = b;
-// 			return (a);
-// 		}
-// 		list_ptr = &(*list_ptr)->next;
-// 	}
-// 	*list_ptr = b;
-// 	return (a);
-// }
