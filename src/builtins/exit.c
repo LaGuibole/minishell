@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:46:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:57:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:51:08 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ int	ft_exit(t_exec_ctx *ctx, char **args)
 	ft_lstclear(ft_envp(NULL), free);
 	if (args && args[1])
 	{
-		if (!is_numeric(args[1]))
-		{
-			fd_printf(STDERR_FILENO, "exit: error, arg must be an int");
-			free_all_and_exit(ctx->head, 255);
-		}
 		if (args[2])
 		{
-			fd_printf(STDERR_FILENO, "exit: too many arguments");
+			fd_printf(STDERR_FILENO, "exit: too many arguments\n");
 			return (ft_atoi(args[1]));
+		}
+		if (!is_numeric(args[1]))
+		{
+			fd_printf(STDERR_FILENO, "exit: error, arg must be an int\n");
+			free_all_and_exit(ctx->head, 255);
 		}
 		status = ft_atoi(args[1]);
 	}

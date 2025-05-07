@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:52:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:39:47 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ void	handle_input(char *input)
 	t_exec_ctx	ctx;
 
 	cmds = parsing_cmd(input);
+	if (!cmds)
+		return (free(input));
 	if (cmds)
 	{
 		ctx = (t_exec_ctx){cmds, cmds};
 		exec_pipeline(&ctx);
-		free_cmd_list(cmds);
+		free_cmd_list(ctx.head);
 	}
 	free(input);
 }
