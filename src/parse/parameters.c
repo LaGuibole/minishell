@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:43:05 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/28 15:21:42 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:33:54 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,19 @@ char	*clean_parameters(char *str)
 
 int	construct_params(char **params, char *str, t_cmd *cmd, size_t start)
 {
-	size_t	end;
-
-	end = 0;
 	while (start < ft_strlen(str))
 	{
-		end = 0;
-		while ((str[start + end] && str[start + end] != ' ') || \
-ft_quote('\'', 0) || ft_quote('"', 0))
-		{
-			ft_quote(str[start + end], 1);
-			end++;
-		}
-		params[cmd->nbparams++] = ft_substr(str, start, end);
-		if (!params[cmd->nbparams - 1])
+		while (str[start] == ' ')
+			start++;
+		if (!str[start])
+			break ;
+		if (set_expanded_param(params, str, cmd, &start) == -1)
 		{
 			cmd->params = params;
 			cmd->nbparams--;
 			free(str);
 			return (print_error(ERR_MALLOC));
 		}
-		else if (ft_strlen(params[cmd->nbparams - 1]) == 0)
-			free(params[cmd->nbparams-- - 1]);
-		start += ++end;
 	}
 	return (RET_OK);
 }
@@ -95,4 +85,18 @@ int	set_parameters(char *str, t_cmd *cmd)
 	cmd->params = params;
 	free(str);
 	return (RET_OK);
+}
+
+int	set_expanded_param(char **params, char *str, t_cmd *cmd, size_t *start)
+{
+	char	*token;
+
+	token = get_full_token(str, start);
+	if (!token)
+		return (-1);
+	if (ft_strlen(token) == 0)
+		free(token);
+	else
+		params[cmd->nbparams++] = token;
+	return (0);
 }

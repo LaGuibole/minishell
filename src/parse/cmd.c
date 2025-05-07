@@ -6,11 +6,12 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:51:19 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/29 13:46:51 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:26:39 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 t_cmd	*cmdlast(t_cmd *cmd)
 {

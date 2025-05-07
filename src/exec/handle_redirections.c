@@ -6,11 +6,51 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:31:41 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:40:28 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	check_redir_file(t_redir *redir)
+{
+	int	fd;
+
+	fd = -1;
+	if (redir->type == R_INPUT || redir->type == R_HEREDOC)
+		fd = open(redir->filename, O_RDONLY);
+	else if (redir->type == R_OUTPUT)
+		fd = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (redir->type == R_APPEND)
+		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		perror(redir->filename);
+		return (RET_ERR);
+	}
+	close(fd);
+	return (RET_OK);
+}
+
+int	validate_redirections(t_cmd *cmds)
+{
+	t_cmd	*curr;
+	t_redir	*redir;
+
+	curr = cmds;
+	while (curr)
+	{
+		redir = curr->redir;
+		while (redir)
+		{
+			if (check_redir_file(redir) != RET_OK)
+				return (RET_ERR);
+			redir = redir->next;
+		}
+		curr = curr->next;
+	}
+	return (RET_OK);
+}
 
 /// @brief Apply input, output and heredoc redirections for a command
 /// @param redir The redirection list to apply

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:46:46 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 21:58:15 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:27:56 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@ char	*get_home_path(void)
 		return (NULL);
 	}
 	if (home[0] == '\0')
+	{
+		free(home);
 		return (NULL);
+	}
 	copy = ft_strdup(home);
+	free(home);
 	return (copy);
 }
 
@@ -41,8 +45,12 @@ char	*get_oldpwd_path(void)
 		return (NULL);
 	}
 	if (oldpwd[0] == '\0')
+	{
+		free(oldpwd);
 		return (NULL);
+	}
 	fd_printf(STDOUT_FILENO, "%s\n", oldpwd);
 	copy = ft_strdup(oldpwd);
+	free(oldpwd);
 	return (copy);
 }
