@@ -6,13 +6,13 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:51:20 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:52:28 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_signal = 0;
+int	g_signal = 0;
 
 void	handle_signal_interactive(int sig)
 {
@@ -39,38 +39,43 @@ void	handle_signal_executing(int sig)
 		g_signal = sig;
 }
 
+void	handle_input(char *input)
+{
+	t_cmd		*cmds;
+	t_exec_ctx	ctx;
 
+	cmds = parsing_cmd(input);
+	if (cmds)
+	{
+		ctx = (t_exec_ctx){cmds, cmds};
+		exec_pipeline(&ctx);
+		free_cmd_list(cmds);
+	}
+	free(input);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void)argc;
-	(void)argv;
+	char		*prompt;
+	char		*line;
+
+	(void)argc, (void)argv;
 	ft_envp(envp);
 	while (1)
 	{
-		t_cmd		*cmds;
-		t_exec_ctx	ctx;
 		signal(SIGINT, handle_signal_interactive);
 		signal(SIGQUIT, SIG_IGN);
-		char	*prompt = display_prompt();
-		char	*line = readline(prompt);
+		prompt = display_prompt();
+		line = readline(prompt);
 		free(prompt);
 		if (!line)
 			return (ft_lstclear(ft_envp(NULL), free), \
-					ft_printf("exit\n"), g_signal);
+					fd_printf(STDOUT_FILENO, "exit\n"), g_signal);
 		if (line)
 			add_history(line);
 		if (ft_strlen(line) == 0)
 			continue ;
-		cmds = parsing_cmd(line);
-		if (cmds)
-		{
-			// print_cmd_list(cmds);
-			ctx = (t_exec_ctx){ cmds, cmds };
-			exec_pipeline(&ctx);
-			free_cmd_list(cmds);
-		}
-		free(line);
+		handle_input(line);
 	}
 	ft_lstclear(ft_envp(NULL), free);
 	return (g_signal);

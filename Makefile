@@ -40,10 +40,12 @@ SOURCES = \
 	./src/exec/redir_output.c \
 	./src/minishell.c \
 	./src/parse/cmd.c \
+	./src/parse/expand_params.c \
 	./src/parse/parameters.c \
 	./src/parse/parse.c \
 	./src/parse/parsing_command.c \
 	./src/parse/redir.c \
+	./src/parse/token_utils.c \
 	./src/pathing/cmd_path2.c \
 	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/cd_helpers.c \

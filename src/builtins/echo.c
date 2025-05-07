@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:56:59 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:32:58 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static bool	is_n_flag(char *arg)
 /// @return 0 always (RET_OK)
 int	ft_echo(t_exec_ctx *ctx, char **args)
 {
-	(void)ctx;
 	bool	n_option;
 
+	(void)ctx;
 	n_option = false;
 	args++;
 	while (*args && is_n_flag(*args))

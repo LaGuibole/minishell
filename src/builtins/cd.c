@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 17:56:52 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:33:03 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ static char	*get_target_path(char **args)
 
 int	ft_cd(t_exec_ctx *ctx, char **args)
 {
-	(void)ctx;
 	char	*path;
 	int		ret;
 
+	(void)ctx;
 	path = get_target_path(args);
 	if (!path)
 		return (RET_ERR);
