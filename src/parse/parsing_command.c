@@ -19,7 +19,7 @@ static int	check_more_chev(char c, char next)
 		if (c == '\0')
 			fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
 		else if ((c == '<' && next == '<') || \
-			(c == '>' && next == '>'))
+(c == '>' && next == '>'))
 			fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
 ERR_CHEV, c, c);
 		else
@@ -49,30 +49,22 @@ static int	set_redirect(char *str, t_cmd *cmd)
 {
 	size_t			i;
 	t_redir_type	type;
-	int				fname_start;
-	char			*filename;
 
 	i = 0;
 	while (str[i])
 	{
 		ft_quote(str[i], 1);
 		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && \
-			(str[i] == '<' || str[i] == '>'))
+(str[i] == '<' || str[i] == '>'))
 		{
 			i += set_type_chev(&type, str[i], str[i + 1]);
-			while (str[i] == ' ')
-				i++;
+			i += ft_skip_char(str, i, 1);
 			if ((ft_strlen(str) <= i && check_more_chev(str[i], '\0')) || \
 (ft_strlen(str) > i && check_more_chev(str[i], str[i + 1])))
-				return (print_error(ERR_REDIR));
-			fname_start = i;
-			while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
-				i++;
-			filename = ft_substr(str, fname_start, i - fname_start);
-			if (!filename)
-				return (print_error(ERR_REDIR));
-			if (add_redir(cmd, type, filename))
-				return (free(filename), print_error(ERR_REDIR));
+				return (RET_ERR);
+			if (set_filename(str, type, i, cmd))
+				return (RET_ERR);
+			i += ft_skip_char(str, i, 2);
 		}
 		else
 			i++;

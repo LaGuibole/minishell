@@ -1,0 +1,9 @@
+ 
+build
+includes
+libs
+Makefile
+minishell
+o
+src
+std.supp
