@@ -62,18 +62,17 @@ static int	set_redirect(char *str, t_cmd *cmd)
 			i += set_type_chev(&type, str[i], str[i + 1]);
 			while (str[i] == ' ')
 				i++;
-			if (ft_strlen(str) <= i && check_more_chev(str[i], '\0'))
-				return (RET_ERR);
-			else if (ft_strlen(str) > i && check_more_chev(str[i], str[i + 1]))
-				return (RET_ERR);
+			if ((ft_strlen(str) <= i && check_more_chev(str[i], '\0')) || \
+(ft_strlen(str) > i && check_more_chev(str[i], str[i + 1])))
+				return (print_error(ERR_REDIR));
 			fname_start = i;
 			while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 				i++;
 			filename = ft_substr(str, fname_start, i - fname_start);
 			if (!filename)
-				return (RET_ERR);
+				return (print_error(ERR_REDIR));
 			if (add_redir(cmd, type, filename))
-				return (free(filename), RET_ERR);
+				return (free(filename), print_error(ERR_REDIR));
 		}
 		else
 			i++;
@@ -129,7 +128,7 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		if (set_redirect(line[cpt], current) || \
 set_parameters(line[cpt], current) || set_cmd(current) || \
 set_is_builtin(current) || set_env_parameters(current))
-			return (free_strstr(line, nbline), print_error(ERR_PARSE));
+			return (free_strstr(line, nbline), RET_ERR);
 		cmdadd_back(cmd, current);
 		cpt++;
 	}
