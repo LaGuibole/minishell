@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 22:15:45 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/28 15:13:43 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:34:32 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	check_more_chev(char c, char next)
 		if (c == '\0')
 			fd_printf(STDOUT_FILENO, "%s `newline'\n", ERR_CHEV);
 		else if ((c == '<' && next == '<') || \
-(c == '>' && next == '>'))
+			(c == '>' && next == '>'))
 			fd_printf(STDOUT_FILENO, "%s `%c%c'\n", \
 ERR_CHEV, c, c);
 		else
@@ -57,7 +57,7 @@ static int	set_redirect(char *str, t_cmd *cmd)
 	{
 		ft_quote(str[i], 1);
 		if (!ft_quote('\'', 0) && !ft_quote('"', 0) && \
-(str[i] == '<' || str[i] == '>'))
+			(str[i] == '<' || str[i] == '>'))
 		{
 			i += set_type_chev(&type, str[i], str[i + 1]);
 			while (str[i] == ' ')

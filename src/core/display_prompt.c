@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 15:59:19 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 22:04:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:28:41 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,17 @@
 static char	*replace_home_with_tilde(char *path)
 {
 	char	*home;
-	size_t	home_len;
 	char	*result;
+	size_t	home_len;
 
 	if (!path)
 		return (NULL);
 	home = ft_getenv("HOME");
 	if (!home || home[0] == '\0')
+	{
+		free(home);
 		return (ft_strdup(path));
+	}
 	home_len = ft_strlen(home);
 	if (ft_strncmp(path, home, home_len) == 0
 		&& (path[home_len] == '/' || path[home_len] == '\0'))

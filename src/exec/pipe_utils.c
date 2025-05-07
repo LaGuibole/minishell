@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 15:13:11 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:35:22 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:58:52 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /// @brief Redirect a given input fd to STDIN
 /// @param input_fd The input file descriptor to redirect
-void	redirect_input_fd(int input_fd)
+void	redirect_input_fd(int input_fd, int *pipefd)
 {
 	if (input_fd != STDIN_FILENO)
 	{
@@ -24,6 +24,15 @@ void	redirect_input_fd(int input_fd)
 			exit(EXIT_FAILURE);
 		}
 		close(input_fd);
+	}
+	else if (pipefd && pipefd[0] != -1)
+	{
+		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 pipefd[0]");
+			exit(EXIT_FAILURE);
+		}
+		close(pipefd[0]);
 	}
 }
 
@@ -40,7 +49,7 @@ void	redirect_output_fd(
 )
 {
 	(void)cmd;
-	if (has_next)
+	if (has_next && pipefd[1] != -1)
 	{
 		close(pipefd[0]);
 		if (!has_out_redir)
@@ -51,6 +60,7 @@ void	redirect_output_fd(
 				exit(EXIT_FAILURE);
 			}
 		}
-		close(pipefd[1]);
 	}
+	if (pipefd && pipefd[1] != -1)
+		close(pipefd[1]);
 }

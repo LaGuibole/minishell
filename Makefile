@@ -23,22 +23,29 @@ SOURCES = \
 	./src/builtins/pwd.c \
 	./src/builtins/unset.c \
 	./src/clean/clean_cmd.c \
+	./src/clean/exit_child.c \
 	./src/core/display_prompt.c \
 	./src/env/env_helpers.c \
+	./src/env/env_to_array.c \
 	./src/env/ft_envp.c \
+	./src/exec/builtin_exec_utils.c \
 	./src/exec/execute_builtin.c \
-	./src/exec/execute_cmd.c \
+	./src/exec/execute_helpers.c \
 	./src/exec/execute_pipeline.c \
+	./src/exec/execute_single_cmd.c \
 	./src/exec/handle_redirections.c \
+	./src/exec/pipeline_process.c \
 	./src/exec/pipe_utils.c \
 	./src/exec/redir_input.c \
 	./src/exec/redir_output.c \
 	./src/minishell.c \
 	./src/parse/cmd.c \
+	./src/parse/expand_params.c \
 	./src/parse/parameters.c \
 	./src/parse/parse.c \
 	./src/parse/parsing_command.c \
 	./src/parse/redir.c \
+	./src/parse/token_utils.c \
 	./src/pathing/cmd_path2.c \
 	./src/pathing/cmd_path.c \
 	./src/utils/builtin_utils/cd_helpers.c \

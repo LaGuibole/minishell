@@ -6,3 +6,4 @@ minishell
 .cache/oh-my-posh/
 minishell.dSYM/
 Makefile
+test*

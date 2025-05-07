@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/23 22:11:39 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 16:32:58 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ static bool	is_n_flag(char *arg)
 /// @brief Builtin implementation of the echo command
 /// @param args The argument list passed to echo
 /// @return 0 always (RET_OK)
-int	ft_echo(char **args)
+int	ft_echo(t_exec_ctx *ctx, char **args)
 {
 	bool	n_option;
 
+	(void)ctx;
 	n_option = false;
 	args++;
 	while (*args && is_n_flag(*args))
