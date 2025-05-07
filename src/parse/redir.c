@@ -39,3 +39,32 @@ bool	is_redir_char(char c)
 {
 	return (c == '<' || c == '>');
 }
+
+int	ft_skip_char(char *str, int i, int type)
+{
+	int	tmp;
+
+	tmp = i;
+	if (type == 1)
+		while (str[i] && str[i] == ' ')
+			i++;
+	if (type == 2)
+		while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
+			i++;
+	return (i - tmp);
+}
+
+int	set_filename(char *str, t_redir_type type, int i, t_cmd *cmd)
+{
+	char			*filename;
+	int				fname_start;
+
+	fname_start = i;
+	i += ft_skip_char(str, i, 2);
+	filename = ft_substr(str, fname_start, i - fname_start);
+	if (!filename)
+		return (print_error(ERR_REDIR));
+	if (add_redir(cmd, type, filename))
+		return (free(filename), print_error(ERR_REDIR));
+	return (RET_OK);
+}
