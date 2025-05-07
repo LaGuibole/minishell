@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 13:10:15 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 15:16:17 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:34:04 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,11 @@ bool	is_valid_identifier(const char *name)
 /// @return 0 on success, 1 otherwise (invalid identifier)
 int	process_export_no_equal(char *arg)
 {
-	// char	*value;
-
 	if (!is_valid_identifier(arg))
 	{
 		print_invalid_identifier(arg);
 		return (RET_ERR);
 	}
-	// value = ft_getenv(arg);
-	// if (value)
-	// 	free(value);
-	// else
-	// 	ft_setenv(arg, "");
 	return (RET_OK);
 }
 
