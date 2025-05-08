@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:47:16 by mlintot           #+#    #+#             */
-/*   Updated: 2025/04/25 21:19:10 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:22:27 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ t_cmd	*parsing_cmd(char *str)
 			ft_quote('"', 1);
 		if (cmd)
 			free_cmd_list(cmd);
+		g_signal = 2;
 		return (NULL);
 	}
 	return (cmd);
