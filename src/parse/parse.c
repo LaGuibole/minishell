@@ -69,7 +69,7 @@ static bool	unclosed_quotes(char *str)
 {
 	while (*str)
 		ft_quote(*str++, 1);
-	if (ft_quote('\'', 0) && ft_quote('"', 0))
+	if (ft_quote('\'', 0) || ft_quote('"', 0))
 		return (print_error(ERR_QUOTE));
 	return (ft_quote('\'', 0) || ft_quote('"', 0));
 }
