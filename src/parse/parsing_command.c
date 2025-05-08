@@ -49,8 +49,6 @@ static int	set_redirect(char *str, t_cmd *cmd)
 {
 	size_t			i;
 	t_redir_type	type;
-	int				fname_start;
-	char			*filename;
 
 	i = 0;
 	while (str[i])
@@ -60,20 +58,13 @@ static int	set_redirect(char *str, t_cmd *cmd)
 			(str[i] == '<' || str[i] == '>'))
 		{
 			i += set_type_chev(&type, str[i], str[i + 1]);
-			while (str[i] == ' ')
-				i++;
-			if (ft_strlen(str) <= i && check_more_chev(str[i], '\0'))
+			i += ft_skip_char(str, i, 1);
+			if ((ft_strlen(str) <= i && check_more_chev(str[i], '\0')) || \
+				(ft_strlen(str) > i && check_more_chev(str[i], str[i + 1])))
 				return (RET_ERR);
-			else if (ft_strlen(str) > i && check_more_chev(str[i], str[i + 1]))
+			if (set_filename(str, type, i, cmd))
 				return (RET_ERR);
-			fname_start = i;
-			while (str[i] && str[i] != ' ' && str[i] != '<' && str[i] != '>')
-				i++;
-			filename = ft_substr(str, fname_start, i - fname_start);
-			if (!filename)
-				return (RET_ERR);
-			if (add_redir(cmd, type, filename))
-				return (free(filename), RET_ERR);
+			i += ft_skip_char(str, i, 2);
 		}
 		else
 			i++;
@@ -128,8 +119,8 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		current->nbparams = 0;
 		if (set_redirect(line[cpt], current) || \
 set_parameters(line[cpt], current) || set_cmd(current) || \
-set_is_builtin(current) || set_env_parameters(current))
-			return (free_strstr(line, nbline), print_error(ERR_PARSE));
+set_is_builtin(current))
+			return (free_strstr(line, nbline), RET_ERR);
 		cmdadd_back(cmd, current);
 		cpt++;
 	}

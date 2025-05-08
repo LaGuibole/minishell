@@ -25,6 +25,7 @@
 # define RET_OK 0
 # define RET_ERR 1
 # define ERR_QUOTE "MISSING QUOTE\n"
+# define ERR_REDIR "ERROR WITH < / >\n"
 # define ERR_PIPE "zsh: parse error near `|'\n"
 # define ERR_MALLOC "NOT ENOUGH MEMORY\n"
 # define ERR_PARSE "ERROR WHILE PARSING COMMAND\n"
@@ -177,12 +178,14 @@ bool			print_error(char *str);
 bool			ft_quote(char type, bool upd);
 int				add_redir(t_cmd *cmd, t_redir_type type, char *filename);
 bool			is_redir_char(char c);
-int				set_env_parameters(t_cmd *cmd);
 char			*clean_parameters(char *str);
 int				set_parameters(char *str, t_cmd *cmd);
 void			free_strstr(char **str, int nbr);
 int				set_is_builtin(t_cmd *cmd);
 int				set_cmd(t_cmd *cmd);
+int				ft_skip_char(char *str, int i, int type);
+int				set_filename(char *str, t_redir_type type, int i, t_cmd *cmd);
+void			ft_strcat_free(char **dst_ptr, char *src);
 
 //TEST
 void			handle_signal_interactive(int sig);
@@ -217,9 +220,6 @@ int				mark_for_export(const char *name);
 void			remove_from_export_list(const char *name);
 
 // EXPAND
-char			*get_var_value(char *key);
-int				is_valid_var_char(char c, int pos);
-char			*expand_loop(char *str, char *res);
 char			*expand_param(char *param);
 int				set_expanded_param(
 					char **params, char *str, t_cmd *cmd, size_t *start);

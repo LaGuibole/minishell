@@ -66,7 +66,7 @@ void	print_cmd_list(t_cmd *cmd)
 	{
 		ft_printf("=== Command %d ===\n", i);
 		ft_printf("  cmd: %s\n", cmd->cmd);
-		ft_printf("  is_builtin: %s\n", cmd->is_builtin ? "true" : "false");
+		ft_printf("  is_builtin: %d\n", cmd->is_builtin);
 		ft_printf("  nbparams: %d\n", cmd->nbparams);
 		print_params(cmd->params, cmd->nbparams);
 		print_redir(cmd->redir);
