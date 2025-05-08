@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 19:11:18 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:23:34 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ char	*create_heredoc_fd(const char *delimiter)
 	return (path);
 }
 
+/// @brief Prepares heredoc redirections for all commands in the pipeline
+///			For each heredoc, creates a temporary file and replaces the redir
+///			filename with the path to this temporary file
+/// @param cmds The list of commands to process
 void	prepare_heredocs(t_cmd *cmds)
 {
 	t_cmd	*cmd;
