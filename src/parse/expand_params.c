@@ -12,22 +12,33 @@
 
 #include "minishell.h"
 
-static	char	*ft_strjoin_char(char *s, char c)
+static int	purge_quote(char *p, int k, t_cmd *cmd)
 {
-	char	*res;
-	size_t	len;
+	size_t	i;
+	size_t	j;
+	char	*newline;
 
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	res = malloc(sizeof(char) * (len + 2));
-	if (!res)
-		return (NULL);
-	ft_strlcpy(res, s, len + 1);
-	res[len] = c;
-	res[len + 1] = '\0';
-	free(s);
-	return (res);
+	i = 0;
+	newline = ft_calloc(sizeof(char), 1);
+	while (i < ft_strlen(p))
+	{
+		if (ft_quote(p[i], 1))
+		{
+			j = ++i;
+			while (ft_quote('\'', 0) || ft_quote('"', 0))
+			{
+				ft_quote(p[j], 1);
+				if (ft_quote('\'', 0) || ft_quote('"', 0))
+					j++;
+				else
+					newline = free_join(newline, ft_substr(p, i, j - i), 1, 1);
+			}
+			i += j;
+		}
+		else
+			newline = free_join(newline, ft_substr(p, i++, 1), 1, 1);
+	}
+	return (free(p), cmd->params[k] = newline, RET_OK);
 }
 
 static char	*get_var_value(char *key)
@@ -42,48 +53,51 @@ static char	*get_var_value(char *key)
 	return (free(key), ret);
 }
 
-static int	is_valid_var_char(char c, int pos)
+static int	check_env_params(char c)
 {
-	if (pos == 0)
-		return (ft_isalpha(c) || c == '_' || c == '?');
-	return (ft_isalnum(c) || c == '_');
+	return (c && c != ' ' && c != '\'' && c != '$' && c != '"');
 }
 
-static char	*expand_loop(char *str, char *res)
+static int	set_env(char *params, int k, t_cmd *cmd)
 {
-	int		i;
-	int		j;
-	char	*val;
+	size_t	i;
+	int		tmp;
+	char	*env;
+	char	*newline;
 
+	newline = ft_calloc(sizeof(char), 1);
 	i = 0;
-	while (str[i])
+	while (i < ft_strlen(params))
 	{
-		ft_quote(str[i], 1);
-		if (str[i] == '$' && !ft_quote('\'', 0))
+		ft_quote(params[i], 1);
+		if (params[i] == '$' && !ft_quote('\'', 0))
 		{
-			j = 1;
-			while (str[i + j] && is_valid_var_char(str[i + j], j - 1))
-				j++;
-			val = get_var_value(ft_substr(str, i + 1, j - 1));
-			if (val)
-				ft_strcat_free(&res, val);
-			i += j;
-			continue ;
+			tmp = ++i;
+			while (check_env_params(params[i]))
+				i++;
+			env = get_var_value(ft_substr(params, tmp, i - tmp));
+			if (!env)
+				newline = free_join(newline, "", 1, 0);
+			else
+				newline = free_join(newline, env, 1, 1);
 		}
 		else
-			res = ft_strjoin_char(res, str[i++]);
+			newline = free_join(newline, ft_substr(params, i++, 1), 1, 1);
 	}
-	return (res);
+	return (free(params), cmd->params[k] = newline, RET_OK);
 }
 
-char	*expand_param(char *param)
+int	set_expand(t_cmd *cmd)
 {
-	char	*res;
+	int		i;
 
-	ft_quote(0, 1);
-	res = ft_strdup("");
-	if (!res)
-		return (NULL);
-	res = expand_loop(param, res);
-	return (res);
+	i = 0;
+	while (i < cmd->nbparams)
+	{
+		if (set_env(cmd->params[i], i, cmd)
+			|| purge_quote(cmd->params[i], i, cmd))
+			return (RET_ERR);
+		i++;
+	}
+	return (RET_OK);
 }
