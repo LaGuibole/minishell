@@ -66,10 +66,7 @@ static char	*expand_loop(char *str, char *res)
 				j++;
 			val = get_var_value(ft_substr(str, i + 1, j - 1));
 			if (val)
-			{
-				my_strcat(&res, val);
-				free(val);
-			}
+				ft_strcat_free(&res, val);
 			i += j;
 			continue ;
 		}
