@@ -117,9 +117,9 @@ int	parse_cmd(char *str, t_cmd **cmd)
 		if (!current)
 			return (free_strstr(line, nbline), print_error(ERR_MALLOC));
 		current->nbparams = 0;
-		if (set_redirect(line[cpt], current) || \
-set_parameters(line[cpt], current) || set_cmd(current) || \
-set_is_builtin(current))
+		if (set_redirect(line[cpt], current)
+			|| set_parameters(line[cpt], current) || set_expand(current)
+			|| set_cmd(current) || set_is_builtin(current))
 			return (free_strstr(line, nbline), RET_ERR);
 		cmdadd_back(cmd, current);
 		cpt++;
