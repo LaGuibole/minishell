@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:33:03 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:21:37 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	ft_cd(t_exec_ctx *ctx, char **args)
 	if (chdir(path) != 0)
 	{
 		fd_printf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
+		g_signal = 2;
 		free(path);
 		return (RET_ERR);
 	}

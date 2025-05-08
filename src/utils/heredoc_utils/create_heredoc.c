@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/29 15:26:42 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:11:18 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*create_heredoc_fd(const char *delimiter)
 	char	*path;
 	int		fd;
 
-	path = ft_mktemp();
+	path = ft_mktemp(0);
 	if (!path)
 		return (NULL);
 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
