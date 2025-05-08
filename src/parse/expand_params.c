@@ -16,11 +16,14 @@ static char	*ft_strjoin_char(char *s, char c);
 
 char	*get_var_value(char *key)
 {
+	char	*ret;
+
 	if (!key)
 		return (NULL);
 	if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(g_signal));
-	return (ft_getenv(key));
+		return (free(key), ft_itoa(g_signal));
+	ret = ft_getenv(key);
+	return (free(key), ret);
 }
 
 int	is_valid_var_char(char c, int pos)
@@ -34,35 +37,28 @@ char	*expand_loop(char *str, char *res)
 {
 	int		i;
 	int		j;
-	char	*key;
 	char	*val;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'' && ft_quote('"', 0))
-			ft_quote('\'', 1);
-		else if (str[i] == '"' && !ft_quote('\'', 0))
-			ft_quote('"', 1);
-		else if (str[i] == '$' && !ft_quote('\'', 0))
+		ft_quote(str[i], 1);
+		if (str[i] == '$' && !ft_quote('\'', 0))
 		{
 			j = 1;
 			while (str[i + j] && is_valid_var_char(str[i + j], j - 1))
 				j++;
-			key = ft_substr(str, i + 1, j - 1);
-			val = get_var_value(key);
+			val = get_var_value(ft_substr(str, i + 1, j - 1));
 			if (val)
 			{
 				my_strcat(&res, val);
 				free(val);
 			}
-			free(key);
 			i += j;
 			continue ;
 		}
 		else
-			res = ft_strjoin_char(res, str[i]);
-		i++;
+			res = ft_strjoin_char(res, str[i++]);
 	}
 	return (res);
 }
