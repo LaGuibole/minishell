@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-int	set_env_parameters(t_cmd *cmd)
-{
-	(void) cmd;
-	return (RET_OK);
-}
-
 char	*clean_parameters(char *str)
 {
 	char	*cleaned;
