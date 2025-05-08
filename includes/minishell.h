@@ -219,9 +219,6 @@ int				mark_for_export(const char *name);
 void			remove_from_export_list(const char *name);
 
 // EXPAND
-char			*get_var_value(char *key);
-int				is_valid_var_char(char c, int pos);
-char			*expand_loop(char *str, char *res);
 char			*expand_param(char *param);
 int				set_expanded_param(
 					char **params, char *str, t_cmd *cmd, size_t *start);

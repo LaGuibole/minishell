@@ -12,9 +12,25 @@
 
 #include "minishell.h"
 
-static char	*ft_strjoin_char(char *s, char c);
+static	char	*ft_strjoin_char(char *s, char c)
+{
+	char	*res;
+	size_t	len;
 
-char	*get_var_value(char *key)
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s);
+	res = malloc(sizeof(char) * (len + 2));
+	if (!res)
+		return (NULL);
+	ft_strlcpy(res, s, len + 1);
+	res[len] = c;
+	res[len + 1] = '\0';
+	free(s);
+	return (res);
+}
+
+static char	*get_var_value(char *key)
 {
 	char	*ret;
 
@@ -26,14 +42,14 @@ char	*get_var_value(char *key)
 	return (free(key), ret);
 }
 
-int	is_valid_var_char(char c, int pos)
+static int	is_valid_var_char(char c, int pos)
 {
 	if (pos == 0)
 		return (ft_isalpha(c) || c == '_' || c == '?');
 	return (ft_isalnum(c) || c == '_');
 }
 
-char	*expand_loop(char *str, char *res)
+static char	*expand_loop(char *str, char *res)
 {
 	int		i;
 	int		j;
@@ -72,23 +88,5 @@ char	*expand_param(char *param)
 	if (!res)
 		return (NULL);
 	res = expand_loop(param, res);
-	return (res);
-}
-
-static	char	*ft_strjoin_char(char *s, char c)
-{
-	char	*res;
-	size_t	len;
-
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	res = malloc(sizeof(char) * (len + 2));
-	if (!res)
-		return (NULL);
-	ft_strlcpy(res, s, len + 1);
-	res[len] = c;
-	res[len + 1] = '\0';
-	free(s);
 	return (res);
 }
