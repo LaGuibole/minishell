@@ -16,6 +16,7 @@
 /// @param input_fd The input file descriptor to redirect
 void	redirect_input_fd(int input_fd, int *pipefd)
 {
+	(void) pipefd;
 	if (input_fd != STDIN_FILENO)
 	{
 		if (dup2(input_fd, STDIN_FILENO) == -1)
@@ -24,15 +25,6 @@ void	redirect_input_fd(int input_fd, int *pipefd)
 			exit(EXIT_FAILURE);
 		}
 		close(input_fd);
-	}
-	else if (pipefd && pipefd[0] != -1)
-	{
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2 pipefd[0]");
-			exit(EXIT_FAILURE);
-		}
-		close(pipefd[0]);
 	}
 }
 

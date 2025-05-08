@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+static void	ft_close_fd(int *pipefd, int input_fd)
+{
+	if (pipefd)
+	{
+		if (pipefd[0] != -1)
+			close(pipefd[0]);
+		if (pipefd[1] != -1)
+			close(pipefd[1]);
+	}
+	if (input_fd != STDIN_FILENO)
+		close(input_fd);
+}
+
 /// @brief Forks and executes a command in a pipeline
 /// @param cmd Current command
 /// @param input_fd fd for input (from previous pipe)
@@ -35,6 +48,7 @@ pid_t	fork_child(t_exec_ctx *ctx, int input_fd, int *pipefd)
 		if (ctx->curr->redir)
 			apply_shell_redirections(ctx->curr->redir);
 		redirect_output_fd(ctx->curr, pipefd, has_next, has_out_redir);
+		ft_close_fd(pipefd, input_fd);
 		if (ctx->curr->is_builtin)
 			exit_child(ctx->head, exec_builtin(ctx));
 		if (ctx->curr->cmd)
@@ -55,7 +69,7 @@ int	parent_cleanup(int input_fd, int *pipefd, bool has_next)
 		close(input_fd);
 	if (pipefd)
 	{
-		if (has_next && pipefd[1] != -1)
+		if (pipefd[1] != -1)
 			close(pipefd[1]);
 		if (!has_next && pipefd[0] != -1)
 			close(pipefd[0]);
