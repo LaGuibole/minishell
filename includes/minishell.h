@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 18:42:48 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:11:06 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char			*get_home_path(void);
 char			*get_oldpwd_path(void);
 
 //HEREDOC HELPER
-char			*ft_mktemp(void);
+char			*ft_mktemp(bool res);
 char			*create_heredoc_fd(const char *delimiter);
 
 // ERRORS

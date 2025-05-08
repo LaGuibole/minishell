@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/06 18:02:35 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:43:23 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	exec_cmd(t_exec_ctx *ctx)
 		exec_child_process(ctx);
 	}
 	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		g_signal = WEXITSTATUS(status);
 	return (RET_OK);
 }
 
@@ -57,6 +59,7 @@ void	exec_child_process(t_exec_ctx *ctx)
 	path = get_cmd_path(ctx->curr, my_env);
 	if (!path)
 	{
+		g_signal = 127;
 		ft_lstclear(ft_envp(NULL), free);
 		fd_printf(STDERR_FILENO, "%s: Command not found\n", ctx->curr->cmd);
 		free_cmd_list(ctx->head);
@@ -75,6 +78,7 @@ static void	execve_cmd(char *path, t_exec_ctx *ctx, char **my_env)
 		free(path);
 		free_cmd_list(ctx->head);
 		free_double_tab(my_env);
+		g_signal = 127;
 		exit(EXIT_FAILURE);
 	}
 }
