@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 19:43:23 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:39:57 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ void	exec_child_process(t_exec_ctx *ctx)
 	execve_cmd(path, ctx, my_env);
 }
 
+/// @brief Executes a command using execve. If it fails (and the path)
+/// @param path
+/// @param ctx
+/// @param my_env
 static void	execve_cmd(char *path, t_exec_ctx *ctx, char **my_env)
 {
 	if (execve(path, ctx->curr->params, my_env) == -1

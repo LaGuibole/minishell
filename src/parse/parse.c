@@ -6,12 +6,18 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:47:16 by mlintot           #+#    #+#             */
-/*   Updated: 2025/05/08 19:22:27 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:04:23 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Manages and queries the current quoting state (single or double quotes).
+///        When `upd` is true, toggles the quote state; otherwise,
+///			just returns the state.
+/// @param type The quote character to check or update (' or ").
+/// @param upd Whether to toggle the quote state (true) or just query it (false).
+/// @return true if the specified quote type is currently open, false otherwise.
 bool	ft_quote(char type, bool upd)
 {
 	static bool	single_quote = 0;
@@ -32,12 +38,18 @@ bool	ft_quote(char type, bool upd)
 	return (0);
 }
 
+/// @brief Prints an error message to STDOUT and returns RET_ERR
+/// @param str The error message to display
+/// @return Always returns RET_ERR
 bool	print_error(char *str)
 {
 	fd_printf(STDOUT_FILENO, str);
 	return (RET_ERR);
 }
 
+/// @brief Checks for empty pipe links or unsupported '&' char outside of quote
+/// @param str The input command line string to validate
+/// @return true if a syntax error was found, false otherwise
 static bool	empty_link(char *str)
 {
 	bool	pipe;
@@ -65,6 +77,9 @@ static bool	empty_link(char *str)
 	return (pipe);
 }
 
+/// @brief Checks whether the input contains unclosed single or double quote
+/// @param str The input command line string to check
+/// @return true if quotes are unbalanced, false otherwise
 static bool	unclosed_quotes(char *str)
 {
 	while (*str)
@@ -74,6 +89,10 @@ static bool	unclosed_quotes(char *str)
 	return (ft_quote('\'', 0) || ft_quote('"', 0));
 }
 
+/// @brief Parses a raw command line string into a linked list of commands
+///			Handles quote validation, pipe syntax, and calls the command parser
+/// @param str The raw input string from the user
+/// @return A pointer to the parsed command list, or NULL on error
 t_cmd	*parsing_cmd(char *str)
 {
 	t_cmd	*cmd;

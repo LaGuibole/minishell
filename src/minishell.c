@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 19:18:00 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:01:45 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	handle_input(char *input)
 		return (free(input));
 	if (cmds)
 	{
+		print_cmd_list(cmds);
 		ctx = (t_exec_ctx){cmds, cmds};
 		exec_pipeline(&ctx);
 		free_cmd_list(ctx.head);

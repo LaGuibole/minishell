@@ -6,28 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 18:51:07 by guphilip          #+#    #+#             */
-/*   Updated: 2025/04/25 11:25:34 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:27:35 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*void	free_cmd_list(t_cmd *cmd)
-{
-	t_cmd	*next;
-
-	while (cmd)
-	{
-		next = cmd->next;
-		if (cmd->cmd)
-			free(cmd->cmd);
-		free_double_tab(cmd->params);
-		free_redirections(cmd->redir);
-		free(cmd);
-		cmd = next;
-	}
-}*/
-
+/// @brief Frees a two-dimensional array of strings up to a specified num of el
+/// @param str The array of strings to free
+/// @param nbr The number of strings to free before freeing the array itself
 void	free_strstr(char **str, int nbr)
 {
 	int	i;
@@ -41,6 +28,8 @@ void	free_strstr(char **str, int nbr)
 	}
 }
 
+/// @brief Recursively frees a linked list of redirection structures
+/// @param redir The head of the redir list to free
 void	free_redir(t_redir *redir)
 {
 	if (redir)
@@ -53,6 +42,9 @@ void	free_redir(t_redir *redir)
 	}
 }
 
+/// @brief Free all memory associated with a single command structure,
+///			including parameters and redirections
+/// @param cmd The command structure to free
 void	free_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -69,6 +61,8 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
+/// @brief Recursively frees a linked list of command structures
+/// @param cmd The head of the command list to free
 void	free_cmd_list(t_cmd *cmd)
 {
 	if (cmd)
