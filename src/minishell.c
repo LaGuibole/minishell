@@ -49,7 +49,6 @@ void	handle_input(char *input)
 		return (free(input));
 	if (cmds)
 	{
-		print_cmd_list(cmds);
 		ctx = (t_exec_ctx){cmds, cmds};
 		exec_pipeline(&ctx);
 		free_cmd_list(ctx.head);
@@ -57,11 +56,26 @@ void	handle_input(char *input)
 	free(input);
 }
 
+static void	purge_heredoc(void)
+{
+	char		*line;
+	int			i;
+
+	line = ft_mktemp(1);
+	i = ft_atoi(line);
+	free(line);
+	while (i > 0)
+	{
+		line = free_join("/tmp/heredoc_", ft_itoa(i--), 0, 1);
+		unlink(line);
+		free(line);
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*prompt;
 	char		*line;
-	int			i;
 
 	(void)argc, (void)argv;
 	ft_envp(envp);
@@ -73,19 +87,8 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt);
 		free(prompt);
 		if (!line)
-		{
-			line = ft_mktemp(1);
-			i = ft_atoi(line);
-			free(line);
-			while (i > 0)
-			{
-				line = free_join("/tmp/heredoc_", ft_itoa(i--), 0 , 1);
-				unlink(line);
-				free(line);
-			}
-			return (ft_lstclear(ft_envp(NULL), free), \
-					fd_printf(STDOUT_FILENO, "exit\n"), g_signal);
-		}
+			return (purge_heredoc(), ft_lstclear(ft_envp(NULL), free),
+				fd_printf(STDOUT_FILENO, "exit\n"), g_signal);
 		if (line)
 			add_history(line);
 		if (ft_strlen(line) == 0)

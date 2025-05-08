@@ -37,7 +37,7 @@ char	*ft_mktemp(bool res)
 	char			*result;
 
 	if (res)
-		return (ft_itoa((int)rand));
+		return (ft_itoa((int)rand - 1));
 	tmp = build_tmp_name(rand, 0);
 	rand++;
 	result = ft_strdup(tmp);
