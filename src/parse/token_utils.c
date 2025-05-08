@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	*get_next_token(
+/*char	*get_next_token(
 	char *str,
 	size_t start,
 	size_t *consumed,
@@ -80,3 +80,4 @@ t_quote_type	quote_type_of(char c)
 		return (DOUBLE_QUOTE);
 	return (NO_QUOTE);
 }
+*/

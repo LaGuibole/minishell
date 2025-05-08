@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-/// @brief Manages and queries the current quoting state (single or double quotes).
+/// @brief Manages and queries the current quoting state (single or double quo
+/// tes).
 ///        When `upd` is true, toggles the quote state; otherwise,
 ///			just returns the state.
 /// @param type The quote character to check or update (' or ").
-/// @param upd Whether to toggle the quote state (true) or just query it (false).
+/// @param upd Whether to toggle the quote state (true) or just query it(false)
 /// @return true if the specified quote type is currently open, false otherwise.
 bool	ft_quote(char type, bool upd)
 {
