@@ -7,3 +7,5 @@ minishell
 minishell.dSYM/
 Makefile
 test*
+docs/
+Doxyfile
