@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:46:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 17:51:08 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:24:02 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Check whether a string contains only numerix characters (0-9)
+/// @param arg The string to check
+/// @return true if the string is numeric, false otherwise
 static bool	is_numeric(char *arg)
 {
 	int	i;
@@ -26,6 +29,12 @@ static bool	is_numeric(char *arg)
 	return (true);
 }
 
+/// @brief Executes the 'exit' builtin. Handles numeric argument,
+///			Error cases, and frees all memory before exiting the shell
+/// @param ctx The execution context containing the cmd list to free
+/// @param args The arg array (expected arg[0] = 'exit', arg[1]= optional num)
+/// @return This function only returns if there are too many arg
+///			Otherwise it terminates the shell with the specified status
 int	ft_exit(t_exec_ctx *ctx, char **args)
 {
 	int	status;

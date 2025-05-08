@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 21:46:46 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/05 16:27:56 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:20:52 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Retrieves and duplicates the value of the HOME environment variable
+///		Prints an error if HOME is not set or is empty
+/// @return A newly allocated copy of the HOME path, or NULL on failure
 char	*get_home_path(void)
 {
 	char	*home;
@@ -33,6 +36,9 @@ char	*get_home_path(void)
 	return (copy);
 }
 
+/// @brief Retrieves and duplicates the value of the OLDPWD env var
+///			Prints an error and the value to STDOUT if available
+/// @return	A newly allocated copy of the OLDPWD path, or NULL on failure
 char	*get_oldpwd_path(void)
 {
 	char	*oldpwd;
