@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 18:39:47 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:01:45 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	handle_input(char *input)
 		return (free(input));
 	if (cmds)
 	{
+		print_cmd_list(cmds);
 		ctx = (t_exec_ctx){cmds, cmds};
 		exec_pipeline(&ctx);
 		free_cmd_list(ctx.head);
@@ -60,6 +61,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*prompt;
 	char		*line;
+	int			i;
 
 	(void)argc, (void)argv;
 	ft_envp(envp);
@@ -71,8 +73,19 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt);
 		free(prompt);
 		if (!line)
+		{
+			line = ft_mktemp(1);
+			i = ft_atoi(line);
+			free(line);
+			while (i > 0)
+			{
+				line = free_join("/tmp/heredoc_", ft_itoa(i--), 0 , 1);
+				unlink(line);
+				free(line);
+			}
 			return (ft_lstclear(ft_envp(NULL), free), \
 					fd_printf(STDOUT_FILENO, "exit\n"), g_signal);
+		}
 		if (line)
 			add_history(line);
 		if (ft_strlen(line) == 0)

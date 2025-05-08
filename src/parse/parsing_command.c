@@ -6,12 +6,18 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 22:15:45 by mlintot           #+#    #+#             */
-/*   Updated: 2025/05/07 18:37:13 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:12:30 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Prints a syntax error message related to redir misuse
+///		Detects invalid sequences like single '<' or '>' at the end of an input
+///		or isolated/malformed redirection operators
+/// @param c The current character to analyze
+/// @param next The next character following 'c'
+/// @return RET_ERR if a syntax error is found, RET_OK otherwise
 static int	check_more_chev(char c, char next)
 {
 	if (c == '<' || c == '>' || c == '\0')
@@ -29,6 +35,12 @@ ERR_CHEV, c, c);
 	return (RET_OK);
 }
 
+/// @brief Determines the type of refir based on the current and next char
+///			and updates the redirection type accordingly
+/// @param type A pointer to the redirection type to set
+/// @param c The current character ('<' or '>')
+/// @param next The next char following 'c'
+/// @return The number of char consumed from the input
 static int	set_type_chev(t_redir_type *type, char c, char next)
 {
 	int	i;
@@ -45,6 +57,11 @@ static int	set_type_chev(t_redir_type *type, char c, char next)
 	return (i);
 }
 
+/// @brief Parses and sets redirection information from a command string
+///		Handles heredoc, input, output, append.
+/// @param str The command string to analyze
+/// @param cmd The command structure to update with redirection informations
+/// @return RET_OK on success, RET_ERR on syntax error or allocation failure
 static int	set_redirect(char *str, t_cmd *cmd)
 {
 	size_t			i;
@@ -72,6 +89,12 @@ static int	set_redirect(char *str, t_cmd *cmd)
 	return (RET_OK);
 }
 
+/// @brief Splits a pipeline string by unquoted pipe ('|') char into
+///		separate command strings.
+///		Handles quote context to ignore pipes inside quotes.
+/// @param line The array of strings to populate with split commands
+/// @param str The raw command line string
+/// @return The number of split commands stored in 'line'
 static int	split_cmd(char **line, char *str)
 {
 	char	*tmp;
@@ -99,6 +122,11 @@ static int	split_cmd(char **line, char *str)
 	return (nbline);
 }
 
+/// @brief Parses a full command line into a linked list of command structure
+///		Handles splitting by pipes, redirections, parameters and builtins
+/// @param str The input command line string
+/// @param cmd A pointer to the head of the command list (will be allocated)
+/// @return RET_OK on success, RET_ERR on failure
 int	parse_cmd(char *str, t_cmd **cmd)
 {
 	char	**line;

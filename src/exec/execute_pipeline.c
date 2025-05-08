@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 16:06:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 18:45:11 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:39:17 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ void	setup_pipe_redirections(int input_fd, int *pipefd, bool has_next)
 	}
 }
 
-/// @brief
-/// @param cmds
-/// @return
+/// @brief Performs initial checks and setup before executing a pipeline,
+///			including heredoc prep, sig config, and redir validation
+/// @param cmds The list of commands to prepare
+/// @return RET_OK if all checks passed, RET_ERR otherwise
 static int	prepare_checks(t_cmd *cmds)
 {
 	if (!cmds)
@@ -78,10 +79,10 @@ static int	prepare_checks(t_cmd *cmds)
 	return (RET_OK);
 }
 
-/// @brief
-/// @param pipefd
-/// @param has_next
-/// @return
+/// @brief Attempts to create a pipe if needed, handles errors
+/// @param pipefd Array to store the read and write pipe fd
+/// @param has_next Boolean flag indicating if a next command exists in pipelin
+/// @return RET_OK on success, RET_ERR on failure (with err msg)
 static int	try_setup_pipe(int *pipefd, int has_next)
 {
 	int	result;

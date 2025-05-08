@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 11:03:21 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 18:45:56 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:48:20 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Closes the given pipe fd and input fd if they are open
+/// @param pipefd Array containing the read and write ends of a pipe
+/// @param input_fd The input fd to close if it's not STDIN_FILENO
 static void	ft_close_fd(int *pipefd, int input_fd)
 {
 	if (pipefd)

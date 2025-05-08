@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:47:14 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:33:03 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 22:12:36 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ static int	update_pwd(void)
 	return (RET_OK);
 }
 
+/// @brief Determine the target path for the 'cd' command based on arguments.
+///			Supports HOME (no arg or ~ or --) and OLDPWD
+/// @param args The arguments array passed to the 'cd' builtin
+/// @return A newly allocated string representing the resolved path
+///			NULL if resolution fails
 static char	*get_target_path(char **args)
 {
 	char	*path;
@@ -62,6 +67,11 @@ static char	*get_target_path(char **args)
 	return (path);
 }
 
+/// @brief Executes the 'cd' builtin. Handles HOME, OLDPWD, updates
+///			env var and prints error message if needed.
+/// @param ctx The execution context (currently unsused).
+/// @param args The arg array (expected: args[0] = 'cd', args[1] = target)
+/// @return RET_OK (0) on success, RET_ERR (-1) on failure
 int	ft_cd(t_exec_ctx *ctx, char **args)
 {
 	char	*path;
@@ -80,6 +90,7 @@ int	ft_cd(t_exec_ctx *ctx, char **args)
 	if (chdir(path) != 0)
 	{
 		fd_printf(STDERR_FILENO, "cd: %s: %s\n", path, strerror(errno));
+		g_signal = 2;
 		free(path);
 		return (RET_ERR);
 	}

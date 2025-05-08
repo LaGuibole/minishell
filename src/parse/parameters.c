@@ -6,12 +6,15 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 12:43:05 by mlintot           #+#    #+#             */
-/*   Updated: 2025/05/07 16:33:54 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/08 20:59:32 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief Concatenates 'src' to '*dst_ptr', frees both the old dest and src
+/// @param dst_ptr A pointer to the dest string pointer
+/// @param src The source string to append, it will be freed after operation
 void	ft_strcat_free(char **dst_ptr, char *src)
 {
 	size_t		dst_len;
@@ -32,6 +35,10 @@ void	ft_strcat_free(char **dst_ptr, char *src)
 	free(src);
 }
 
+/// @brief Cleans a parameter string by removing redirections parts and skippin
+//			over them
+/// @param str The raw parameter string to clean
+/// @return A newly allocated cleaned version of the input string, or NULL
 char	*clean_parameters(char *str)
 {
 	char	*cleaned;
@@ -60,6 +67,12 @@ char	*clean_parameters(char *str)
 	return (cleaned);
 }
 
+/// @brief Fills the 'params' array with expanded parameters that are parsed
+/// @param params The array to store the parsed parameters
+/// @param str The full input string to tokenize and expand
+/// @param cmd The command structure to update ic of partial allocation fail
+/// @param start The current index in the string to start parsing from
+/// @return RET_OK on success, or RET_ERR if memory allocation failed
 int	construct_params(char **params, char *str, t_cmd *cmd, size_t start)
 {
 	size_t	end;
@@ -88,6 +101,11 @@ int	construct_params(char **params, char *str, t_cmd *cmd, size_t start)
 	return (RET_OK);
 }
 
+/// @brief Parses a string to extract and expand its parameters, then store
+///			it in the parameters array
+/// @param str The raw input string to parse
+/// @param cmd The command structure in which to store the parameters
+/// @return RET_OK on success, RET_ERR on failure
 int	set_parameters(char *str, t_cmd *cmd)
 {
 	size_t	start;
