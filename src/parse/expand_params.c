@@ -33,7 +33,7 @@ static int	purge_quote(char *p, int k, t_cmd *cmd)
 				else
 					newline = free_join(newline, ft_substr(p, i, j - i), 1, 1);
 			}
-			i += j;
+			i = ++j;
 		}
 		else
 			newline = free_join(newline, ft_substr(p, i++, 1), 1, 1);
@@ -58,33 +58,35 @@ static int	check_env_params(char c)
 	return (c && c != ' ' && c != '\'' && c != '$' && c != '"');
 }
 
-static int	set_env(char *params, int k, t_cmd *cmd)
+static int	set_env(char *p, int k, t_cmd *cmd)
 {
 	size_t	i;
-	int		tmp;
+	size_t	tmp;
 	char	*env;
-	char	*newline;
+	char	*l;
 
-	newline = ft_calloc(sizeof(char), 1);
+	l = ft_calloc(sizeof(char), 1);
 	i = 0;
-	while (i < ft_strlen(params))
+	while (i < ft_strlen(p))
 	{
-		ft_quote(params[i], 1);
-		if (params[i] == '$' && !ft_quote('\'', 0))
+		ft_quote(p[i], 1);
+		if (p[i] == '$' && !ft_quote('\'', 0))
 		{
 			tmp = ++i;
-			while (check_env_params(params[i]))
+			while (check_env_params(p[i]))
 				i++;
-			env = get_var_value(ft_substr(params, tmp, i - tmp));
+			if (i == tmp)
+				return (free(p), cmd->params[k] = free_join(l, "$", 1, 0), RET_OK);
+			env = get_var_value(ft_substr(p, tmp, i - tmp));
 			if (!env)
-				newline = free_join(newline, "", 1, 0);
+				l = free_join(l, "", 1, 0);
 			else
-				newline = free_join(newline, env, 1, 1);
+				l = free_join(l, env, 1, 1);
 		}
 		else
-			newline = free_join(newline, ft_substr(params, i++, 1), 1, 1);
+			l = free_join(l, ft_substr(p, i++, 1), 1, 1);
 	}
-	return (free(params), cmd->params[k] = newline, RET_OK);
+	return (free(p), cmd->params[k] = l, RET_OK);
 }
 
 int	set_expand(t_cmd *cmd)
