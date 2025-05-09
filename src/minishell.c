@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:04:50 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 22:44:10 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 02:11:56 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,14 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 			return (purge_heredoc(), ft_lstclear(ft_envp(NULL), free),
 				fd_printf(STDOUT_FILENO, "exit\n"), g_signal);
+		if (ft_strlen(line) == 0)
+		{
+			free(line);
+			continue ;
+		}
 		if (line)
 			add_history(line);
-		if (ft_strlen(line) == 0)
-			continue ;
 		handle_input(line);
 	}
-	// free(prompt);
-	ft_lstclear(ft_envp(NULL), free);
-	return (g_signal);
+	return (ft_lstclear(ft_envp(NULL), free), g_signal);
 }

@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 14:47:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 20:39:57 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 02:16:56 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static void	execve_cmd(char *path, t_exec_ctx *ctx, char **my_env)
 		free(path);
 		free_cmd_list(ctx->head);
 		free_double_tab(my_env);
+		ft_lstclear(ft_envp(NULL), free);
 		g_signal = 127;
 		exit(EXIT_FAILURE);
 	}
