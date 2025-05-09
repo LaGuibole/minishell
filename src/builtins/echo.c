@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:03 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:32:58 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:07:29 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static bool	is_n_flag(char *arg)
 {
 	size_t	i;
 
-	if (!arg || arg[0] != '-')
+	if (!arg || arg[0] != '-' || ft_strlen(arg) < 2)
 		return (false);
 	i = 1;
 	while (arg[i])

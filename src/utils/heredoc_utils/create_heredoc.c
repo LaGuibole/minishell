@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 21:23:34 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:18:04 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,3 +86,95 @@ void	prepare_heredocs(t_cmd *cmds)
 		cmd = cmd->next;
 	}
 }
+
+// int	write_heredoc_content(int fd, const char *delimiter)
+// {
+// 	char	*line;
+
+// 	line = NULL;
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (line == NULL)
+// 			break ;
+// 		if (g_heredoc_sigint)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		if (ft_strcmp(line, delimiter) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		fd_printf(fd, "%s\n", line);
+// 		free(line);
+// 	}
+// 	return (g_heredoc_sigint);
+// }
+
+// int	create_heredoc_fd(const char *delimiter, char **path_out)
+// {
+// 	char	*path;
+// 	int		fd;
+// 	pid_t	pid;
+// 	int		status;
+
+// 	path = ft_mktemp();
+// 	if (!path)
+// 		return (-1);
+// 	fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 	{
+// 		free(path);
+// 		return (-1);
+// 	}
+
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		signal(SIGINT, handle_sigint_heredoc);
+// 		signal(SIGQUIT, SIG_IGN);
+// 		if (write_heredoc_content(fd, delimiter))
+// 			exit(130);
+// 		close(fd);
+// 		exit(0);
+// 	}
+// 	close(fd);
+// 	waitpid(pid, &status, 0);
+
+// 	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
+// 	{
+// 		unlink(path);
+// 		free(path);
+// 		return (-1);
+// 	}
+// 	*path_out = path;
+// 	return (0);
+// }
+
+// void	prepare_heredocs(t_cmd *cmds)
+// {
+// 	t_cmd	*cmd;
+// 	t_redir	*redir;
+// 	char	*path;
+
+// 	cmd = cmds;
+// 	while (cmd)
+// 	{
+// 		redir = cmd->redir;
+// 		while (redir)
+// 		{
+// 			if (redir->type == R_HEREDOC)
+// 			{
+// 				path = NULL;
+// 				if (create_heredoc_fd(redir->filename, &path) == -1)
+// 					break ;
+// 				free(redir->filename);
+// 				redir->filename = path;
+// 			}
+// 			redir = redir->next;
+// 		}
+// 		cmd = cmd->next;
+// 	}
+// }

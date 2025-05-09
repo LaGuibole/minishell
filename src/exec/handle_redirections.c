@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 17:53:51 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/05 14:40:28 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:10:06 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	check_redir_file(t_redir *redir)
 		fd = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
 	{
+		g_signal = 1;
 		perror(redir->filename);
 		return (RET_ERR);
 	}
