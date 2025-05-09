@@ -41,7 +41,7 @@ static int	purge_quote(char *p, int k, t_cmd *cmd)
 	return (free(p), cmd->params[k] = newline, RET_OK);
 }
 
-static char	*get_var_value(char *key)
+char	*get_var_value(char *key)
 {
 	char	*ret;
 
@@ -62,7 +62,6 @@ static int	set_env(char *p, int k, t_cmd *cmd)
 {
 	size_t	i;
 	size_t	tmp;
-	char	*env;
 	char	*l;
 
 	l = ft_calloc(sizeof(char), 1);
@@ -76,12 +75,11 @@ static int	set_env(char *p, int k, t_cmd *cmd)
 			while (check_env_params(p[i]))
 				i++;
 			if (i == tmp)
-				return (free(p), cmd->params[k] = free_join(l, "$", 1, 0), RET_OK);
-			env = get_var_value(ft_substr(p, tmp, i - tmp));
-			if (!env)
-				l = free_join(l, "", 1, 0);
-			else
-				l = free_join(l, env, 1, 1);
+			{
+				l = free_join(l, "$", 1, 0);
+				continue ;
+			}
+			l = get_env(ft_substr(p, tmp, i - tmp), l);
 		}
 		else
 			l = free_join(l, ft_substr(p, i++, 1), 1, 1);

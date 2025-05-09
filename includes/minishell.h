@@ -145,6 +145,8 @@ int				ft_skip_char(char *str, int i, int type);
 int				set_filename(char *str, t_redir_type type, int i, t_cmd *cmd);
 void			ft_strcat_free(char **dst_ptr, char *src);
 int				set_expand(t_cmd *line);
+char			*get_env(char *str, char *line);
+char			*get_var_value(char *key);
 
 // EXEC
 bool			cmd_is_builtin(char *name);

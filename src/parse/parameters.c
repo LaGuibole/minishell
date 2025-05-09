@@ -12,6 +12,17 @@
 
 #include "minishell.h"
 
+char	*get_env(char *str, char *line)
+{
+	char	*env;
+
+	env = get_var_value(str);
+	if (!env)
+		return (free_join(line, "", 1, 0));
+	else
+		return (free_join(line, env, 1, 1));
+}
+
 /// @brief Concatenates 'src' to '*dst_ptr', frees both the old dest and src
 /// @param dst_ptr A pointer to the dest string pointer
 /// @param src The source string to append, it will be freed after operation
