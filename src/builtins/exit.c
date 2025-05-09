@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:46:08 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 20:24:02 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 01:42:02 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_exit(t_exec_ctx *ctx, char **args)
 		}
 		if (!is_numeric(args[1]))
 		{
-			fd_printf(STDERR_FILENO, "exit: error, arg must be an int\n");
+			fd_printf(STDERR_FILENO, "exit: numeric argument required\n");
 			free_all_and_exit(ctx->head, 255);
 		}
 		status = ft_atoi(args[1]);
