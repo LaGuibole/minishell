@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 17:22:39 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/07 16:33:19 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 02:29:08 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	ft_unset(t_exec_ctx *ctx, char **args)
 	{
 		if (is_valid_identifier(args[i]))
 			ft_unsetenv(args[i]);
-		else
-			print_invalid_identifier(args[i]);
 		i++;
 	}
 	return (RET_OK);

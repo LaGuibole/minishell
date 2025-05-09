@@ -9,5 +9,5 @@
 	std
 	Memcheck:Leak
 	...
-	obj:*/usr/bin/*
+	obj:/usr/bin/*
 }
