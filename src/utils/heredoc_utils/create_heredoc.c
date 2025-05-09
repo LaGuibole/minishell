@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 11:35:22 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/09 02:50:49 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:18:04 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	prepare_heredocs(t_cmd *cmds)
 // 	pid = fork();
 // 	if (pid == 0)
 // 	{
-// 		signal(SIGINT, handle_sigint_heredoc); 
+// 		signal(SIGINT, handle_sigint_heredoc);
 // 		signal(SIGQUIT, SIG_IGN);
 // 		if (write_heredoc_content(fd, delimiter))
 // 			exit(130);
