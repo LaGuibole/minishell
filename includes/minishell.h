@@ -6,7 +6,7 @@
 /*   By: guphilip <guphilip@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:15:30 by guphilip          #+#    #+#             */
-/*   Updated: 2025/05/08 22:11:46 by guphilip         ###   ########.fr       */
+/*   Updated: 2025/05/09 02:48:27 by guphilip         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void			prepare_heredocs(t_cmd *cmds);
 char			*ft_mktemp(bool res);
 void			set_sig_executing(void);
 
-// ?? 
+// ??
 void			handle_signal_interactive(int sig);
 void			handle_signal_executing(int sig);
 void			apply_heredoc_redirections(t_redir *redir);
@@ -214,6 +214,7 @@ char			*get_next_token(
 					size_t *consumed,
 					t_quote_type *qtype);
 char			*get_full_token(char *str, size_t *start);
+void			handle_sig_heredoc(int sig);
 
 t_quote_type	quote_type_of(char c);
 
