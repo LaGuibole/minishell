@@ -58,27 +58,3 @@ int	ft_exit(t_exec_ctx *ctx, char **args)
 	free_all_and_exit(ctx->head, status);
 	return (0);
 }
-
-// int	ft_exit(t_cmd *cmd, char **args)
-// {
-// 	int	code;
-
-// 	write(2, "exit\n", 5);
-// 	if (!args[1])
-// 		free_all_and_exit(cmd, 0);
-// 	if (!is_numeric(args[1]))
-// 	{
-// 		ft_putstr_fd("minishell: exit: ", 2);
-// 		ft_putstr_fd(args[1], 2);
-// 		ft_putstr_fd(": numeric argument required\n", 2);
-// 		free_all_and_exit(cmd, 255);
-// 	}
-// 	if (args[2])
-// 	{
-// 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-// 		return (1);
-// 	}
-// 	code = ft_atoi(args[1]);
-// 	free_all_and_exit(cmd, code % 256);
-// 	return (0);
-// }
