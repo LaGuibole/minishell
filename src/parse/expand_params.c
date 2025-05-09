@@ -94,8 +94,8 @@ int	set_expand(t_cmd *cmd)
 	i = 0;
 	while (i < cmd->nbparams)
 	{
-		if (purge_quote(cmd->params[i], i, cmd)
-			|| set_env(cmd->params[i], i, cmd))
+		if (set_env(cmd->params[i], i, cmd)
+			|| purge_quote(cmd->params[i], i, cmd))
 			return (RET_ERR);
 		i++;
 	}
