@@ -98,6 +98,5 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		handle_input(line);
 	}
-	ft_lstclear(ft_envp(NULL), free);
-	return (g_signal);
+	return (ft_lstclear(ft_envp(NULL), free), g_signal);
 }

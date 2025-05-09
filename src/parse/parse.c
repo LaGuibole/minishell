@@ -99,12 +99,12 @@ t_cmd	*parsing_cmd(char *str)
 	t_cmd	*cmd;
 
 	cmd = NULL;
+	if (ft_quote('\'', 0))
+		ft_quote('\'', 1);
+	if (ft_quote('"', 0))
+		ft_quote('"', 1);
 	if (unclosed_quotes(str) || empty_link(str) || parse_cmd(str, &cmd))
 	{
-		if (ft_quote('\'', 0))
-			ft_quote('\'', 1);
-		if (ft_quote('"', 0))
-			ft_quote('"', 1);
 		if (cmd)
 			free_cmd_list(cmd);
 		g_signal = 2;
